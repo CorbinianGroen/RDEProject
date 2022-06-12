@@ -1,20 +1,21 @@
+#imports of packages
 import tkinter as tk
+from tkinter import filedialog
 import customtkinter as ct
+
 import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
+from scipy import interpolate
+
 import matplotlib.lines as lines
 from matplotlib.figure import Figure
-from scipy import interpolate
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+
+#imports of files
 from importfilter import importwindow
-from tkinter import filedialog
-from tkinter import ttk
+import scanimport as scan
 
-
-
-
-
+#testing values
 loading = 3.847E-6
 R = 32.7
 Ref = 0.0035
@@ -27,45 +28,10 @@ diameter = 0.196
 
 cm = 1 / 2.54
 
+#end of testing values
+
 ct.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ct.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
-
-def scanfind(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.'):
-    if headervalue is None:
-        colnames = ['WE(1).Potential (V)', 'WE(1).Current (A)', 'empty', 'rpm', 'time', 'time_corr', 'index']
-        CVs = pd.read_csv(filename, sep=sepvalue, skiprows=0, header=headervalue, decimal=decimalvalue, names=colnames)
-    else:
-        CVs = pd.read_csv(filename, sep=sepvalue, skiprows=0, header=headervalue, decimal=decimalvalue)
-    if 'Scan' in CVs:
-        CV_scan = CVs[CVs['Scan'] == scan].reset_index()
-        CV_reduced = CV_scan.loc[:, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
-    else:
-        CV_reduced = CVs.loc[:, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
-    CV_reduced.rename(columns={'WE(1).Potential (V)': 'Potential/V'}, inplace=True)
-    CV_reduced.rename(columns={'WE(1).Current (A)': 'Current/A'}, inplace=True)
-    upper = CV_reduced['Potential/V'].nlargest(1).index[0]
-    lower = CV_reduced['Potential/V'].nsmallest(1).index[0]
-    CV_cathodic = CV_reduced.iloc[upper + 1:lower].reset_index()
-    del CV_cathodic['index']
-    CV_anodic1 = CV_reduced.iloc[0:upper]
-    CV_anodic2 = CV_reduced.iloc[lower + 1:CV_reduced.shape[0]]
-    CV_anodic = pd.concat([CV_anodic2, CV_anodic1], ignore_index=True).reset_index()
-    del CV_anodic['index']
-    return CV_cathodic, CV_anodic
-
-
-def scanfind_single(filename, sepvalue=';', headervalue=0, decimalvalue='.'):
-    if headervalue is None:
-        colnames = ['WE(1).Potential (V)', 'WE(1).Current (A)', 'empty', 'rpm', 'time', 'potential applied', 'index']
-        CVs = pd.read_csv(filename, sep=sepvalue, skiprows=0, header=headervalue, decimal=decimalvalue, names=colnames)
-    else:
-        CVs = pd.read_csv(filename, sep=sepvalue, skiprows=0, header=headervalue, decimal=decimalvalue)
-    CV_reduced = CVs.loc[:, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
-    CV_reduced.rename(columns={'WE(1).Potential (V)': 'Potential/V'}, inplace=True)
-    CV_reduced.rename(columns={'WE(1).Current (A)': 'Current/A'}, inplace=True)
-    CV_reduced.reset_index()
-
-    return CV_reduced
 
 
 def interpolation(curve1, curve2):
@@ -1209,7 +1175,7 @@ def HUPD():
 ct.CTkButton(master=input_frame, text='Open', command=HUPD, text_font=("Calibri", -18), width=80).grid(row=1, column=6, sticky=tk.W, padx=20)
 def Ar_graph():
     #Ar = HUPDEntry.get()
-    Ar_cathodic, Ar_anodic = scanfind(Ar, 2)
+    Ar_cathodic, Ar_anodic = scan.singlescan(Ar, 2)
     Ar_Plot(Ar_anodic, Ar_cathodic)
 
 
@@ -1234,8 +1200,8 @@ ct.CTkButton(master=input_frame, text='Open', command=COStrip, text_font=("Calib
 
 def CO_Strip_graph():
     #CO_Strip = COStripEntry.get()
-    CO_cathodic_1, CO_anodic_1 = scanfind(CO_Strip, 1, sepvalue='\t', decimalvalue=',')
-    CO_cathodic_2, CO_anodic_2 = scanfind(CO_Strip, 2, sepvalue='\t', decimalvalue=',')
+    CO_cathodic_1, CO_anodic_1 = scan.multiplescan(CO_Strip, 1, sepvalue='\t', decimalvalue=',')
+    CO_cathodic_2, CO_anodic_2 = scan.multiplescan(CO_Strip, 2, sepvalue='\t', decimalvalue=',')
     CO_plot(CO_anodic_1, CO_anodic_2)
 
 
@@ -1291,8 +1257,8 @@ def ORR_graph():
     else:
         RefEntry.configure(fg_color=('red'))
     if R is not None and Ref is not None:
-        O2_anodic = scanfind_single(O2, headervalue=None)
-        Ar_anodic_orr = scanfind_single(Ar_orr, headervalue=None)
+        O2_anodic = scan.lsvscan(O2, headervalue=None)
+        Ar_anodic_orr = scan.lsvscan(Ar_orr, headervalue=None)
         O2_plot(O2_anodic, Ar_anodic_orr)
 
 
@@ -1336,8 +1302,8 @@ def HOR_graph():
     pass
     #H2 = HOREntry.get()
     #Ar_hor = HORArEntry.get()
-    #H2_anodic = scanfind_single(H2, headervalue=None)
-    #Ar_anodic_HOR = scanfind_single(Ar_hor, headervalue=None)
+    #H2_anodic = lsvscan(H2, headervalue=None)
+    #Ar_anodic_HOR = lsvscan(Ar_hor, headervalue=None)
     #H2_plot(O2_anodic, Ar_anodic_HOR)
 
 
@@ -1347,7 +1313,7 @@ HOREval.configure(state=tk.DISABLED)
 
 def save_enable():
     amount = len(list(data_frame.winfo_children()))
-    if amount > 1:
+    if amount > 0:
         SaveButton.config(state=tk.NORMAL)
     else:
         SaveButton.config(state=tk.DISABLED)
@@ -1374,7 +1340,7 @@ def save():
 
 SaveButton = ct.CTkButton(master=bottom_frame,text="Save", command=save, text_font=("Calibri", -18), width= 80, height= 10)
 SaveButton.grid(row=1, column=2, sticky=tk.E, padx=10)
-SaveButton.config(state= tk.DISABLED)
+SaveButton.config(state=tk.DISABLED)
 
 def options():
     importwindow(root, widthfactor, heightfactor)
