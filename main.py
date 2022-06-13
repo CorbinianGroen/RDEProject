@@ -1,4 +1,3 @@
-#imports of packages
 import tkinter as tk
 from tkinter import filedialog
 import customtkinter as ct
@@ -23,16 +22,19 @@ Ar = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE
 O2 = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-O2-1(1).txt'
 Ar_orr = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-Ar-1(1).txt'
 CO_Strip = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3_20210414-RRDE3_COstrip-0.05V_1Vs-1_0.01rpm_Ar_0_GC-19936-afterORRC_all cylcles.txt'
+Kr_test = 'C:/CloudStation/Master/Forschungspraktikum Krischer/Data/nSi-Pt_20220225/5_ar_cv_-0pt67_-0pt3_20mvs_200rpm_3cyc - Kopie.txt'
+Kr_test_2 = "C:/CloudStation/Master/Forschungspraktikum Krischer/Data/nSi-Pt_20220225/3_ar_cv_-0pt67_0pt46_20mvs_200rpm_3cyc.txt"
 
-diameter = 0.196
+radius = 0.2
 
 cm = 1 / 2.54
 
 #end of testing values
 
+#apperancesetting
 ct.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ct.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
-
+#end
 
 def interpolation(curve1, curve2):
     upper1 = curve1['Potential/V'].loc[curve1['Potential/V'].nlargest(1).index[0]]
@@ -110,7 +112,8 @@ def CO_plot(df1, df2):
     co_area = ((integration / 0.01) / 420e-6)
 
     global co_rf
-    co_rf = co_area / diameter
+    area_geo = np.pi * (radius ** 2)
+    co_rf = co_area / area_geo
     firstvalue = higher0.head(1).index[0]
 
     if LoadingEntry.get() != '':
@@ -408,7 +411,8 @@ def Ar_Plot(anodic, cathodic):
         area_norm = area / loading * 0.0001
 
     global rf
-    rf = area / diameter
+    area_geo = np.pi * (radius ** 2)
+    rf = area / area_geo
 
     def dragged():
         upper_potential = Tline2.getvalue()
@@ -444,7 +448,8 @@ def Ar_Plot(anodic, cathodic):
             area_norm = area / loading * 0.0001
 
         global rf
-        rf = area / diameter
+        area_geo = np.pi * (radius ** 2)
+        rf = area / area_geo
 
         rf_label.config(text='{0:.3f}'.format(rf))
         Area_label.config(text='{0:.3f}'.format(area))
@@ -1034,350 +1039,365 @@ def O2_plot(O2, Ar):
 
     window.mainloop()
 
+if __name__ == '__main__':
+    root = ct.CTk()
+    root.title('RDE Evaluation')
+    root.iconphoto(True, tk.PhotoImage(file='iconRDE.png'))
+    width = root.winfo_screenwidth()
+    height = root.winfo_screenheight()
+    widthfactor = width / 1920
+    heightfactor = height / 1080
+    root.geometry(str(int(width - (widthfactor * 20))) + 'x' + str(int(height - (heightfactor * 90))) + '+0+10')
+    root.configure(bg='grey90')
+    root.resizable(False, False)
 
-root = ct.CTk()
-root.title('RDE Evaluation')
-root.iconphoto(True, tk.PhotoImage(file='iconRDE.png'))
-width = root.winfo_screenwidth()
-height = root.winfo_screenheight()
-widthfactor = width / 1920
-heightfactor = height / 1080
-root.geometry(str(int(width - (widthfactor * 20))) + 'x' + str(int(height - (heightfactor * 90))) + '+0+10')
-root.configure(bg='grey90')
-root.resizable(False, False)
+    root.grid_columnconfigure(0, weight=3, minsize=int(widthfactor * (width * 0.753) - 25))
+    root.grid_columnconfigure(1, weight=1, minsize=int(widthfactor * (width * (1 - 0.753)) - 25))
+    root.grid_rowconfigure(0, weight=1)
+    root.grid_rowconfigure(1, weight=1, minsize=int(heightfactor * (height * 0.615)))
+    root.grid_rowconfigure(2, weight=0)
+    root.grid_rowconfigure(3, weight=0, minsize=10)
 
-root.grid_columnconfigure(0, weight=3, minsize=int(widthfactor * (width * 0.753) - 25))
-root.grid_columnconfigure(1, weight=1, minsize=int(widthfactor * (width * (1-0.753)) - 25))
-root.grid_rowconfigure(0, weight=1)
-root.grid_rowconfigure(1, weight=1, minsize=int(heightfactor * (height * 0.615)))
-root.grid_rowconfigure(2, weight=0)
-root.grid_rowconfigure(3, weight=0, minsize=10)
+    if ct.get_appearance_mode() == 'Dark':
+        bg_color = 'grey10'
+        fg_color = 'grey20'
+    else:
+        bg_color = 'grey90'
+        fg_color = 'grey80'
 
-if ct.get_appearance_mode() == 'Dark':
-    bg_color = 'grey10'
-    fg_color = 'grey20'
-else:
-    bg_color = 'grey90'
-    fg_color = 'grey80'
-
-
-d = {}
-global z
-z = 0
-global savefile
-global results
-savefile = np.linspace(0, 1000, 1001)
-savefile = pd.DataFrame(savefile, columns=['ignore'])
-results = pd.DataFrame({'ignore': [1]})
-
-
-
-
-#layout of frames for the main window
-input_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
-input_frame.grid(row=0, column=0, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
-input_frame.grid_rowconfigure(0, weight=0, minsize=10)
-input_frame.grid_columnconfigure(0,weight=0, minsize=10)
-input_frame.grid_columnconfigure(3,weight=0, minsize=10)
-input_frame.grid_rowconfigure(2, weight=0, minsize=10)
-input_frame.grid_rowconfigure(4, weight=0, minsize=10)
-input_frame.grid_rowconfigure(6, weight=0, minsize=10)
-input_frame.grid_rowconfigure(8, weight=0, minsize=10)
-input_frame.grid_rowconfigure(10, weight=0, minsize=10)
-
-graph_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
-graph_frame.grid(row=1, column=0, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
-
-
-data_over_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
-data_over_frame.grid(row=0, column=1, rowspan=2, sticky='nswe', pady=10, padx=10)
-data_over_frame.grid_columnconfigure(0, weight=0, minsize=10)
-data_over_frame.grid_columnconfigure(1, weight=1)
-data_over_frame.grid_columnconfigure(2, weight=0)
-data_over_frame.grid_columnconfigure(3, weight=0, minsize=5)
-data_over_frame.grid_rowconfigure(0, weight=0, minsize=10)
-data_over_frame.grid_rowconfigure(1, weight=1)
-data_over_frame.grid_rowconfigure(2, weight=0, minsize=10)
-
-data_canvas = ct.CTkCanvas(master=data_over_frame, bg=fg_color, highlightthickness=0)
-data_canvas.grid(row=1, column=1, sticky='nswe')
-data_canvas.grid_columnconfigure(0, weight=1)
-data_canvas.grid_columnconfigure(1, weight=0, minsize=5)
-
-yscrollbar = tk.Scrollbar(data_over_frame, orient='vertical')
-yscrollbar.grid(row=1, column=2, sticky='nse')
-
-data_canvas.config(yscrollcommand=yscrollbar.set)
-yscrollbar.config(command=data_canvas.yview)
-
-data_frame = ct.CTkFrame(master=data_canvas, fg_color=fg_color, bg_color=fg_color)
-data_frame.grid(row=0, column=0, sticky='nswe')
-data_frame.grid_rowconfigure(0, weight=0, minsize=0)
-data_frame.grid_columnconfigure(0, weight=0, minsize=0)
-data_frame.grid_columnconfigure(1, weight=1)
-
-data_canvas.create_window((0,0), window=data_frame, anchor='nw')
-
-bottom_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
-bottom_frame.grid(row=2, column=0, columnspan=2 , sticky='nswe', padx=10, ipadx=10, ipady=10)
-bottom_frame.grid_rowconfigure(0, weight=0)
-bottom_frame.grid_rowconfigure(1, weight=1)
-bottom_frame.grid_rowconfigure(2, weight=0)
-bottom_frame.grid_columnconfigure(1, weight=1)
-
-def remove(value):
-    for widgets in d['v_f_{0}'.format(value)].winfo_children():
-        widgets.destroy()
-    d['v_f_{0}'.format(value)].grid_forget()
-    d['v_f_{0}'.format(value)].destroy()
-    data_frame.grid_rowconfigure(value * 2 + 2, minsize=0)
+    d = {}
+    global z
+    z = 0
     global savefile
-    savefile.drop(list(savefile.filter(regex='_' + str(value))), axis=1, inplace=True)
     global results
-    results.drop(list(results.filter(regex='_' + str(value))), axis=1, inplace=True)
-    save_enable()
+    savefile = np.linspace(0, 1000, 1001)
+    savefile = pd.DataFrame(savefile, columns=['ignore'])
+    results = pd.DataFrame({'ignore': [1]})
+
+    # layout of frames for the main window
+    input_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
+    input_frame.grid(row=0, column=0, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
+    input_frame.grid_rowconfigure(0, weight=0, minsize=10)
+    input_frame.grid_columnconfigure(0, weight=0, minsize=10)
+    input_frame.grid_columnconfigure(3, weight=0, minsize=10)
+    input_frame.grid_rowconfigure(2, weight=0, minsize=10)
+    input_frame.grid_rowconfigure(4, weight=0, minsize=10)
+    input_frame.grid_rowconfigure(6, weight=0, minsize=10)
+    input_frame.grid_rowconfigure(8, weight=0, minsize=10)
+    input_frame.grid_rowconfigure(10, weight=0, minsize=10)
+
+    graph_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
+    graph_frame.grid(row=1, column=0, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
+
+    data_over_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
+    data_over_frame.grid(row=0, column=1, rowspan=2, sticky='nswe', pady=10, padx=10)
+    data_over_frame.grid_columnconfigure(0, weight=0, minsize=10)
+    data_over_frame.grid_columnconfigure(1, weight=1)
+    data_over_frame.grid_columnconfigure(2, weight=0)
+    data_over_frame.grid_columnconfigure(3, weight=0, minsize=5)
+    data_over_frame.grid_rowconfigure(0, weight=0, minsize=10)
+    data_over_frame.grid_rowconfigure(1, weight=1)
+    data_over_frame.grid_rowconfigure(2, weight=0, minsize=10)
+
+    data_canvas = ct.CTkCanvas(master=data_over_frame, bg=fg_color, highlightthickness=0)
+    data_canvas.grid(row=1, column=1, sticky='nswe')
+    data_canvas.grid_columnconfigure(0, weight=1)
+    data_canvas.grid_columnconfigure(1, weight=0, minsize=5)
+
+    yscrollbar = tk.Scrollbar(data_over_frame, orient='vertical')
+    yscrollbar.grid(row=1, column=2, sticky='nse')
+
+    data_canvas.config(yscrollcommand=yscrollbar.set)
+    yscrollbar.config(command=data_canvas.yview)
+
+    data_frame = ct.CTkFrame(master=data_canvas, fg_color=fg_color, bg_color=fg_color)
+    data_frame.grid(row=0, column=0, sticky='nswe')
+    data_frame.grid_rowconfigure(0, weight=0, minsize=0)
+    data_frame.grid_columnconfigure(0, weight=0, minsize=0)
+    data_frame.grid_columnconfigure(1, weight=1)
+
+    data_canvas.create_window((0, 0), window=data_frame, anchor='nw')
+
+    bottom_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
+    bottom_frame.grid(row=2, column=0, columnspan=2, sticky='nswe', padx=10, ipadx=10, ipady=10)
+    bottom_frame.grid_rowconfigure(0, weight=0)
+    bottom_frame.grid_rowconfigure(1, weight=1)
+    bottom_frame.grid_rowconfigure(2, weight=0)
+    bottom_frame.grid_columnconfigure(1, weight=1)
 
 
-#input frame
-NameLabel = ct.CTkLabel(master=input_frame, text='Name:', text_font=("Calibri", -18))
-NameLabel.grid(row=1, column=1, sticky=tk.W)
-NameEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
-NameEntry.grid(row=1, column=2, sticky=tk.W)
-
-LoadingLabel = ct.CTkLabel(master=input_frame, text='Loading [g]:', text_font=("Calibri", -18))
-LoadingLabel.grid(row=3, column=1, sticky=tk.W)
-LoadingEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
-LoadingEntry.grid(row=3, column=2, sticky=tk.W)
-
-RLabel = ct.CTkLabel(master=input_frame, text=u'HFR [\u03A9]:', text_font=("Calibri", -18))
-RLabel.grid(row=5, column=1, sticky=tk.W)
-REntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
-REntry.grid(row=5, column=2, sticky=tk.W)
-
-RefLabel = ct.CTkLabel(master=input_frame, text='Ref [V]:', text_font=("Calibri", -18))
-RefLabel.grid(row=7, column=1, sticky=tk.W)
-RefEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
-RefEntry.grid(row=7, column=2, sticky=tk.W)
+    def remove(value):
+        for widgets in d['v_f_{0}'.format(value)].winfo_children():
+            widgets.destroy()
+        d['v_f_{0}'.format(value)].grid_forget()
+        d['v_f_{0}'.format(value)].destroy()
+        data_frame.grid_rowconfigure(value * 2 + 2, minsize=0)
+        global savefile
+        savefile.drop(list(savefile.filter(regex='_' + str(value))), axis=1, inplace=True)
+        global results
+        results.drop(list(results.filter(regex='_' + str(value))), axis=1, inplace=True)
+        save_enable()
 
 
-HUPDLabel = ct.CTkLabel(master=input_frame, text='Ar CV:', text_font=("Calibri", -18))
-HUPDLabel.grid(row=1, column=4, sticky=tk.W)
-HUPDEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
-HUPDEntry.grid(row=1, column=5, sticky=tk.W)
-def HUPD():
-    file = filedialog.askopenfilename(title='Open HUPD file', initialdir='/', filetypes=[('Textfile', '*.txt')])
-    if file is not None:
-        HUPDEntry.delete(0, 'end')
-        HUPDEntry.insert(0, file)
-        HUPDEval.configure(state=tk.NORMAL)
+    # input frame
+    NameLabel = ct.CTkLabel(master=input_frame, text='Name:', text_font=("Calibri", -18))
+    NameLabel.grid(row=1, column=1, sticky=tk.W)
+    NameEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    NameEntry.grid(row=1, column=2, sticky=tk.W)
+
+    LoadingLabel = ct.CTkLabel(master=input_frame, text='Loading [g]:', text_font=("Calibri", -18))
+    LoadingLabel.grid(row=3, column=1, sticky=tk.W)
+    LoadingEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    LoadingEntry.grid(row=3, column=2, sticky=tk.W)
+
+    RLabel = ct.CTkLabel(master=input_frame, text=u'HFR [\u03A9]:', text_font=("Calibri", -18))
+    RLabel.grid(row=5, column=1, sticky=tk.W)
+    REntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    REntry.grid(row=5, column=2, sticky=tk.W)
+
+    RefLabel = ct.CTkLabel(master=input_frame, text='Ref [V]:', text_font=("Calibri", -18))
+    RefLabel.grid(row=7, column=1, sticky=tk.W)
+    RefEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    RefEntry.grid(row=7, column=2, sticky=tk.W)
+
+    HUPDLabel = ct.CTkLabel(master=input_frame, text='Ar CV:', text_font=("Calibri", -18))
+    HUPDLabel.grid(row=1, column=4, sticky=tk.W)
+    HUPDEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    HUPDEntry.grid(row=1, column=5, sticky=tk.W)
 
 
-ct.CTkButton(master=input_frame, text='Open', command=HUPD, text_font=("Calibri", -18), width=80).grid(row=1, column=6, sticky=tk.W, padx=20)
-def Ar_graph():
-    #Ar = HUPDEntry.get()
-    Ar_cathodic, Ar_anodic = scan.singlescan(Ar, 2)
-    Ar_Plot(Ar_anodic, Ar_cathodic)
+    def HUPD():
+        file = filedialog.askopenfilename(title='Open HUPD file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        if file is not None:
+            HUPDEntry.delete(0, 'end')
+            HUPDEntry.insert(0, file)
+            HUPDEval.configure(state=tk.NORMAL)
 
 
-HUPDEval = ct.CTkButton(master=input_frame, text='Eval', command=Ar_graph, text_font=("Calibri", -18), width=80)
-HUPDEval.grid(row=1, column=7, sticky=tk.W, padx=20)
-#HUPDEval.configure(state=tk.DISABLED)
-
-COStripLabel = ct.CTkLabel(master=input_frame, text='CO Strip:', text_font=("Calibri", -18))
-COStripLabel.grid(row=3, column=4, sticky=tk.W)
-COStripEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
-COStripEntry.grid(row=3, column=5, sticky=tk.W)
-
-def COStrip():
-    file = filedialog.askopenfilename(title='Open COStrip file', initialdir='/', filetypes=[('Textfile', '*.txt')])
-    if file is not None:
-        COStripEntry.delete(0, 'end')
-        COStripEntry.insert(0, file)
-        HUPDEval.configure(state=tk.NORMAL)
+    ct.CTkButton(master=input_frame, text='Open', command=HUPD, text_font=("Calibri", -18), width=80).grid(row=1, column=6, sticky=tk.W, padx=20)
 
 
-ct.CTkButton(master=input_frame, text='Open', command=COStrip, text_font=("Calibri", -18), width=80).grid(row=3, column=6, sticky=tk.W, padx=20)
-
-def CO_Strip_graph():
-    #CO_Strip = COStripEntry.get()
-    CO_cathodic_1, CO_anodic_1 = scan.multiplescan(CO_Strip, 1, sepvalue='\t', decimalvalue=',')
-    CO_cathodic_2, CO_anodic_2 = scan.multiplescan(CO_Strip, 2, sepvalue='\t', decimalvalue=',')
-    CO_plot(CO_anodic_1, CO_anodic_2)
-
-
-COStripEval = ct.CTkButton(master=input_frame, text='Eval', command=CO_Strip_graph, text_font=("Calibri", -18), width=80)
-COStripEval.grid(row=3, column=7, sticky=tk.W, padx=20)
-#COStripEval.configure(state=tk.DISABLED)
-
-ORRLabel = ct.CTkLabel(master=input_frame, text='ORR O2:', text_font=("Calibri", -18))
-ORRLabel.grid(row=5, column=4, sticky=tk.W)
-ORREntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
-ORREntry.grid(row=5, column=5, sticky=tk.W)
-
-def ORR():
-    file = filedialog.askopenfilename(title='Open ORR O2 file', initialdir='/', filetypes=[('Textfile', '*.txt')])
-    if file is not None:
-        ORREntry.delete(0, 'end')
-        ORREntry.insert(0, file)
-        if ORRArEntry.get() != '':
-            ORREval.configure(state=tk.NORMAL)
+    def Ar_graph():
+        # Ar = HUPDEntry.get()
+        #Ar_cathodic, Ar_anodic = scan.singlescan(Ar)
+        Kr1, Kr2 = scan.multiplescan(Kr_test_2, 2, sepvalue='\s+', headervalue=None, decimalvalue='.', skip=19, pot=2, cur=3)
+        Ar_Plot(Kr2, Kr1)
+        #Ar_Plot(Ar_anodic, Ar_cathodic)
 
 
-ct.CTkButton(master=input_frame, text='Open', command=ORR, text_font=("Calibri", -18), width=80).grid(row=5, column=6, sticky=tk.W, padx=20)
+    HUPDEval = ct.CTkButton(master=input_frame, text='Eval', command=Ar_graph, text_font=("Calibri", -18), width=80)
+    HUPDEval.grid(row=1, column=7, sticky=tk.W, padx=20)
+    # HUPDEval.configure(state=tk.DISABLED)
 
-ORRArLabel = ct.CTkLabel(master=input_frame, text='ORR Ar:', text_font=("Calibri", -18))
-ORRArLabel.grid(row=7, column=4, sticky=tk.W)
-ORRArEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
-ORRArEntry.grid(row=7, column=5, sticky=tk.W)
-
-def ORR_Ar():
-    file = filedialog.askopenfilename(title='Open ORR Ar file', initialdir='/', filetypes=[('Textfile', '*.txt')])
-    if file is not None:
-        ORRArEntry.delete(0, 'end')
-        ORRArEntry.insert(0, file)
-        if ORREntry.get() != '':
-            ORREval.configure(state=tk.NORMAL)
+    COStripLabel = ct.CTkLabel(master=input_frame, text='CO Strip:', text_font=("Calibri", -18))
+    COStripLabel.grid(row=3, column=4, sticky=tk.W)
+    COStripEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    COStripEntry.grid(row=3, column=5, sticky=tk.W)
 
 
-ct.CTkButton(master=input_frame, text='Open', command=ORR_Ar, text_font=("Calibri", -18), width=80).grid(row=7, column=6, sticky=tk.W, padx=20)
-
-def ORR_graph():
-    #O2 = ORREntry.get()
-    #Ar_orr = ORRArEntry.get()
-    R = None
-    Ref = None
-    if REntry.get() != '':
-        R = REntry.get()
-        REntry.configure(fg_color=('white', 'grey25'))
-    else:
-        REntry.configure(fg_color=('red'))
-    if RefEntry.get() != '':
-        Ref = RefEntry.get()
-        RefEntry.configure(fg_color=('white', 'grey25'))
-    else:
-        RefEntry.configure(fg_color=('red'))
-    if R is not None and Ref is not None:
-        O2_anodic = scan.lsvscan(O2, headervalue=None)
-        Ar_anodic_orr = scan.lsvscan(Ar_orr, headervalue=None)
-        O2_plot(O2_anodic, Ar_anodic_orr)
+    def COStrip():
+        file = filedialog.askopenfilename(title='Open COStrip file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        if file is not None:
+            COStripEntry.delete(0, 'end')
+            COStripEntry.insert(0, file)
+            HUPDEval.configure(state=tk.NORMAL)
 
 
-ORREval = ct.CTkButton(master=input_frame, text='Eval', command=ORR_graph, text_font=("Calibri", -18), width=80)
-ORREval.grid(row=5, column=7, rowspan=3, sticky=tk.W, padx=20)
-#ORREval.configure(state=tk.DISABLED)
-
-HORLabel = ct.CTkLabel(master=input_frame, text='HOR O2:', text_font=("Calibri", -18))
-HORLabel.grid(row=9, column=4, sticky=tk.W)
-HOREntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
-HOREntry.grid(row=9, column=5, sticky=tk.W)
-
-def HOR():
-    file = filedialog.askopenfilename(title='Open HOR H2 file', initialdir='/', filetypes=[('Textfile', '*.txt')])
-    if file is not None:
-        HOREntry.delete(0, 'end')
-        HOREntry.insert(0, file)
-        if HORArEntry.get() != '':
-            HOREval.configure(state=tk.NORMAL)
+    ct.CTkButton(master=input_frame, text='Open', command=COStrip, text_font=("Calibri", -18), width=80).grid(row=3, column=6, sticky=tk.W, padx=20)
 
 
-ct.CTkButton(master=input_frame, text='Open', command=HOR, text_font=("Calibri", -18), width=80).grid(row=9, column=6, sticky=tk.W, padx=20)
-
-HORArLabel = ct.CTkLabel(master=input_frame, text='HOR Ar:', text_font=("Calibri", -18))
-HORArLabel.grid(row=11, column=4, sticky=tk.W)
-HORArEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
-HORArEntry.grid(row=11, column=5, sticky=tk.W)
-
-def HOR_Ar():
-    file = filedialog.askopenfilename(title='Open HOR Ar file', initialdir='/', filetypes=[('Textfile', '*.txt')])
-    if file is not None:
-        HORArEntry.delete(0, 'end')
-        HORArEntry.insert(0, file)
-        if HOREntry.get() != '':
-            HOREval.configure(state=tk.NORMAL)
+    def CO_Strip_graph():
+        # CO_Strip = COStripEntry.get()
+        CO_cathodic_1, CO_anodic_1 = scan.multiplescan(CO_Strip, 1, sepvalue='\t', decimalvalue=',')
+        CO_cathodic_2, CO_anodic_2 = scan.multiplescan(CO_Strip, 2, sepvalue='\t', decimalvalue=',')
+        CO_plot(CO_anodic_1, CO_anodic_2)
 
 
-ct.CTkButton(master=input_frame, text='Open', command=HOR_Ar, text_font=("Calibri", -18), width=80).grid(row=11, column=6, sticky=tk.W, padx=20)
+    COStripEval = ct.CTkButton(master=input_frame, text='Eval', command=CO_Strip_graph, text_font=("Calibri", -18), width=80)
+    COStripEval.grid(row=3, column=7, sticky=tk.W, padx=20)
+    # COStripEval.configure(state=tk.DISABLED)
 
-def HOR_graph():
-    pass
-    #H2 = HOREntry.get()
-    #Ar_hor = HORArEntry.get()
-    #H2_anodic = lsvscan(H2, headervalue=None)
-    #Ar_anodic_HOR = lsvscan(Ar_hor, headervalue=None)
-    #H2_plot(O2_anodic, Ar_anodic_HOR)
-
-
-HOREval = ct.CTkButton(master=input_frame, text='Eval', command=HOR_graph, text_font=("Calibri", -18), width=80)
-HOREval.grid(row=9, column=7, rowspan=3, sticky=tk.W, padx=20)
-HOREval.configure(state=tk.DISABLED)
-
-def save_enable():
-    amount = len(list(data_frame.winfo_children()))
-    if amount > 0:
-        SaveButton.config(state=tk.NORMAL)
-    else:
-        SaveButton.config(state=tk.DISABLED)
+    ORRLabel = ct.CTkLabel(master=input_frame, text='ORR O2:', text_font=("Calibri", -18))
+    ORRLabel.grid(row=5, column=4, sticky=tk.W)
+    ORREntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    ORREntry.grid(row=5, column=5, sticky=tk.W)
 
 
-def save():
-    del savefile['ignore']
-    del results['ignore']
-
-    file = filedialog.asksaveasfilename(title='Save As', initialdir='/', filetypes=[('Textfile', '*.txt')], initialfile=NameEntry.get())
-    if file is not None:
-        file1 = file + '.txt'
-        file2 = file + '_results.txt'
-        #savefile.to_csv(file1, sep='\t', index=False, header=True)
-        #results.to_csv(file2, sep='\t', index=False, header=True)
-
-        w_list = list(data_frame.winfo_children())
-        w_list.pop(0)
-        for element in w_list:
-            element.destroy()
-        global z
-        z = 0
+    def ORR():
+        file = filedialog.askopenfilename(title='Open ORR O2 file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        if file is not None:
+            ORREntry.delete(0, 'end')
+            ORREntry.insert(0, file)
+            if ORRArEntry.get() != '':
+                ORREval.configure(state=tk.NORMAL)
 
 
-SaveButton = ct.CTkButton(master=bottom_frame,text="Save", command=save, text_font=("Calibri", -18), width= 80, height= 10)
-SaveButton.grid(row=1, column=2, sticky=tk.E, padx=10)
-SaveButton.config(state=tk.DISABLED)
+    ct.CTkButton(master=input_frame, text='Open', command=ORR, text_font=("Calibri", -18), width=80).grid(row=5, column=6, sticky=tk.W, padx=20)
 
-def options():
-    importwindow(root, widthfactor, heightfactor)
-
-    config = open('Importconfig.txt')
-    config_txt = config.readlines()
-    config.close()
-
-    Ar_config = config_txt[2].replace('\n', '').split()
-    CO_config = config_txt[4].replace('\n', '').split()
-
-OptionsButton = ct.CTkButton(master=bottom_frame,text="Import Options", command=options, text_font=("Calibri", -18), width= 160, height= 10)
-OptionsButton.grid(row=1, column=1, sticky=tk.W, padx=10)
-
-def change_mode():
-    if switch_2.get() == 1:
-        ct.set_appearance_mode("Dark")
-        root.configure(bg='grey10')
-        data_canvas.configure(bg='grey20')
-        data_frame.configure(fg_color='grey20')
-        data_frame.configure(bg_color='grey20')
-    else:
-        ct.set_appearance_mode("Light")
-        root.configure(bg='grey90')
-        data_canvas.configure(bg='grey80')
-        data_frame.configure(fg_color='grey80')
-        data_frame.configure(bg_color='grey80')
-
-switch_2 = ct.CTkSwitch(master=bottom_frame,text="Dark Mode", command=change_mode)
-switch_2.grid(row=1, column=0, sticky=tk.W, padx=10)
+    ORRArLabel = ct.CTkLabel(master=input_frame, text='ORR Ar:', text_font=("Calibri", -18))
+    ORRArLabel.grid(row=7, column=4, sticky=tk.W)
+    ORRArEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    ORRArEntry.grid(row=7, column=5, sticky=tk.W)
 
 
-def on_closing():
-    root.destroy()
-    exit()
+    def ORR_Ar():
+        file = filedialog.askopenfilename(title='Open ORR Ar file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        if file is not None:
+            ORRArEntry.delete(0, 'end')
+            ORRArEntry.insert(0, file)
+            if ORREntry.get() != '':
+                ORREval.configure(state=tk.NORMAL)
 
 
-root.protocol("WM_DELETE_WINDOW", on_closing)
+    ct.CTkButton(master=input_frame, text='Open', command=ORR_Ar, text_font=("Calibri", -18), width=80).grid(row=7, column=6, sticky=tk.W, padx=20)
 
-root.mainloop()
+
+    def ORR_graph():
+        # O2 = ORREntry.get()
+        # Ar_orr = ORRArEntry.get()
+        R = None
+        Ref = None
+        if REntry.get() != '':
+            R = REntry.get()
+            REntry.configure(fg_color=('white', 'grey25'))
+        else:
+            REntry.configure(fg_color=('red'))
+        if RefEntry.get() != '':
+            Ref = RefEntry.get()
+            RefEntry.configure(fg_color=('white', 'grey25'))
+        else:
+            RefEntry.configure(fg_color=('red'))
+        if R is not None and Ref is not None:
+            O2_anodic = scan.lsvscan(O2, headervalue=None)
+            Ar_anodic_orr = scan.lsvscan(Ar_orr, headervalue=None)
+            O2_plot(O2_anodic, Ar_anodic_orr)
+
+
+    ORREval = ct.CTkButton(master=input_frame, text='Eval', command=ORR_graph, text_font=("Calibri", -18), width=80)
+    ORREval.grid(row=5, column=7, rowspan=3, sticky=tk.W, padx=20)
+    # ORREval.configure(state=tk.DISABLED)
+
+    HORLabel = ct.CTkLabel(master=input_frame, text='HOR O2:', text_font=("Calibri", -18))
+    HORLabel.grid(row=9, column=4, sticky=tk.W)
+    HOREntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    HOREntry.grid(row=9, column=5, sticky=tk.W)
+
+
+    def HOR():
+        file = filedialog.askopenfilename(title='Open HOR H2 file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        if file is not None:
+            HOREntry.delete(0, 'end')
+            HOREntry.insert(0, file)
+            if HORArEntry.get() != '':
+                HOREval.configure(state=tk.NORMAL)
+
+
+    ct.CTkButton(master=input_frame, text='Open', command=HOR, text_font=("Calibri", -18), width=80).grid(row=9, column=6, sticky=tk.W, padx=20)
+
+    HORArLabel = ct.CTkLabel(master=input_frame, text='HOR Ar:', text_font=("Calibri", -18))
+    HORArLabel.grid(row=11, column=4, sticky=tk.W)
+    HORArEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    HORArEntry.grid(row=11, column=5, sticky=tk.W)
+
+
+    def HOR_Ar():
+        file = filedialog.askopenfilename(title='Open HOR Ar file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        if file is not None:
+            HORArEntry.delete(0, 'end')
+            HORArEntry.insert(0, file)
+            if HOREntry.get() != '':
+                HOREval.configure(state=tk.NORMAL)
+
+
+    ct.CTkButton(master=input_frame, text='Open', command=HOR_Ar, text_font=("Calibri", -18), width=80).grid(row=11, column=6, sticky=tk.W, padx=20)
+
+
+    def HOR_graph():
+        pass
+        # H2 = HOREntry.get()
+        # Ar_hor = HORArEntry.get()
+        # H2_anodic = lsvscan(H2, headervalue=None)
+        # Ar_anodic_HOR = lsvscan(Ar_hor, headervalue=None)
+        # H2_plot(O2_anodic, Ar_anodic_HOR)
+
+
+    HOREval = ct.CTkButton(master=input_frame, text='Eval', command=HOR_graph, text_font=("Calibri", -18), width=80)
+    HOREval.grid(row=9, column=7, rowspan=3, sticky=tk.W, padx=20)
+    HOREval.configure(state=tk.DISABLED)
+
+
+    def save_enable():
+        amount = len(list(data_frame.winfo_children()))
+        if amount > 0:
+            SaveButton.config(state=tk.NORMAL)
+        else:
+            SaveButton.config(state=tk.DISABLED)
+
+
+    def save():
+        del savefile['ignore']
+        del results['ignore']
+
+        file = filedialog.asksaveasfilename(title='Save As', initialdir='/', filetypes=[('Textfile', '*.txt')], initialfile=NameEntry.get())
+        if file is not None:
+            file1 = file + '.txt'
+            file2 = file + '_results.txt'
+            # savefile.to_csv(file1, sep='\t', index=False, header=True)
+            # results.to_csv(file2, sep='\t', index=False, header=True)
+
+            w_list = list(data_frame.winfo_children())
+            w_list.pop(0)
+            for element in w_list:
+                element.destroy()
+            global z
+            z = 0
+
+
+    SaveButton = ct.CTkButton(master=bottom_frame, text="Save", command=save, text_font=("Calibri", -18), width=80, height=10)
+    SaveButton.grid(row=1, column=2, sticky=tk.E, padx=10)
+    SaveButton.config(state=tk.DISABLED)
+
+
+    def options():
+        importwindow(root, widthfactor, heightfactor)
+
+        config = open('Importconfig.txt')
+        config_txt = config.readlines()
+        config.close()
+
+        Ar_config = config_txt[2].replace('\n', '').split()
+        CO_config = config_txt[4].replace('\n', '').split()
+
+
+    OptionsButton = ct.CTkButton(master=bottom_frame, text="Import Options", command=options, text_font=("Calibri", -18), width=160, height=10)
+    OptionsButton.grid(row=1, column=1, sticky=tk.W, padx=10)
+
+
+    def change_mode():
+        if switch_2.get() == 1:
+            ct.set_appearance_mode("Dark")
+            root.configure(bg='grey10')
+            data_canvas.configure(bg='grey20')
+            data_frame.configure(fg_color='grey20')
+            data_frame.configure(bg_color='grey20')
+        else:
+            ct.set_appearance_mode("Light")
+            root.configure(bg='grey90')
+            data_canvas.configure(bg='grey80')
+            data_frame.configure(fg_color='grey80')
+            data_frame.configure(bg_color='grey80')
+
+
+    switch_2 = ct.CTkSwitch(master=bottom_frame, text="Dark Mode", command=change_mode)
+    switch_2.grid(row=1, column=0, sticky=tk.W, padx=10)
+
+
+    def on_closing():
+        root.destroy()
+        exit()
+
+
+    root.protocol("WM_DELETE_WINDOW", on_closing)
+
+    root.mainloop()
+
