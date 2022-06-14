@@ -13,7 +13,7 @@ def importwindow(master, widthfactor, heightfactor):
 
 
     window = ct.CTkToplevel(master)
-    window.grab_set()
+    #window.grab_set()
     window.title('Import Options')
     window.geometry(str(int(widthfactor*750)) + 'x' + str(int(heightfactor*600)))
 
@@ -49,15 +49,18 @@ def importwindow(master, widthfactor, heightfactor):
     #ArFrame Inputs
     ArFrame.grid_rowconfigure(0, minsize=10)
     ArFrame.grid_columnconfigure(0, minsize=10)
-    ArFrame.grid_columnconfigure(11, minsize=10)
+    ArFrame.grid_columnconfigure(17, minsize=10)
     ct.CTkLabel(master=ArFrame, text='Ar CV:', text_font=("Calibri", -18), width=1).grid(row=1, column=1, sticky=tk.W)
     ct.CTkLabel(master=ArFrame, text='Scantype:', text_font=("Calibri", -18), width=1).grid(row=2, column=1, sticky=tk.W)
     ct.CTkLabel(master=ArFrame, text='Scan:', text_font=("Calibri", -18), width=1).grid(row=2, column=3, sticky=tk.W)
     ct.CTkLabel(master=ArFrame, text='Sep:', text_font=("Calibri", -18), width=1).grid(row=2, column=5, sticky=tk.W)
     ct.CTkLabel(master=ArFrame, text='Header:', text_font=("Calibri", -18), width=1).grid(row=2, column=7, sticky=tk.W)
     ct.CTkLabel(master=ArFrame, text='Decimal:', text_font=("Calibri", -18), width=1).grid(row=2, column=9, sticky=tk.W)
+    ct.CTkLabel(master=ArFrame, text='Skip:', text_font=("Calibri", -18), width=1).grid(row=2, column=11, sticky=tk.W)
+    ct.CTkLabel(master=ArFrame, text='Pot Column:', text_font=("Calibri", -18), width=1).grid(row=2, column=13, sticky=tk.W)
+    ct.CTkLabel(master=ArFrame, text='Cur Column:', text_font=("Calibri", -18), width=1).grid(row=2, column=15, sticky=tk.W)
 
-    Scans = ("LSV", "Single", "Multiple")
+    Scans = ("Single", "Multiple")
     ArScan_var = ct.StringVar()
     ArScan = ttk.Combobox(ArFrame, textvariable=ArScan_var)
     ArScan['values'] = Scans
@@ -81,12 +84,12 @@ def importwindow(master, widthfactor, heightfactor):
 
     Options = ('None', '0', '1', '2', '3', '4', '5', '6')
     ArOption_var = ct.StringVar()
-    ArHead = ttk.Combobox(ArFrame, textvariable=ArOption_var)
-    ArHead['values'] = Options
-    ArOption_var.set(Ar_config[3])
-    ArHead.config(width=8)
-    #ArHead = ct.CTkComboBox(master=ArFrame, variable=ArOption_var, values=Options)
-    #ArHead.config(width=80, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey70', 'grey30'))
+    #ArHead = ttk.Combobox(ArFrame, textvariable=ArOption_var)
+    #ArHead['values'] = Options
+    #ArOption_var.set(Ar_config[3])
+    #ArHead.config(width=8)
+    ArHead = ct.CTkComboBox(master=ArFrame, variable=ArOption_var, values=Options)
+    ArHead.config(width=80, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey70', 'grey30'))
     ArHead.grid(row=2, column=8, sticky=tk.W)
 
     Decimals = ('.', ',')
@@ -97,6 +100,18 @@ def importwindow(master, widthfactor, heightfactor):
     ArDecimal.config(width=5)
     ArDecimal.grid(row=2, column=10, sticky=tk.W)
     ArDecimal_var.set(Ar_config[4])
+
+    ArSkip = ct.CTkEntry(master=ArFrame, width=10)
+    ArSkip.grid(row=2, column=12, sticky=tk.W)
+    ArSkip.insert(0, Ar_config[5])
+
+    ArPot = ct.CTkEntry(master=ArFrame, width=30)
+    ArPot.grid(row=2, column=14, sticky=tk.W)
+    ArPot.insert(0, Ar_config[6])
+
+    ArCur = ct.CTkEntry(master=ArFrame, width=30)
+    ArCur.grid(row=2, column=16, sticky=tk.W)
+    ArCur.insert(0, Ar_config[7])
 
     # COFrame Inputs
     COFrame.grid_rowconfigure(0, minsize=10)
@@ -144,7 +159,7 @@ def importwindow(master, widthfactor, heightfactor):
 
         SaveText = f'Import Configure File\n' \
                    f'Ar\n' \
-                   f'{ArScan.get()}\t{ArScanNumber.get()}\t{ArSep.get()}\t{ArHead.get()}\t{ArDecimal.get()}\n' \
+                   f'{ArScan.get()}\t{ArScanNumber.get()}\t{ArSep.get()}\t{ArHead.get()}\t{ArDecimal.get()}\t{ArSkip.get()}\t{ArPot.get()}\t{ArCur.get()}\n' \
                    f'CO\n' \
                    f'{COSep.get()}\t{COHead.get()}\t{CODecimal.get()}\n'
 
