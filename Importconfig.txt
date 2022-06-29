@@ -1,5 +1,5 @@
 Import Configure File
 Ar
-Single	2	;	0	.	0	0	1
+Single	0.02	2	tabs	None	.	0	1	2
 CO
 tabs	None	.
