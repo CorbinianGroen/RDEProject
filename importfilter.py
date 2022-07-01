@@ -10,12 +10,12 @@ def importwindow(master, widthfactor, heightfactor):
 
     Ar_config = config_txt[2].replace('\n', '').split()
     CO_config = config_txt[4].replace('\n', '').split()
-
+    ORR_config = config_txt[6].replace('\n', '').split()
 
     window = ct.CTkToplevel(master)
     #window.grab_set()
     window.title('Import Options')
-    window.geometry(str(int(widthfactor*1200)) + 'x' + str(int(heightfactor*600)))
+    window.geometry(str(int(widthfactor*1230)) + 'x' + str(int(heightfactor*600)))
     window.resizable(False, False)
 
     window.grid_rowconfigure(0, minsize=10)
@@ -68,7 +68,7 @@ def importwindow(master, widthfactor, heightfactor):
     Scans = ("Single", "Multiple")
     ArScan_var = ct.StringVar()
     ArScan = ct.CTkOptionMenu(master=ArFrame, variable=ArScan_var, values=Scans)
-    ArScan.config(width=80, fg_color=('grey70', 'grey30'), button_color=('grey70', 'grey30'),button_hover_color=('grey70', 'grey30'))
+    ArScan.config(width=90, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'),button_hover_color=('grey80', 'grey20'))
     ArScan.set(Ar_config[0])
     ArScan.grid(row=2, column=2, sticky=tk.W)
 
@@ -83,25 +83,25 @@ def importwindow(master, widthfactor, heightfactor):
     Seperators = (";", "spaces", "tabs")
     ArSep_var = ct.StringVar()
     ArSep = ct.CTkOptionMenu(master=ArFrame, variable=ArSep_var, values=Seperators)
-    ArSep.config(width=50, fg_color=('grey70', 'grey30'), button_color=('grey70', 'grey30'),button_hover_color=('grey70', 'grey30'))
+    ArSep.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
     ArSep.set(Ar_config[3])
     ArSep.grid(row=2, column=8, sticky=tk.W)
 
     Options = ('None', '0', '1', '2', '3', '4', '5', '6')
     ArOption_var = ct.StringVar()
     ArHead = ct.CTkComboBox(master=ArFrame, variable=ArOption_var, values=Options)
-    ArHead.config(width=70, fg_color=('grey70', 'grey30'), button_color=('grey70', 'grey30'), button_hover_color=('grey70', 'grey30'))
+    ArHead.configure(width=70, fg_color=('grey90', 'grey10'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'), border_color=('grey80', 'grey20'))
     ArHead.set(Ar_config[4])
     ArHead.grid(row=2, column=10, sticky=tk.W)
 
     Decimals = ('.', ',')
     ArDecimal_var = ct.StringVar()
     ArDecimal = ct.CTkOptionMenu(master=ArFrame, variable=ArDecimal_var, values=Decimals)
-    ArDecimal.config(width=50, fg_color=('grey70', 'grey30'), button_color=('grey70', 'grey30'), button_hover_color=('grey70', 'grey30'))
+    ArDecimal.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
     ArDecimal.set(Ar_config[5])
     ArDecimal.grid(row=2, column=12, sticky=tk.W)
 
-    ArSkip = ct.CTkEntry(master=ArFrame, width=10)
+    ArSkip = ct.CTkEntry(master=ArFrame, width=30)
     ArSkip.grid(row=2, column=14, sticky=tk.W)
     ArSkip.insert(0, Ar_config[6])
 
@@ -115,6 +115,7 @@ def importwindow(master, widthfactor, heightfactor):
 
     # COFrame Inputs
     COFrame.grid_rowconfigure(0, minsize=10)
+    COFrame.grid_rowconfigure(3, minsize=10)
     COFrame.grid_columnconfigure(0, minsize=10)
     COFrame.grid_columnconfigure(11, minsize=10)
     ct.CTkLabel(master=COFrame, text='CO CV:', text_font=("Calibri", -18), width=1).grid(row=1, column=1, sticky=tk.W)
@@ -124,31 +125,90 @@ def importwindow(master, widthfactor, heightfactor):
 
     Seperators = (";", "spaces", "tabs")
     COSep_var = ct.StringVar()
-    COSep = ttk.Combobox(COFrame, textvariable=COSep_var)
-    COSep['values'] = Seperators
-    COSep['state'] = 'readonly'
-    COSep.config(width=5)
-    COSep_var.set(CO_config[0])
+    COSep = ct.CTkOptionMenu(master=COFrame, variable=COSep_var, values=Seperators)
+    COSep.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    COSep.set(CO_config[0])
     COSep.grid(row=2, column=2, sticky=tk.W)
 
     Options = ('None', '0', '1', '2', '3', '4', '5', '6')
     COOption_var = ct.StringVar()
-    COHead = ttk.Combobox(COFrame, textvariable=COOption_var)
-    COHead['values'] = Options
-    COOption_var.set(CO_config[1])
-    COHead.config(width=8)
-    # COHead = ct.CTkComboBox(master=COFrame, variable=COOption_var, values=Options)
-    # COHead.config(width=80, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey70', 'grey30'))
+    COHead = ct.CTkComboBox(master=COFrame, variable=COOption_var, values=Options)
+    COHead.configure(width=70, fg_color=('grey90', 'grey10'), button_color=('grey80', 'grey20'),button_hover_color=('grey80', 'grey20'), border_color=('grey80', 'grey20'))
+    COHead.set(CO_config[1])
     COHead.grid(row=2, column=4, sticky=tk.W)
 
     Decimals = ('.', ',')
     CODecimal_var = ct.StringVar()
-    CODecimal = ttk.Combobox(COFrame, textvariable=ArDecimal_var)
-    CODecimal['values'] = Decimals
-    CODecimal['state'] = 'readonly'
-    CODecimal.config(width=5)
+    CODecimal = ct.CTkOptionMenu(master=COFrame, variable=CODecimal_var, values=Decimals)
+    CODecimal.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    CODecimal.set(CO_config[2])
     CODecimal.grid(row=2, column=6, sticky=tk.W)
-    CODecimal_var.set(CO_config[2])
+
+    #ORR inputs
+    ORRFrame.grid_rowconfigure(0, minsize=10, weight=0)
+    ORRFrame.grid_rowconfigure(1, minsize=30, weight=0)
+    ORRFrame.grid_rowconfigure(2, minsize=30, weight=1)
+    ORRFrame.grid_rowconfigure(3, minsize=10, weight=0)
+    ORRFrame.grid_columnconfigure(0, minsize=10)
+    ORRFrame.grid_columnconfigure(17, minsize=10)
+    ct.CTkLabel(master=ORRFrame, text='ORR O2 Scan:', text_font=("Calibri", -18), width=1).grid(row=1, column=1, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Scantype:', text_font=("Calibri", -18), width=1).grid(row=2, column=1, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Scan Rate:', text_font=("Calibri", -18), width=1).grid(row=2, column=3, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Scan:', text_font=("Calibri", -18), width=1).grid(row=2, column=5, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Sep:', text_font=("Calibri", -18), width=1).grid(row=2, column=7, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Header:', text_font=("Calibri", -18), width=1).grid(row=2, column=9, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Decimal:', text_font=("Calibri", -18), width=1).grid(row=2, column=11, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Skip:', text_font=("Calibri", -18), width=1).grid(row=2, column=13, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Pot Column:', text_font=("Calibri", -18), width=1).grid(row=2, column=15, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Cur Column:', text_font=("Calibri", -18), width=1).grid(row=2, column=17, sticky=tk.W)
+
+    Scans = ("LSV","Single", "Multiple")
+    ORRScan_var = ct.StringVar()
+    ORRScan = ct.CTkOptionMenu(master=ORRFrame, variable=ORRScan_var, values=Scans)
+    ORRScan.config(width=90, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ORRScan.set(ORR_config[0])
+    ORRScan.grid(row=2, column=2, sticky=tk.W)
+
+    ORRScanRate = ct.CTkEntry(master=ORRFrame, width=50)
+    ORRScanRate.grid(row=2, column=4, sticky=tk.W)
+    ORRScanRate.insert(0, ORR_config[1])
+
+    ORRScanNumber = ct.CTkEntry(master=ORRFrame, width=30)
+    ORRScanNumber.grid(row=2, column=6, sticky=tk.W)
+    ORRScanNumber.insert(0, ORR_config[2])
+
+    Seperators = (";", "spaces", "tabs")
+    ORRSep_var = ct.StringVar()
+    ORRSep = ct.CTkOptionMenu(master=ORRFrame, variable=ORRSep_var, values=Seperators)
+    ORRSep.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ORRSep.set(ORR_config[3])
+    ORRSep.grid(row=2, column=8, sticky=tk.W)
+
+    Options = ('None', '0', '1', '2', '3', '4', '5', '6')
+    ORROption_var = ct.StringVar()
+    ORRHead = ct.CTkComboBox(master=ORRFrame, variable=ORROption_var, values=Options)
+    ORRHead.configure(width=70, fg_color=('grey90', 'grey10'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'), border_color=('grey80', 'grey20'))
+    ORRHead.set(ORR_config[4])
+    ORRHead.grid(row=2, column=10, sticky=tk.W)
+
+    Decimals = ('.', ',')
+    ORRDecimal_var = ct.StringVar()
+    ORRDecimal = ct.CTkOptionMenu(master=ORRFrame, variable=ORRDecimal_var, values=Decimals)
+    ORRDecimal.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ORRDecimal.set(ORR_config[5])
+    ORRDecimal.grid(row=2, column=12, sticky=tk.W)
+
+    ORRSkip = ct.CTkEntry(master=ORRFrame, width=30)
+    ORRSkip.grid(row=2, column=14, sticky=tk.W)
+    ORRSkip.insert(0, ORR_config[6])
+
+    ORRPot = ct.CTkEntry(master=ORRFrame, width=30)
+    ORRPot.grid(row=2, column=16, sticky=tk.W)
+    ORRPot.insert(0, ORR_config[7])
+
+    ORRCur = ct.CTkEntry(master=ORRFrame, width=30)
+    ORRCur.grid(row=2, column=18, sticky=tk.W)
+    ORRCur.insert(0, ORR_config[8])
 
 
     SaveFrame = ct.CTkFrame(master=window, corner_radius=10, fg_color=('grey80', 'grey20'))
@@ -161,8 +221,9 @@ def importwindow(master, widthfactor, heightfactor):
                    f'Ar\n' \
                    f'{ArScan.get()}\t{ArScanRate.get()}\t{ArScanNumber.get()}\t{ArSep.get()}\t{ArHead.get()}\t{ArDecimal.get()}\t{ArSkip.get()}\t{ArPot.get()}\t{ArCur.get()}\n' \
                    f'CO\n' \
-                   f'{COSep.get()}\t{COHead.get()}\t{CODecimal.get()}\n'
-
+                   f'{COSep.get()}\t{COHead.get()}\t{CODecimal.get()}\n' \
+                   f'ORR\n'\
+                   f'{ORRScan.get()}\t{ORRScanRate.get()}\t{ORRScanNumber.get()}\t{ORRSep.get()}\t{ORRHead.get()}\t{ORRDecimal.get()}\t{ORRSkip.get()}\t{ORRPot.get()}\t{ORRCur.get()}\n'
 
         config = open('Importconfig.txt', 'w')
         config.write(SaveText)

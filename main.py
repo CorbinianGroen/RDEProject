@@ -1277,7 +1277,7 @@ if __name__ == '__main__':
     ORREval.grid(row=5, column=7, rowspan=3, sticky=tk.W, padx=20)
     # ORREval.configure(state=tk.DISABLED)
 
-    HORLabel = ct.CTkLabel(master=input_frame, text='HOR O2:', text_font=("Calibri", -18))
+    HORLabel = ct.CTkLabel(master=input_frame, text='HOR H2:', text_font=("Calibri", -18))
     HORLabel.grid(row=9, column=4, sticky=tk.W)
     HOREntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
     HOREntry.grid(row=9, column=5, sticky=tk.W)
@@ -1335,22 +1335,22 @@ if __name__ == '__main__':
 
 
     def save():
-        del savefile['ignore']
-        del results['ignore']
-
         file = filedialog.asksaveasfilename(title='Save As', initialdir='/', filetypes=[('Textfile', '*.txt')], initialfile=NameEntry.get())
-        if file is not None:
+        if file.strip():
+            del savefile['ignore']
+            del results['ignore']
             file1 = file + '.txt'
             file2 = file + '_results.txt'
+            print(file1)
             # savefile.to_csv(file1, sep='\t', index=False, header=True)
             # results.to_csv(file2, sep='\t', index=False, header=True)
-
             w_list = list(data_frame.winfo_children())
-            w_list.pop(0)
             for element in w_list:
                 element.destroy()
             global z
             z = 0
+        else:
+            pass
 
 
     SaveButton = ct.CTkButton(master=bottom_frame, text="Save", command=save, text_font=("Calibri", -18), width=80, height=10)
