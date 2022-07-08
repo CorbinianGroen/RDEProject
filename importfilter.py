@@ -11,12 +11,13 @@ def importwindow(master, widthfactor, heightfactor):
     Ar_config = config_txt[2].replace('\n', '').split()
     CO_config = config_txt[4].replace('\n', '').split()
     ORR_config = config_txt[6].replace('\n', '').split()
+    ORRa_config = config_txt[8].replace('\n', '').split()
 
     window = ct.CTkToplevel(master)
     #window.grab_set()
     window.title('Import Options')
-    window.geometry(str(int(widthfactor*1230)) + 'x' + str(int(heightfactor*600)))
-    window.resizable(False, False)
+    window.geometry(str(int(widthfactor*1250)) + 'x' + str(int(heightfactor*600)))
+    #window.resizable(False, False)
 
     window.grid_rowconfigure(0, minsize=10)
     window.grid_rowconfigure(1, weight=5)
@@ -31,10 +32,10 @@ def importwindow(master, widthfactor, heightfactor):
     InputFrame = ct.CTkFrame(master=window, corner_radius=10, fg_color=('grey80', 'grey20'))
     InputFrame.grid(row=1, column=1, sticky='nswe')
 
-    InputFrame.grid_rowconfigure(0, weight=1, minsize=100)
     InputFrame.grid_columnconfigure(0, weight=1)
-    InputFrame.grid_rowconfigure(1, weight=1, minsize=100)
-    InputFrame.grid_rowconfigure(2, weight=1, minsize=150)
+    InputFrame.grid_rowconfigure(0, weight=1, minsize=100)
+    InputFrame.grid_rowconfigure(1, weight=1, minsize=80)
+    InputFrame.grid_rowconfigure(2, weight=1, minsize=160)
     InputFrame.grid_rowconfigure(3, weight=1, minsize=150)
     InputFrame.grid_rowconfigure(4, minsize=10)
 
@@ -53,8 +54,8 @@ def importwindow(master, widthfactor, heightfactor):
     ArFrame.grid_rowconfigure(2, minsize=30, weight=1)
     ArFrame.grid_rowconfigure(3, minsize=10, weight=0)
     ArFrame.grid_columnconfigure(0, minsize=10)
-    ArFrame.grid_columnconfigure(17, minsize=10)
-    ct.CTkLabel(master=ArFrame, text='Ar CV:', text_font=("Calibri", -18), width=1).grid(row=1, column=1, sticky=tk.W)
+    ArFrame.grid_columnconfigure(19, minsize=10)
+    ct.CTkLabel(master=ArFrame, text='Ar CV:', text_font=("Calibri", -18), width=1).grid(row=1, column=1, sticky=tk.W, columnspan=3)
     ct.CTkLabel(master=ArFrame, text='Scantype:', text_font=("Calibri", -18), width=1).grid(row=2, column=1, sticky=tk.W)
     ct.CTkLabel(master=ArFrame, text='Scan Rate:', text_font=("Calibri", -18), width=1).grid(row=2, column=3, sticky=tk.W)
     ct.CTkLabel(master=ArFrame, text='Scan:', text_font=("Calibri", -18), width=1).grid(row=2, column=5, sticky=tk.W)
@@ -83,7 +84,7 @@ def importwindow(master, widthfactor, heightfactor):
     Seperators = (";", "spaces", "tabs")
     ArSep_var = ct.StringVar()
     ArSep = ct.CTkOptionMenu(master=ArFrame, variable=ArSep_var, values=Seperators)
-    ArSep.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ArSep.config(width=90, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
     ArSep.set(Ar_config[3])
     ArSep.grid(row=2, column=8, sticky=tk.W)
 
@@ -118,7 +119,7 @@ def importwindow(master, widthfactor, heightfactor):
     COFrame.grid_rowconfigure(3, minsize=10)
     COFrame.grid_columnconfigure(0, minsize=10)
     COFrame.grid_columnconfigure(11, minsize=10)
-    ct.CTkLabel(master=COFrame, text='CO CV:', text_font=("Calibri", -18), width=1).grid(row=1, column=1, sticky=tk.W)
+    ct.CTkLabel(master=COFrame, text='CO CV:', text_font=("Calibri", -18), width=1).grid(row=1, column=1, sticky=tk.W, columnspan=3)
     ct.CTkLabel(master=COFrame, text='Sep:', text_font=("Calibri", -18), width=1).grid(row=2, column=1, sticky=tk.W)
     ct.CTkLabel(master=COFrame, text='Header:', text_font=("Calibri", -18), width=1).grid(row=2, column=3, sticky=tk.W)
     ct.CTkLabel(master=COFrame, text='Decimal:', text_font=("Calibri", -18), width=1).grid(row=2, column=5, sticky=tk.W)
@@ -126,7 +127,7 @@ def importwindow(master, widthfactor, heightfactor):
     Seperators = (";", "spaces", "tabs")
     COSep_var = ct.StringVar()
     COSep = ct.CTkOptionMenu(master=COFrame, variable=COSep_var, values=Seperators)
-    COSep.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    COSep.config(width=90, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
     COSep.set(CO_config[0])
     COSep.grid(row=2, column=2, sticky=tk.W)
 
@@ -148,10 +149,12 @@ def importwindow(master, widthfactor, heightfactor):
     ORRFrame.grid_rowconfigure(0, minsize=10, weight=0)
     ORRFrame.grid_rowconfigure(1, minsize=30, weight=0)
     ORRFrame.grid_rowconfigure(2, minsize=30, weight=1)
-    ORRFrame.grid_rowconfigure(3, minsize=10, weight=0)
+    ORRFrame.grid_rowconfigure(3, minsize=30, weight=0)
+    ORRFrame.grid_rowconfigure(4, minsize=30, weight=1)
+    ORRFrame.grid_rowconfigure(5, minsize=10, weight=0)
     ORRFrame.grid_columnconfigure(0, minsize=10)
-    ORRFrame.grid_columnconfigure(17, minsize=10)
-    ct.CTkLabel(master=ORRFrame, text='ORR O2 Scan:', text_font=("Calibri", -18), width=1).grid(row=1, column=1, sticky=tk.W)
+    ORRFrame.grid_columnconfigure(19, minsize=10)
+    ct.CTkLabel(master=ORRFrame, text='ORR O2 Scan:', text_font=("Calibri", -18), width=1).grid(row=1, column=1, sticky=tk.W, columnspan=3)
     ct.CTkLabel(master=ORRFrame, text='Scantype:', text_font=("Calibri", -18), width=1).grid(row=2, column=1, sticky=tk.W)
     ct.CTkLabel(master=ORRFrame, text='Scan Rate:', text_font=("Calibri", -18), width=1).grid(row=2, column=3, sticky=tk.W)
     ct.CTkLabel(master=ORRFrame, text='Scan:', text_font=("Calibri", -18), width=1).grid(row=2, column=5, sticky=tk.W)
@@ -180,7 +183,7 @@ def importwindow(master, widthfactor, heightfactor):
     Seperators = (";", "spaces", "tabs")
     ORRSep_var = ct.StringVar()
     ORRSep = ct.CTkOptionMenu(master=ORRFrame, variable=ORRSep_var, values=Seperators)
-    ORRSep.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ORRSep.config(width=90, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
     ORRSep.set(ORR_config[3])
     ORRSep.grid(row=2, column=8, sticky=tk.W)
 
@@ -210,6 +213,66 @@ def importwindow(master, widthfactor, heightfactor):
     ORRCur.grid(row=2, column=18, sticky=tk.W)
     ORRCur.insert(0, ORR_config[8])
 
+    # ORR_Ar inputs
+    ct.CTkLabel(master=ORRFrame, text='ORR Ar Scan:', text_font=("Calibri", -18), width=1).grid(row=3, column=1, sticky=tk.W, columnspan=3)
+    ct.CTkLabel(master=ORRFrame, text='Scantype:', text_font=("Calibri", -18), width=1).grid(row=4, column=1, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Scan Rate:', text_font=("Calibri", -18), width=1).grid(row=4, column=3, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Scan:', text_font=("Calibri", -18), width=1).grid(row=4, column=5, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Sep:', text_font=("Calibri", -18), width=1).grid(row=4, column=7, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Header:', text_font=("Calibri", -18), width=1).grid(row=4, column=9, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Decimal:', text_font=("Calibri", -18), width=1).grid(row=4, column=11, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Skip:', text_font=("Calibri", -18), width=1).grid(row=4, column=13, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Pot Column:', text_font=("Calibri", -18), width=1).grid(row=4, column=15, sticky=tk.W)
+    ct.CTkLabel(master=ORRFrame, text='Cur Column:', text_font=("Calibri", -18), width=1).grid(row=4, column=17, sticky=tk.W)
+
+    Scans = ("LSV", "Single", "Multiple")
+    ORRaScan_var = ct.StringVar()
+    ORRaScan = ct.CTkOptionMenu(master=ORRFrame, variable=ORRaScan_var, values=Scans)
+    ORRaScan.config(width=90, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ORRaScan.set(ORRa_config[0])
+    ORRaScan.grid(row=4, column=2, sticky=tk.W)
+
+    ORRaScanRate = ct.CTkEntry(master=ORRFrame, width=50)
+    ORRaScanRate.grid(row=4, column=4, sticky=tk.W)
+    ORRaScanRate.insert(0, ORRa_config[1])
+
+    ORRaScanNumber = ct.CTkEntry(master=ORRFrame, width=30)
+    ORRaScanNumber.grid(row=4, column=6, sticky=tk.W)
+    ORRaScanNumber.insert(0, ORRa_config[2])
+
+    Seperators = (";", "spaces", "tabs")
+    ORRaSep_var = ct.StringVar()
+    ORRaSep = ct.CTkOptionMenu(master=ORRFrame, variable=ORRaSep_var, values=Seperators)
+    ORRaSep.config(width=90, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ORRaSep.set(ORRa_config[3])
+    ORRaSep.grid(row=4, column=8, sticky=tk.W)
+
+    Options = ('None', '0', '1', '2', '3', '4', '5', '6')
+    ORRaOption_var = ct.StringVar()
+    ORRaHead = ct.CTkComboBox(master=ORRFrame, variable=ORRaOption_var, values=Options)
+    ORRaHead.configure(width=70, fg_color=('grey90', 'grey10'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'), border_color=('grey80', 'grey20'))
+    ORRaHead.set(ORR_config[4])
+    ORRaHead.grid(row=4, column=10, sticky=tk.W)
+
+    Decimals = ('.', ',')
+    ORRaDecimal_var = ct.StringVar()
+    ORRaDecimal = ct.CTkOptionMenu(master=ORRFrame, variable=ORRaDecimal_var, values=Decimals)
+    ORRaDecimal.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ORRaDecimal.set(ORRa_config[5])
+    ORRaDecimal.grid(row=4, column=12, sticky=tk.W)
+
+    ORRaSkip = ct.CTkEntry(master=ORRFrame, width=30)
+    ORRaSkip.grid(row=4, column=14, sticky=tk.W)
+    ORRaSkip.insert(0, ORR_config[6])
+
+    ORRaPot = ct.CTkEntry(master=ORRFrame, width=30)
+    ORRaPot.grid(row=4, column=16, sticky=tk.W)
+    ORRaPot.insert(0, ORR_config[7])
+
+    ORRaCur = ct.CTkEntry(master=ORRFrame, width=30)
+    ORRaCur.grid(row=4, column=18, sticky=tk.W)
+    ORRaCur.insert(0, ORR_config[8])
+
 
     SaveFrame = ct.CTkFrame(master=window, corner_radius=10, fg_color=('grey80', 'grey20'))
     SaveFrame.grid(row=3, column=1, sticky='nswe')
@@ -223,8 +286,9 @@ def importwindow(master, widthfactor, heightfactor):
                    f'CO\n' \
                    f'{COSep.get()}\t{COHead.get()}\t{CODecimal.get()}\n' \
                    f'ORR\n'\
-                   f'{ORRScan.get()}\t{ORRScanRate.get()}\t{ORRScanNumber.get()}\t{ORRSep.get()}\t{ORRHead.get()}\t{ORRDecimal.get()}\t{ORRSkip.get()}\t{ORRPot.get()}\t{ORRCur.get()}\n'
-
+                   f'{ORRScan.get()}\t{ORRScanRate.get()}\t{ORRScanNumber.get()}\t{ORRSep.get()}\t{ORRHead.get()}\t{ORRDecimal.get()}\t{ORRSkip.get()}\t{ORRPot.get()}\t{ORRCur.get()}\n'\
+                   f'ORRa\n' \
+                   f'{ORRaScan.get()}\t{ORRaScanRate.get()}\t{ORRaScanNumber.get()}\t{ORRaSep.get()}\t{ORRaHead.get()}\t{ORRaDecimal.get()}\t{ORRaSkip.get()}\t{ORRaPot.get()}\t{ORRaCur.get()}\n'
         config = open('Importconfig.txt', 'w')
         config.write(SaveText)
         config.close()

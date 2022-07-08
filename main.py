@@ -1074,6 +1074,17 @@ if __name__ == '__main__':
     savefile = pd.DataFrame(savefile, columns=['ignore'])
     results = pd.DataFrame({'ignore': [1]})
 
+    #open importfilter
+    config = open('Importconfig.txt')
+    config_txt = config.readlines()
+    config.close()
+
+    Ar_config = config_txt[2].replace('\n', '').split()
+    CO_config = config_txt[4].replace('\n', '').split()
+    ORR_config = config_txt[6].replace('\n', '').split()
+    ORRa_config = config_txt[8].replace('\n', '').split()
+
+
     # layout of frames for the main window
     input_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
     input_frame.grid(row=0, column=0, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
@@ -1178,7 +1189,10 @@ if __name__ == '__main__':
 
 
     def Ar_graph():
-        # Ar = HUPDEntry.get()
+        #Ar = HUPDEntry.get()
+        #Ar_sep = '\s+'
+        #Ar_dic = {'Single':scan.singlescan(Ar, int(Ar_config[2]) ,sepvalue=Ar_sep, headervalue=Ar_config[4], decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), cur=int(Ar_config[8]))}
+
         #Ar_cathodic, Ar_anodic = scan.singlescan(Ar)
         Kr1, Kr2 = scan.multiplescan(Kr_test_2, 2, sepvalue='\s+', headervalue=None, decimalvalue='.', skip=19, pot=2, cur=3)
         Ar_Plot(Kr2, Kr1)
