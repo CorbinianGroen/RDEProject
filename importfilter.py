@@ -1,6 +1,5 @@
 import tkinter as tk
 import customtkinter as ct
-from tkinter import ttk
 
 def importwindow(master, widthfactor, heightfactor):
 
@@ -13,7 +12,8 @@ def importwindow(master, widthfactor, heightfactor):
     ORR_config = config_txt[6].replace('\n', '').split()
     ORRa_config = config_txt[8].replace('\n', '').split()
 
-    window = ct.CTkToplevel(master)
+    #window = ct.CTkToplevel(master)
+    window = master
     #window.grab_set()
     window.title('Import Options')
     window.geometry(str(int(widthfactor*1250)) + 'x' + str(int(heightfactor*600)))
@@ -144,6 +144,18 @@ def importwindow(master, widthfactor, heightfactor):
     CODecimal.config(width=50, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
     CODecimal.set(CO_config[2])
     CODecimal.grid(row=2, column=6, sticky=tk.W)
+
+    COSkip = ct.CTkEntry(master=COFrame, width=30)
+    COSkip.grid(row=2, column=8, sticky=tk.W)
+    COSkip.insert(0, CO_config[3])
+
+    COPot = ct.CTkEntry(master=COFrame, width=30)
+    COPot.grid(row=2, column=10, sticky=tk.W)
+    COPot.insert(0, CO_config[4])
+
+    COCur = ct.CTkEntry(master=COFrame, width=30)
+    COCur.grid(row=2, column=12, sticky=tk.W)
+    COCur.insert(0, CO_config[5])
 
     #ORR inputs
     ORRFrame.grid_rowconfigure(0, minsize=10, weight=0)
@@ -284,7 +296,7 @@ def importwindow(master, widthfactor, heightfactor):
                    f'Ar\n' \
                    f'{ArScan.get()}\t{ArScanRate.get()}\t{ArScanNumber.get()}\t{ArSep.get()}\t{ArHead.get()}\t{ArDecimal.get()}\t{ArSkip.get()}\t{ArPot.get()}\t{ArCur.get()}\n' \
                    f'CO\n' \
-                   f'{COSep.get()}\t{COHead.get()}\t{CODecimal.get()}\n' \
+                   f'{COSep.get()}\t{COHead.get()}\t{CODecimal.get()}\t{COSkip.get()}\t{COPot.get()}\t{COCur.get()}\n' \
                    f'ORR\n'\
                    f'{ORRScan.get()}\t{ORRScanRate.get()}\t{ORRScanNumber.get()}\t{ORRSep.get()}\t{ORRHead.get()}\t{ORRDecimal.get()}\t{ORRSkip.get()}\t{ORRPot.get()}\t{ORRCur.get()}\n'\
                    f'ORRa\n' \
@@ -297,7 +309,8 @@ def importwindow(master, widthfactor, heightfactor):
     SaveButton = ct.CTkButton(master=SaveFrame,text="Save", command=save, text_font=("Calibri", -18), width= 160, height= 10)
     SaveButton.grid(row=0, column=0, sticky=tk.E, pady=10, padx=10)
 
-    window.mainloop()
+
+    #window.mainloop()
 
 
 #root = 1

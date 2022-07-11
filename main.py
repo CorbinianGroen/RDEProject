@@ -25,7 +25,7 @@ CO_Strip = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/2021041
 Kr_test = 'C:/CloudStation/Master/Forschungspraktikum Krischer/Data/nSi-Pt_20220225/5_ar_cv_-0pt67_-0pt3_20mvs_200rpm_3cyc - Kopie.txt'
 Kr_test_2 = "C:/CloudStation/Master/Forschungspraktikum Krischer/Data/nSi-Pt_20220225/3_ar_cv_-0pt67_0pt46_20mvs_200rpm_3cyc.txt"
 
-radius = 0.2
+#radius = 0.2
 
 cm = 1 / 2.54
 
@@ -85,9 +85,41 @@ def CO_plot(df1, df2):
         window.configure(bg='grey90')
     window.overrideredirect(True)
     window.attributes("-topmost", True)
+
     window.grid_columnconfigure(0, weight=3)
     window.grid_columnconfigure(1, weight=2, minsize=350)
     window.grid_rowconfigure(0, weight=1)
+
+    co_info_frame = ct.CTkFrame(master=window, corner_radius=10, fg_color=("grey80", 'grey20'))
+    co_info_frame.grid(row=0, column=1, sticky='nswe', pady=10, padx=10)
+
+    co_info_frame.grid_rowconfigure(0, weight=10)
+    co_info_frame.grid_rowconfigure(1, weight=1)
+    co_info_frame.grid_rowconfigure(2, weight=10)
+    co_info_frame.grid_columnconfigure(0, weight=0)
+    co_info_frame.grid_columnconfigure(1, weight=1)
+    co_info_frame.grid_columnconfigure(2, weight=0)
+
+    button_frame = ct.CTkFrame(master=co_info_frame, corner_radius=10, fg_color=("grey80", 'grey20'))
+    button_frame.grid(row=2, column=1, sticky='nswe', pady=10, padx=10)
+    button_frame.grid_rowconfigure(0, weight=1)
+    button_frame.grid_rowconfigure(1, weight=0)
+    button_frame.grid_columnconfigure(0, weight=1)
+    button_frame.grid_columnconfigure(1, weight=0)
+    button_frame.grid_columnconfigure(2, weight=0)
+
+    def exit2():
+        window.destroy()
+
+    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, text_font=("Calibri", -24),
+                 text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
+
+    def on_closing():
+        window.destroy()
+
+    window.protocol("WM_DELETE_WINDOW", on_closing)
+
+
     co_graph_frame = ct.CTkFrame(master=window, corner_radius=10, fg_color=('grey80', 'grey20'))
     co_graph_frame.grid(row=0, column=0, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
 
@@ -112,7 +144,7 @@ def CO_plot(df1, df2):
     co_area = ((integration / 0.01) / 420e-6)
 
     global co_rf
-    area_geo = np.pi * (radius ** 2)
+    area_geo = np.pi * (float(RadiusEntry.get()) ** 2)
     co_rf = co_area / area_geo
     firstvalue = higher0.head(1).index[0]
 
@@ -145,16 +177,7 @@ def CO_plot(df1, df2):
 
     canvas.draw_idle()
 
-    co_info_frame = ct.CTkFrame(master=window, corner_radius=10, fg_color=("grey80", 'grey20'))
-    co_info_frame.grid(row=0, column=1, sticky='nswe', pady=10, padx=10)
 
-    co_info_frame.grid_rowconfigure(0, weight=10)
-    co_info_frame.grid_rowconfigure(1, weight=1)
-    co_info_frame.grid_rowconfigure(2, weight=10)
-    co_info_frame.grid_columnconfigure(0, weight=0)
-    co_info_frame.grid_columnconfigure(1, weight=1)
-    co_info_frame.grid_columnconfigure(2, weight=0)
-    # co_info_frame.grid_columnconfigure(0, minsize=140)
     co_variable_frame = ct.CTkFrame(master=co_info_frame, corner_radius=10, fg_color=("grey70", 'grey30'))
     co_variable_frame.grid(row=1, column=1, sticky='nswe', pady=10, padx=10)
     co_variable_frame.grid_columnconfigure(0, weight=1, minsize=300)
@@ -286,27 +309,10 @@ def CO_plot(df1, df2):
 
         z += 1
 
-    button_frame = ct.CTkFrame(master=co_info_frame, corner_radius=10, fg_color=("grey80", 'grey20'))
-    button_frame.grid(row=2, column=1, sticky='nswe', pady=10, padx=10)
-    button_frame.grid_rowconfigure(0, weight=1)
-    button_frame.grid_rowconfigure(1, weight=0)
-    button_frame.grid_columnconfigure(0, weight=1)
-    button_frame.grid_columnconfigure(1, weight=0)
-    button_frame.grid_columnconfigure(2, weight=0)
+
     ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=lambda: exit1(df), text_font=("Calibri", -24),
                  text_color=("grey20", 'grey80')).grid(row=1, column=2, sticky="se", pady=10, padx=10)
 
-    def exit2():
-        window.destroy()
-
-    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, text_font=("Calibri", -24),
-                 text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
-
-    def on_closing():
-        window.destroy()
-        # exit()
-
-    window.protocol("WM_DELETE_WINDOW", on_closing)
 
     window.mainloop()
 
@@ -334,6 +340,38 @@ def Ar_Plot(anodic, cathodic):
     window.grid_columnconfigure(0, weight=3)
     window.grid_columnconfigure(1, weight=2, minsize=350)
     window.grid_rowconfigure(0, weight=1)
+
+    info_frame = ct.CTkFrame(master=window, corner_radius=10, fg_color=('grey80', 'grey20'))
+    info_frame.grid(row=0, column=1, sticky='nswe', pady=10, padx=10)
+
+    info_frame.grid_rowconfigure(0, weight=10)
+    info_frame.grid_rowconfigure(1, weight=1)
+    info_frame.grid_rowconfigure(2, weight=10)
+    info_frame.grid_columnconfigure(0, weight=0)
+    info_frame.grid_columnconfigure(1, weight=1)
+    info_frame.grid_columnconfigure(2, weight=0)
+
+    button_frame = ct.CTkFrame(master=info_frame, corner_radius=10, fg_color=("grey80", 'grey20'))
+    button_frame.grid(row=2, column=1, sticky='nswe', pady=10, padx=10)
+    button_frame.grid_rowconfigure(0, weight=1)
+    button_frame.grid_rowconfigure(1, weight=0)
+    button_frame.grid_columnconfigure(0, weight=1)
+    button_frame.grid_columnconfigure(1, weight=0)
+    button_frame.grid_columnconfigure(2, weight=0)
+
+    def exit2():
+        window.destroy()
+
+    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, text_font=("Calibri", -24), text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
+
+
+    def on_closing():
+        window.destroy()
+        # exit()
+
+    window.protocol("WM_DELETE_WINDOW", on_closing)
+
+
     ar_graph_frame = ct.CTkFrame(master=window, corner_radius=10, fg_color=('grey80', 'grey20'))
     ar_graph_frame.grid(row=0, column=0, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
 
@@ -402,7 +440,7 @@ def Ar_Plot(anodic, cathodic):
                       y=cathodic['Current/A'].loc[index_high_c:index_low_c] - init_cathodic_A)
     global area
     area = (abs(area_a) + abs(area_c)) / 2
-    area = (area / 0.02) / 201e-6
+    area = (area / float(Ar_config[1])) / 210e-6
 
     if LoadingEntry.get() != '':
         global loading
@@ -411,7 +449,7 @@ def Ar_Plot(anodic, cathodic):
         area_norm = area / loading * 0.0001
 
     global rf
-    area_geo = np.pi * (radius ** 2)
+    area_geo = np.pi * (float(RadiusEntry.get()) ** 2)
     rf = area / area_geo
 
     def dragged():
@@ -448,7 +486,7 @@ def Ar_Plot(anodic, cathodic):
             area_norm = area / loading * 0.0001
 
         global rf
-        area_geo = np.pi * (radius ** 2)
+        area_geo = np.pi * (float(RadiusEntry.get()) ** 2)
         rf = area / area_geo
 
         rf_label.config(text='{0:.3f}'.format(rf))
@@ -512,15 +550,6 @@ def Ar_Plot(anodic, cathodic):
 
     canvas.draw_idle()
 
-    info_frame = ct.CTkFrame(master=window, corner_radius=10, fg_color=('grey80', 'grey20'))
-    info_frame.grid(row=0, column=1, sticky='nswe', pady=10, padx=10)
-
-    info_frame.grid_rowconfigure(0, weight=10)
-    info_frame.grid_rowconfigure(1, weight=1)
-    info_frame.grid_rowconfigure(2, weight=10)
-    info_frame.grid_columnconfigure(0, weight=0)
-    info_frame.grid_columnconfigure(1, weight=1)
-    info_frame.grid_columnconfigure(2, weight=0)
     #info_frame.grid_columnconfigure(0, minsize=140)
     variable_frame = ct.CTkFrame(master=info_frame, corner_radius=10, fg_color=("grey70", 'grey30'))
     variable_frame.grid(row=1, column=1, sticky='nswe', pady=10, padx=10)
@@ -657,26 +686,7 @@ def Ar_Plot(anodic, cathodic):
         z += 1
 
 
-    button_frame = ct.CTkFrame(master=info_frame, corner_radius=10, fg_color=("grey80", 'grey20'))
-    button_frame.grid(row=2, column=1, sticky='nswe', pady=10, padx=10)
-    button_frame.grid_rowconfigure(0, weight=1)
-    button_frame.grid_rowconfigure(1, weight=0)
-    button_frame.grid_columnconfigure(0, weight=1)
-    button_frame.grid_columnconfigure(1, weight=0)
-    button_frame.grid_columnconfigure(2, weight=0)
     ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=exit1, text_font=("Calibri", -24), text_color=("grey20", 'grey80')).grid(row=1, column=2, sticky="se", pady=10, padx=10)
-
-    def exit2():
-        window.destroy()
-
-    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, text_font=("Calibri", -24), text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
-
-
-    def on_closing():
-        window.destroy()
-        # exit()
-
-    window.protocol("WM_DELETE_WINDOW", on_closing)
 
     window.mainloop()
 
@@ -1079,6 +1089,11 @@ if __name__ == '__main__':
     config_txt = config.readlines()
     config.close()
 
+    global Ar_config
+    global CO_config
+    global ORR_config
+    global ORRa_config
+
     Ar_config = config_txt[2].replace('\n', '').split()
     CO_config = config_txt[4].replace('\n', '').split()
     ORR_config = config_txt[6].replace('\n', '').split()
@@ -1171,6 +1186,12 @@ if __name__ == '__main__':
     RefEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
     RefEntry.grid(row=7, column=2, sticky=tk.W)
 
+    RadiusLabel = ct.CTkLabel(master=input_frame, text='Radius [cm]:', text_font=("Calibri", -18))
+    RadiusLabel.grid(row=9, column=1, sticky=tk.W)
+    RadiusEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    RadiusEntry.grid(row=9, column=2, sticky=tk.W)
+    RadiusEntry.insert(0, '0.2')
+
     HUPDLabel = ct.CTkLabel(master=input_frame, text='Ar CV:', text_font=("Calibri", -18))
     HUPDLabel.grid(row=1, column=4, sticky=tk.W)
     HUPDEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
@@ -1179,7 +1200,7 @@ if __name__ == '__main__':
 
     def HUPD():
         file = filedialog.askopenfilename(title='Open HUPD file', initialdir='/', filetypes=[('Textfile', '*.txt')])
-        if file is not None:
+        if file.strip():
             HUPDEntry.delete(0, 'end')
             HUPDEntry.insert(0, file)
             HUPDEval.configure(state=tk.NORMAL)
@@ -1189,41 +1210,53 @@ if __name__ == '__main__':
 
 
     def Ar_graph():
-        #Ar = HUPDEntry.get()
-        #Ar_sep = '\s+'
-        #Ar_dic = {'Single':scan.singlescan(Ar, int(Ar_config[2]) ,sepvalue=Ar_sep, headervalue=Ar_config[4], decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), cur=int(Ar_config[8]))}
+        Ar = HUPDEntry.get()
 
-        #Ar_cathodic, Ar_anodic = scan.singlescan(Ar)
-        Kr1, Kr2 = scan.multiplescan(Kr_test_2, 2, sepvalue='\s+', headervalue=None, decimalvalue='.', skip=19, pot=2, cur=3)
-        Ar_Plot(Kr2, Kr1)
-        #Ar_Plot(Ar_anodic, Ar_cathodic)
+        if Ar_config[4] == 'None':
+            Ar_header = None
+        else:
+            Ar_header = int(Ar_config[4])
+
+        Ar_sep_dic = {';': ';', 'spaces': '\s+', 'tabs': '\t'}
+        Ar_dic = {'Single': scan.singlescan(Ar, sepvalue=Ar_sep_dic[Ar_config[3]], headervalue=Ar_header, decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), cur=int(Ar_config[8])),
+                  'Multiple': scan.multiplescan(Ar, int(Ar_config[2]), sepvalue=Ar_sep_dic[Ar_config[3]], headervalue=Ar_header, decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), cur=int(Ar_config[8]))}
+        Ar_cathodic, Ar_anodic = Ar_dic[Ar_config[0]]
+        Ar_Plot(Ar_anodic, Ar_cathodic)
 
 
     HUPDEval = ct.CTkButton(master=input_frame, text='Eval', command=Ar_graph, text_font=("Calibri", -18), width=80)
     HUPDEval.grid(row=1, column=7, sticky=tk.W, padx=20)
-    # HUPDEval.configure(state=tk.DISABLED)
+    HUPDEval.configure(state=tk.DISABLED)
 
     COStripLabel = ct.CTkLabel(master=input_frame, text='CO Strip:', text_font=("Calibri", -18))
     COStripLabel.grid(row=3, column=4, sticky=tk.W)
     COStripEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
     COStripEntry.grid(row=3, column=5, sticky=tk.W)
+    COStripEntry.insert(0, CO_Strip)
 
 
     def COStrip():
         file = filedialog.askopenfilename(title='Open COStrip file', initialdir='/', filetypes=[('Textfile', '*.txt')])
-        if file is not None:
+        if file.strip():
             COStripEntry.delete(0, 'end')
             COStripEntry.insert(0, file)
-            HUPDEval.configure(state=tk.NORMAL)
+            COStripEval.configure(state=tk.NORMAL)
 
 
     ct.CTkButton(master=input_frame, text='Open', command=COStrip, text_font=("Calibri", -18), width=80).grid(row=3, column=6, sticky=tk.W, padx=20)
 
 
     def CO_Strip_graph():
-        # CO_Strip = COStripEntry.get()
-        CO_cathodic_1, CO_anodic_1 = scan.multiplescan(CO_Strip, 1, sepvalue='\t', decimalvalue=',')
-        CO_cathodic_2, CO_anodic_2 = scan.multiplescan(CO_Strip, 2, sepvalue='\t', decimalvalue=',')
+        CO_Strip = COStripEntry.get()
+        if CO_config[1] == 'None':
+            CO_header = None
+        else:
+            CO_header = int(CO_config[1])
+
+        CO_sep_dic = {';': ';', 'spaces': '\s+', 'tabs': '\t'}
+
+        CO_cathodic_1, CO_anodic_1 = scan.multiplescan(CO_Strip, 1, sepvalue=CO_sep_dic[CO_config[0]], headervalue=CO_header, decimalvalue=CO_config[2], skip=int(CO_config[3]), pot=int(CO_config[4]), cur=int(CO_config[5]))
+        CO_cathodic_2, CO_anodic_2 = scan.multiplescan(CO_Strip, 2, sepvalue=CO_sep_dic[CO_config[0]], headervalue=CO_header, decimalvalue=CO_config[2], skip=int(CO_config[3]), pot=int(CO_config[4]), cur=int(CO_config[5]))
         CO_plot(CO_anodic_1, CO_anodic_2)
 
 
@@ -1373,14 +1406,25 @@ if __name__ == '__main__':
 
 
     def options():
-        importwindow(root, widthfactor, heightfactor)
+        window = ct.CTkToplevel(root)
+        importwindow(window, widthfactor, heightfactor)
+
+        root.wait_window(window)
 
         config = open('Importconfig.txt')
         config_txt = config.readlines()
         config.close()
 
+        global Ar_config
+        global CO_config
+        global ORR_config
+        global ORRa_config
+
         Ar_config = config_txt[2].replace('\n', '').split()
         CO_config = config_txt[4].replace('\n', '').split()
+        ORR_config = config_txt[6].replace('\n', '').split()
+        ORRa_config = config_txt[8].replace('\n', '').split()
+
 
 
     OptionsButton = ct.CTkButton(master=bottom_frame, text="Import Options", command=options, text_font=("Calibri", -18), width=160, height=10)
