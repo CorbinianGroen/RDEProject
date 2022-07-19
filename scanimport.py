@@ -23,7 +23,7 @@ def lsvscan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot
     CV_reduced.rename(columns={'WE(1).Current (A)': 'Current/A'}, inplace=True)
     CV_reduced.reset_index()
 
-    return CV_reduced
+    return 'None', CV_reduced
 
 
 def singlescan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot=0, cur=1):
