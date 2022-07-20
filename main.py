@@ -1121,6 +1121,14 @@ if __name__ == '__main__':
     ORR_config = config_txt[6].replace('\n', '').split()
     ORRa_config = config_txt[8].replace('\n', '').split()
 
+    #open Savpath:
+    pathfile = open('Pathfile.txt')
+    path_txt = pathfile.readlines()
+    pathfile.close()
+
+    global path
+    path = path_txt[1].replace('\n', '')
+
 
     # layout of frames for the main window
     input_frame = ct.CTkFrame(master=root, corner_radius=10, fg_color=('grey80', 'grey20'))
@@ -1221,11 +1229,21 @@ if __name__ == '__main__':
 
 
     def HUPD():
-        file = filedialog.askopenfilename(title='Open HUPD file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        global path
+        file = filedialog.askopenfilename(title='Open HUPD file', initialdir=path, filetypes=[('Textfile', '*.txt')])
         if file.strip():
             HUPDEntry.delete(0, 'end')
             HUPDEntry.insert(0, file)
             HUPDEval.configure(state=tk.NORMAL)
+
+            file_path = file.split('/')
+            del file_path[-1]
+            file_path = '/'.join(file_path) + '/'
+
+            path = f'PathFile\n'f'{file_path}\n'
+            pathfile = open('Pathfile.txt', 'w')
+            pathfile.write(path)
+            pathfile.close()
 
 
     ct.CTkButton(master=input_frame, text='Open', command=HUPD, text_font=("Calibri", -18), width=80).grid(row=1, column=6, sticky=tk.W, padx=20)
@@ -1258,11 +1276,22 @@ if __name__ == '__main__':
 
 
     def COStrip():
-        file = filedialog.askopenfilename(title='Open COStrip file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        global path
+        file = filedialog.askopenfilename(title='Open COStrip file', initialdir=path, filetypes=[('Textfile', '*.txt')])
         if file.strip():
             COStripEntry.delete(0, 'end')
             COStripEntry.insert(0, file)
             COStripEval.configure(state=tk.NORMAL)
+
+            file_path = file.split('/')
+            del file_path[-1]
+            file_path = '/'.join(file_path) + '/'
+
+            path = f'PathFile\n'f'{file_path}\n'
+
+            pathfile = open('Pathfile.txt', 'w')
+            pathfile.write(path)
+            pathfile.close()
 
 
     ct.CTkButton(master=input_frame, text='Open', command=COStrip, text_font=("Calibri", -18), width=80).grid(row=3, column=6, sticky=tk.W, padx=20)
@@ -1293,10 +1322,22 @@ if __name__ == '__main__':
 
 
     def ORR():
-        file = filedialog.askopenfilename(title='Open ORR O2 file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        global path
+        file = filedialog.askopenfilename(title='Open ORR O2 file', initialdir=path, filetypes=[('Textfile', '*.txt')])
         if file is not None:
             ORREntry.delete(0, 'end')
             ORREntry.insert(0, file)
+
+            file_path = file.split('/')
+            del file_path[-1]
+            file_path = '/'.join(file_path) + '/'
+
+            path = f'PathFile\n'f'{file_path}\n'
+
+            pathfile = open('Pathfile.txt', 'w')
+            pathfile.write(path)
+            pathfile.close()
+
             if ORRArEntry.get() != '':
                 ORREval.configure(state=tk.NORMAL)
 
@@ -1310,10 +1351,22 @@ if __name__ == '__main__':
 
 
     def ORR_Ar():
-        file = filedialog.askopenfilename(title='Open ORR Ar file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        global path
+        file = filedialog.askopenfilename(title='Open ORR Ar file', initialdir=path, filetypes=[('Textfile', '*.txt')])
         if file is not None:
             ORRArEntry.delete(0, 'end')
             ORRArEntry.insert(0, file)
+
+            file_path = file.split('/')
+            del file_path[-1]
+            file_path = '/'.join(file_path) + '/'
+
+            path = f'PathFile\n'f'{file_path}\n'
+
+            pathfile = open('Pathfile.txt', 'w')
+            pathfile.write(path)
+            pathfile.close()
+
             if ORREntry.get() != '':
                 ORREval.configure(state=tk.NORMAL)
 
@@ -1377,10 +1430,22 @@ if __name__ == '__main__':
 
 
     def HOR():
-        file = filedialog.askopenfilename(title='Open HOR H2 file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        global path
+        file = filedialog.askopenfilename(title='Open HOR H2 file', initialdir=path, filetypes=[('Textfile', '*.txt')])
         if file is not None:
             HOREntry.delete(0, 'end')
             HOREntry.insert(0, file)
+
+            file_path = file.split('/')
+            del file_path[-1]
+            file_path = '/'.join(file_path) + '/'
+
+            path = f'PathFile\n'f'{file_path}\n'
+
+            pathfile = open('Pathfile.txt', 'w')
+            pathfile.write(path)
+            pathfile.close()
+
             if HORArEntry.get() != '':
                 HOREval.configure(state=tk.NORMAL)
 
@@ -1394,16 +1459,29 @@ if __name__ == '__main__':
 
 
     def HOR_Ar():
-        file = filedialog.askopenfilename(title='Open HOR Ar file', initialdir='/', filetypes=[('Textfile', '*.txt')])
+        global path
+        file = filedialog.askopenfilename(title='Open HOR Ar file', initialdir=path, filetypes=[('Textfile', '*.txt')])
         if file is not None:
             HORArEntry.delete(0, 'end')
             HORArEntry.insert(0, file)
+
+            file_path = file.split('/')
+            del file_path[-1]
+            file_path = '/'.join(file_path) + '/'
+
+            path = f'PathFile\n'f'{file_path}\n'
+
+            pathfile = open('Pathfile.txt', 'w')
+            pathfile.write(path)
+            pathfile.close()
+
             if HOREntry.get() != '':
                 HOREval.configure(state=tk.NORMAL)
 
 
-    ct.CTkButton(master=input_frame, text='Open', command=HOR_Ar, text_font=("Calibri", -18), width=80).grid(row=11, column=6, sticky=tk.W, padx=20)
-
+    HORButton = ct.CTkButton(master=input_frame, text='Open', command=HOR_Ar, text_font=("Calibri", -18), width=80)
+    HORButton.grid(row=11, column=6, sticky=tk.W, padx=20)
+    HORButton.configure(state=tk.DISABLED)
 
     def HOR_graph():
         pass
@@ -1435,8 +1513,8 @@ if __name__ == '__main__':
             file1 = file + '.txt'
             file2 = file + '_results.txt'
             print(file1)
-            # savefile.to_csv(file1, sep='\t', index=False, header=True)
-            # results.to_csv(file2, sep='\t', index=False, header=True)
+            savefile.to_csv(file1, sep='\t', index=False, header=True)
+            results.to_csv(file2, sep='\t', index=False, header=True)
             w_list = list(data_frame.winfo_children())
             for element in w_list:
                 element.destroy()
