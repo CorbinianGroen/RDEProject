@@ -1,2 +1,2 @@
 PathFile
-C:/CloudStation/Doktor/Data/RRDE/nSi-Pt-TiOx/nSi-Pt_TiOx_75nm_20220629/
+C:/CloudStation/Doktor/Data/RRDE/nSi-Pt-TiOx/nSi-Pt_TiOx_75nm_oven_20220708/

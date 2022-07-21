@@ -123,6 +123,9 @@ def importwindow(master, widthfactor, heightfactor):
     ct.CTkLabel(master=COFrame, text='Sep:', text_font=("Calibri", -18), width=1).grid(row=2, column=1, sticky=tk.W)
     ct.CTkLabel(master=COFrame, text='Header:', text_font=("Calibri", -18), width=1).grid(row=2, column=3, sticky=tk.W)
     ct.CTkLabel(master=COFrame, text='Decimal:', text_font=("Calibri", -18), width=1).grid(row=2, column=5, sticky=tk.W)
+    ct.CTkLabel(master=COFrame, text='Skip:', text_font=("Calibri", -18), width=1).grid(row=2, column=7, sticky=tk.W)
+    ct.CTkLabel(master=COFrame, text='Pot Column:', text_font=("Calibri", -18), width=1).grid(row=2, column=9, sticky=tk.W)
+    ct.CTkLabel(master=COFrame, text='Cur Column:', text_font=("Calibri", -18), width=1).grid(row=2, column=11, sticky=tk.W)
 
     Seperators = (";", "spaces", "tabs")
     COSep_var = ct.StringVar()
@@ -275,15 +278,15 @@ def importwindow(master, widthfactor, heightfactor):
 
     ORRaSkip = ct.CTkEntry(master=ORRFrame, width=30)
     ORRaSkip.grid(row=4, column=14, sticky=tk.W)
-    ORRaSkip.insert(0, ORR_config[6])
+    ORRaSkip.insert(0, ORRa_config[6])
 
     ORRaPot = ct.CTkEntry(master=ORRFrame, width=30)
     ORRaPot.grid(row=4, column=16, sticky=tk.W)
-    ORRaPot.insert(0, ORR_config[7])
+    ORRaPot.insert(0, ORRa_config[7])
 
     ORRaCur = ct.CTkEntry(master=ORRFrame, width=30)
     ORRaCur.grid(row=4, column=18, sticky=tk.W)
-    ORRaCur.insert(0, ORR_config[8])
+    ORRaCur.insert(0, ORRa_config[8])
 
 
     SaveFrame = ct.CTkFrame(master=window, corner_radius=10, fg_color=('grey80', 'grey20'))

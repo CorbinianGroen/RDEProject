@@ -1506,15 +1506,25 @@ if __name__ == '__main__':
 
 
     def save():
-        file = filedialog.asksaveasfilename(title='Save As', initialdir='/', filetypes=[('Textfile', '*.txt')], initialfile=NameEntry.get())
+        global savefile
+        global results
+        global path
+
+        file = filedialog.asksaveasfilename(title='Save As', initialdir=path, filetypes=[('Textfile', '*.txt')], initialfile=NameEntry.get())
         if file.strip():
             del savefile['ignore']
             del results['ignore']
             file1 = file + '.txt'
             file2 = file + '_results.txt'
-            print(file1)
+
             savefile.to_csv(file1, sep='\t', index=False, header=True)
             results.to_csv(file2, sep='\t', index=False, header=True)
+
+            #reinitialize the savefiles
+            savefile = np.linspace(0, 1000, 1001)
+            savefile = pd.DataFrame(savefile, columns=['ignore'])
+            results = pd.DataFrame({'ignore': [1]})
+
             w_list = list(data_frame.winfo_children())
             for element in w_list:
                 element.destroy()
