@@ -1,9 +1,9 @@
 Import Configure File
 Ar
-Multiple	0.02	2	spaces	None	.	19	2	3
+Multiple	0.02	2	tabs	0	.	0	2	3
 CO
 tabs	None	,	1	2	4
 ORR
-Multiple	0.02	2	spaces	None	.	19	2	3
+Multiple	0.02	2	tabs	0	.	0	3	4
 ORRa
-Multiple	0.02	2	spaces	None	.	19	2	3
+Multiple	0.02	2	tabs	0	.	0	3	4

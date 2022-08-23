@@ -61,7 +61,7 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
     else:
         CVs = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=headervalue, decimal=decimalvalue)
     #if 'Scan' in CVs:
-    if 'Scan1' in CVs:
+    if 'Scan' in CVs:
         CV_scan = CVs[CVs['Scan'] == scan].reset_index()
         CV_reduced = CV_scan.loc[:, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
         CV_reduced.rename(columns={'WE(1).Potential (V)': 'Potential/V'}, inplace=True)
