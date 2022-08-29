@@ -2,7 +2,7 @@ Import Configure File
 Ar
 Multiple	0.02	2	tabs	0	.	0	2	3
 CO
-tabs	None	,	1	2	4
+tabs	0	.	0	2	3
 ORR
 Multiple	0.02	2	tabs	0	.	0	3	4
 ORRa

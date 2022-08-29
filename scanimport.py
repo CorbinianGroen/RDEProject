@@ -4,7 +4,7 @@ import pandas as pd
 Ar = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-Ar-0.02mVs-CV-0.05-0.925mV-2.txt'
 O2 = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-O2-1(1).txt'
 Ar_orr = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-Ar-1(1).txt'
-CO_Strip = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3_20210414-RRDE3_COstrip-0.05V_1Vs-1_0.01rpm_Ar_0_GC-19936-afterORRC_all cylcles.txt'
+CO_Strip = "C:/CloudStation/Doktor/Data/RRDE/RDETesting/20220822-RRDE3/GC-16507-COStrip.txt"
 Kr_test = 'C:/CloudStation/Master/Forschungspraktikum Krischer/Data/nSi-Pt_20220225/5_ar_cv_-0pt67_-0pt3_20mvs_200rpm_3cyc - Kopie.txt'
 #end of testing values
 
@@ -50,7 +50,7 @@ def singlescan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, 
     return CV_cathodic, CV_anodic
 
 
-def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot=0, cur=1):
+def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot=2, cur=3):
     if headervalue is None:
         CVs = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=None, decimal=decimalvalue)
         headerlist = list(CVs)
@@ -60,7 +60,7 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
 
     else:
         CVs = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=headervalue, decimal=decimalvalue)
-    #if 'Scan' in CVs:
+
     if 'Scan' in CVs:
         CV_scan = CVs[CVs['Scan'] == scan].reset_index()
         CV_reduced = CV_scan.loc[:, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
@@ -155,7 +155,7 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
 #AR1, AR2 = singlescan(Ar, 2)
 #print(AR1, AR2)
 
-#CO1, CO2 = multiplescan(CO_Strip, 1, sepvalue='\t', decimalvalue=',')
+#CO1, CO2 = multiplescan(CO_Strip, 1, sepvalue='\t', decimalvalue='.')
 #print(CO1, CO2)
 
 #Kr1, Kr2 = multiplescan(Kr_test, 2, sepvalue='\s+', headervalue=None, decimalvalue='.', skip=19, pot=2, cur=3)

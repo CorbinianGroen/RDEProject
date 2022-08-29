@@ -778,14 +778,14 @@ def O2_plot(O2, Ar):
     df['ik/A'] = (i_limiting * df['Diff/A']) / (i_limiting - df['Diff/A'])
 
     if 'area' in globals():
-        df['is/A'] = abs(df['ik/A']) / area * 1000
+        df['is/A'] = abs(df['ik/A']) / area * 1000 * 1000
         global i_surface_0pt9
         i_surface_0pt9 = df['is/A'].loc[index_0pt9]
 
     if LoadingEntry.get() != '':
         global loading
         loading = float(LoadingEntry.get())
-        df['im/A'] = abs(df['ik/A']) / loading / 1000
+        df['im/A'] = abs(df['ik/A']) / loading
         global i_mass_0pt9
         i_mass_0pt9 = df['im/A'].loc[index_0pt9]
 
@@ -808,7 +808,7 @@ def O2_plot(O2, Ar):
         il_label.config(text='{0:.3e}'.format(i_limiting))
 
         if 'area' in globals():
-            df['is/A'] = abs(df['ik/A']) / area * 1000
+            df['is/A'] = abs(df['ik/A']) / area * 1000 * 1000
             global i_surface_0pt9
             i_surface_0pt9 = df['is/A'].loc[index_0pt9]
             is_label.config(text='{0:.3f}'.format(i_surface_0pt9))
@@ -818,7 +818,7 @@ def O2_plot(O2, Ar):
         if LoadingEntry.get() != '':
             global loading
             loading = float(LoadingEntry.get())
-            df['im/A'] = abs(df['ik/A']) / loading / 1000
+            df['im/A'] = abs(df['ik/A']) / loading
             global i_mass_0pt9
             i_mass_0pt9 = df['im/A'].loc[index_0pt9]
             im_label.config(text='{0:.3f}'.format(i_mass_0pt9))
@@ -910,7 +910,7 @@ def O2_plot(O2, Ar):
         is_label = ct.CTkLabel(is_frame, text='n.a.', text_font=("Calibri", -20), width=1)
         is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
     ct.CTkLabel(is_frame, text='iₛ:',text_font=("Calibri", -20),  width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(is_frame, text='A/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
     im_frame = ct.CTkFrame(master=variable_frame, corner_radius=10, fg_color=('grey80', 'grey20'))
     im_frame.grid(row=2, column=0, sticky='nswe', pady=5, padx=5)
@@ -992,7 +992,7 @@ def O2_plot(O2, Ar):
             d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
         ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='A/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
         d['a_n_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['a_n_f_{0}'.format(z)].grid(row=3, column=0, sticky='nswe', pady=5, padx=5, ipady=2, ipadx=2, columnspan=3)
@@ -1272,7 +1272,7 @@ if __name__ == '__main__':
     COStripLabel.grid(row=3, column=4, sticky=tk.W)
     COStripEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
     COStripEntry.grid(row=3, column=5, sticky=tk.W)
-    COStripEntry.insert(0, CO_Strip)
+    #COStripEntry.insert(0, CO_Strip)
 
 
     def COStrip():
