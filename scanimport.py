@@ -60,19 +60,27 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
 
     else:
         CVs = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=headervalue, decimal=decimalvalue)
-    #if 'Scan' in CVs:
+
     if 'Scan' in CVs:
         CV_scan = CVs[CVs['Scan'] == scan].reset_index()
         CV_reduced = CV_scan.loc[:, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
         CV_reduced.rename(columns={'WE(1).Potential (V)': 'Potential/V'}, inplace=True)
         CV_reduced.rename(columns={'WE(1).Current (A)': 'Current/A'}, inplace=True)
+
         upper = CV_reduced['Potential/V'].nlargest(1).index[0]
         lower = CV_reduced['Potential/V'].nsmallest(1).index[0]
-        CV_cathodic = CV_reduced.iloc[upper + 1:lower].reset_index()
+
+        if upper == (CV_reduced.shape[0] - 1):
+            CV_anodic = CV_reduced.iloc[lower+1:CV_reduced.shape[0]].reset_index()
+            CV_cathodic = CV_reduced.iloc[0:lower].reset_index()
+
+        else:
+            CV_cathodic = CV_reduced.iloc[upper + 1:lower].reset_index()
+            CV_anodic1 = CV_reduced.iloc[0:upper]
+            CV_anodic2 = CV_reduced.iloc[lower + 1:CV_reduced.shape[0]]
+            CV_anodic = pd.concat([CV_anodic2, CV_anodic1], ignore_index=True).reset_index()
+
         del CV_cathodic['index']
-        CV_anodic1 = CV_reduced.iloc[0:upper]
-        CV_anodic2 = CV_reduced.iloc[lower + 1:CV_reduced.shape[0]]
-        CV_anodic = pd.concat([CV_anodic2, CV_anodic1], ignore_index=True).reset_index()
         del CV_anodic['index']
         return CV_cathodic, CV_anodic
 

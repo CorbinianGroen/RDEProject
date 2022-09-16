@@ -65,6 +65,7 @@ def interpolation(curve1, curve2):
     return df
 
 
+
 def CO_plot(df1, df2):
     d_x = root.winfo_x()
     d_y = root.winfo_y()
@@ -168,6 +169,7 @@ def CO_plot(df1, df2):
     ax_co.spines['bottom'].set_color(fgcolor)
     ax_co.plot(df['Potential/V'], df['Current/A_1'], label='first scan')
     ax_co.plot(df['Potential/V'], df['Current/A_2'], label='second scan')
+    ax_co.plot(higher0['Potential/V'], higher0['Diff'], 'w--', label='integration')
     legend = ax_co.legend(loc='lower right', frameon=False)
     for text in legend.get_texts():
         text.set_color(fgcolor)
@@ -790,6 +792,9 @@ def O2_plot(O2, Ar):
         i_mass_0pt9 = df['im/A'].loc[index_0pt9]
 
     ax_o2.plot(df['E-iR/V'], df['Diff/A'], label='ORR_corrected')
+    ax_o2.plot(df['E-iR/V'], df['Current/A_1'],'w--', label='O2')
+    ax_o2.plot(df['E-iR/V'], df['Current/A_2'], 'k--', label='Ar')
+
     legend = ax_o2.legend(loc='lower right', frameon=False)
     for text in legend.get_texts():
         text.set_color(fgcolor)
