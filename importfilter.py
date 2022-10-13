@@ -16,7 +16,7 @@ def importwindow(master, widthfactor, heightfactor):
     window = master
     #window.grab_set()
     window.title('Import Options')
-    window.geometry(str(int(widthfactor*1250)) + 'x' + str(int(heightfactor*600)))
+    window.geometry(str(int(widthfactor*1400)) + 'x' + str(int(heightfactor*600)))
     #window.resizable(False, False)
 
     window.grid_rowconfigure(0, minsize=10)
@@ -64,7 +64,9 @@ def importwindow(master, widthfactor, heightfactor):
     ct.CTkLabel(master=ArFrame, text='Decimal:', text_font=("Calibri", -18), width=1).grid(row=2, column=11, sticky=tk.W)
     ct.CTkLabel(master=ArFrame, text='Skip:', text_font=("Calibri", -18), width=1).grid(row=2, column=13, sticky=tk.W)
     ct.CTkLabel(master=ArFrame, text='Pot Column:', text_font=("Calibri", -18), width=1).grid(row=2, column=15, sticky=tk.W)
-    ct.CTkLabel(master=ArFrame, text='Cur Column:', text_font=("Calibri", -18), width=1).grid(row=2, column=17, sticky=tk.W)
+    ct.CTkLabel(master=ArFrame, text='', text_font=("Calibri", -18), width=1).grid(row=2, column=17, sticky=tk.W)
+    ct.CTkLabel(master=ArFrame, text='Cur Column:', text_font=("Calibri", -18), width=1).grid(row=2, column=19, sticky=tk.W)
+    ct.CTkLabel(master=ArFrame, text='', text_font=("Calibri", -18), width=1).grid(row=2, column=21, sticky=tk.W)
 
     Scans = ("Single", "Multiple")
     ArScan_var = ct.StringVar()
@@ -110,9 +112,26 @@ def importwindow(master, widthfactor, heightfactor):
     ArPot.grid(row=2, column=16, sticky=tk.W)
     ArPot.insert(0, Ar_config[7])
 
+    Unit = ("V", "mV", "µV")
+    ArV_var = ct.StringVar()
+    ArV = ct.CTkOptionMenu(master=ArFrame, variable=ArV_var, values=Unit)
+    ArV.config(width=30, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ArV.set(Ar_config[8])
+    ArV.grid(row=2, column=18, sticky=tk.W)
+
     ArCur = ct.CTkEntry(master=ArFrame, width=30)
-    ArCur.grid(row=2, column=18, sticky=tk.W)
-    ArCur.insert(0, Ar_config[8])
+    ArCur.grid(row=2, column=20, sticky=tk.W)
+    ArCur.insert(0, Ar_config[9])
+
+    Unit_1 = ("A", "mA", "µA")
+    ArA_var = ct.StringVar()
+    ArA = ct.CTkOptionMenu(master=ArFrame, variable=ArA_var, values=Unit_1)
+    ArA.config(width=30, fg_color=('grey80', 'grey20'), button_color=('grey80', 'grey20'), button_hover_color=('grey80', 'grey20'))
+    ArA.set(Ar_config[10])
+    ArA.grid(row=2, column=22, sticky=tk.W)
+
+
+
 
     # COFrame Inputs
     COFrame.grid_rowconfigure(0, minsize=10)
@@ -297,7 +316,7 @@ def importwindow(master, widthfactor, heightfactor):
 
         SaveText = f'Import Configure File\n' \
                    f'Ar\n' \
-                   f'{ArScan.get()}\t{ArScanRate.get()}\t{ArScanNumber.get()}\t{ArSep.get()}\t{ArHead.get()}\t{ArDecimal.get()}\t{ArSkip.get()}\t{ArPot.get()}\t{ArCur.get()}\n' \
+                   f'{ArScan.get()}\t{ArScanRate.get()}\t{ArScanNumber.get()}\t{ArSep.get()}\t{ArHead.get()}\t{ArDecimal.get()}\t{ArSkip.get()}\t{ArPot.get()}\t{ArV.get()}\t{ArCur.get()}\t{ArA.get()}\n' \
                    f'CO\n' \
                    f'{COSep.get()}\t{COHead.get()}\t{CODecimal.get()}\t{COSkip.get()}\t{COPot.get()}\t{COCur.get()}\n' \
                    f'ORR\n'\

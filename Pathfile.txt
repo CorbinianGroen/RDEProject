@@ -1,2 +1,2 @@
 PathFile
-C:/CloudStation/Doktor/Data/RRDE/RDETesting/20220915-RRDE3-Pt-C-TKK-20wt/
+/

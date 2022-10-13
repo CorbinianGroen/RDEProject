@@ -462,6 +462,7 @@ def Ar_Plot(anodic, cathodic):
     area_geo = np.pi * (float(RadiusEntry.get()) ** 2)
     rf = area / area_geo
 
+
     def dragged():
         upper_potential = Tline2.getvalue()
         lower_potential = Tline.getvalue()
@@ -485,9 +486,12 @@ def Ar_Plot(anodic, cathodic):
                           y=anodic['Current/A'].loc[index_low:index_high] - anodic_dl)
         area_c = np.trapz(x=cathodic['Potential/V'].loc[index_high_c:index_low_c],
                           y=cathodic['Current/A'].loc[index_high_c:index_low_c] - cathodic_dl)
+
+
         global area
         area = (abs(area_a) + abs(area_c)) / 2
-        area = (area / 0.02) / 201e-6
+        area = (area / float(Ar_config[1])) / 210e-6
+
 
         if LoadingEntry.get() != '':
             global loading
@@ -1263,8 +1267,10 @@ if __name__ == '__main__':
             Ar_header = int(Ar_config[4])
 
         Ar_sep_dic = {';': ';', 'spaces': '\s+', 'tabs': '\t'}
-        Ar_dic = {'Single': scan.singlescan(Ar, sepvalue=Ar_sep_dic[Ar_config[3]], headervalue=Ar_header, decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), cur=int(Ar_config[8])),
-                  'Multiple': scan.multiplescan(Ar, int(Ar_config[2]), sepvalue=Ar_sep_dic[Ar_config[3]], headervalue=Ar_header, decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), cur=int(Ar_config[8]))}
+        Ar_unit_dic = {'V': 1, 'mV': 1000, 'µV': 1000000}
+        Ar_unit_1_dic = {'A': 1, 'mA': 1000, 'µA': 1000000}
+        Ar_dic = {'Single': scan.singlescan(Ar, sepvalue=Ar_sep_dic[Ar_config[3]], headervalue=Ar_header, decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), u_V=Ar_unit_dic[Ar_config[8]], cur=int(Ar_config[9]), u_A=Ar_unit_1_dic[Ar_config[10]]),
+                  'Multiple': scan.multiplescan(Ar, int(Ar_config[2]), sepvalue=Ar_sep_dic[Ar_config[3]], headervalue=Ar_header, decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), u_V=Ar_unit_dic[Ar_config[8]], cur=int(Ar_config[9]), u_A=Ar_unit_1_dic[Ar_config[10]])}
         Ar_cathodic, Ar_anodic = Ar_dic[Ar_config[0]]
         Ar_Plot(Ar_anodic, Ar_cathodic)
 

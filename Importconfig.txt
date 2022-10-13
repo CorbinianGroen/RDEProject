@@ -1,6 +1,6 @@
 Import Configure File
 Ar
-Multiple	0.02	2	tabs	0	.	0	2	3
+Multiple	0.1	2	tabs	None	.	1	8	V	9	mA
 CO
 tabs	0	.	0	2	4
 ORR

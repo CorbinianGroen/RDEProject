@@ -26,7 +26,7 @@ def lsvscan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot
     return 'None', CV_reduced
 
 
-def singlescan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot=0, cur=1):
+def singlescan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot=0, u_V=1, cur=1, u_A=1):
     if headervalue is None:
         CVs = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=None, decimal=decimalvalue)
         headerlist = list(CVs)
@@ -47,10 +47,22 @@ def singlescan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, 
     CV_anodic2 = CV_reduced.iloc[lower + 1:CV_reduced.shape[0]]
     CV_anodic = pd.concat([CV_anodic2, CV_anodic1], ignore_index=True).reset_index()
     del CV_anodic['index']
+
+    CV_anodic_V = CV_anodic['Potential/V'] / u_V
+    CV_anodic_A = CV_anodic['Current/A'] / u_A
+
+    CV_anodic = pd.concat([CV_anodic_V, CV_anodic_A], axis=1, join='inner')
+
+    CV_cathodic_V = CV_cathodic['Potential/V'] / u_V
+    CV_cathodic_A = CV_cathodic['Current/A'] / u_A
+
+    CV_cathodic = pd.concat([CV_cathodic_V, CV_cathodic_A], axis=1, join='inner')
+
+
     return CV_cathodic, CV_anodic
 
 
-def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot=2, cur=3):
+def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot=2, u_V=1, cur=3, u_A=1):
     if headervalue is None:
         CVs = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=None, decimal=decimalvalue)
         headerlist = list(CVs)
@@ -152,6 +164,16 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
         CV_anodic.rename(columns={'WE(1).Potential (V)': 'Potential/V'}, inplace=True)
         CV_anodic.rename(columns={'WE(1).Current (A)': 'Current/A'}, inplace=True)
 
+        CV_anodic_V = CV_anodic['Potential/V'] / u_V
+        CV_anodic_A = CV_anodic['Current/A'] / u_A
+
+        CV_anodic = pd.concat([CV_anodic_V, CV_anodic_A], axis=1, join='inner')
+
+        CV_cathodic_V = CV_cathodic['Potential/V'] / u_V
+        CV_cathodic_A = CV_cathodic['Current/A'] / u_A
+
+        CV_cathodic = pd.concat([CV_cathodic_V, CV_cathodic_A], axis=1, join='inner')
+
         return CV_cathodic, CV_anodic
 
 
@@ -160,7 +182,7 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
 #ORR = lsvscan(O2, headervalue=None)
 #print(ORR)
 
-#AR1, AR2 = singlescan(Ar, 2)
+#AR1, AR2 = singlescan(Ar, u_A=1000)
 #print(AR1, AR2)
 
 #CO1, CO2 = multiplescan(CO_Strip, 1, sepvalue='\t', decimalvalue='.')
