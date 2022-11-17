@@ -1208,28 +1208,78 @@ if __name__ == '__main__':
     NameLabel = ct.CTkLabel(master=input_frame, text='Name:', text_font=("Calibri", -18))
     NameLabel.grid(row=1, column=1, sticky=tk.W)
     NameEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
-    NameEntry.grid(row=1, column=2, sticky=tk.W)
+    NameEntry.grid(row=1, column=2, sticky=tk.W, columnspan= 2)
 
     LoadingLabel = ct.CTkLabel(master=input_frame, text='Loading [g]:', text_font=("Calibri", -18))
     LoadingLabel.grid(row=3, column=1, sticky=tk.W)
     LoadingEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
-    LoadingEntry.grid(row=3, column=2, sticky=tk.W)
+    LoadingEntry.grid(row=3, column=2, sticky=tk.W, columnspan=2)
 
     RLabel = ct.CTkLabel(master=input_frame, text=u'HFR [\u03A9]:', text_font=("Calibri", -18))
     RLabel.grid(row=5, column=1, sticky=tk.W)
-    REntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    REntry = ct.CTkEntry(master=input_frame, width=150, text_font=("Calibri", -14))
     REntry.grid(row=5, column=2, sticky=tk.W)
+
+    def HFR():
+        global path
+        file = filedialog.askopenfilename(title='Open HFR file', initialdir=path, filetypes=[('Textfile', '*.txt')])
+        if file.strip():
+
+            file_path = file.split('/')
+            del file_path[-1]
+            file_path = '/'.join(file_path) + '/'
+
+            path = f'PathFile\n'f'{file_path}\n'
+            pathfile = open('Pathfile.txt', 'w')
+            pathfile.write(path)
+            pathfile.close()
+
+            HFR = scan.HFRscan(file, sepvalue='\t', headervalue=None, decimalvalue='.', skip=1, R=3, u_R=1)
+
+
+            REntry.delete(0, 'end')
+            REntry.insert(0, HFR)
+
+
+    ct.CTkButton(master=input_frame, text='HFR', command=HFR, text_font=("Calibri", -16), width=40, height=20).grid(row=5, column=3, sticky=tk.W, padx=5)
 
     RefLabel = ct.CTkLabel(master=input_frame, text='Ref [V]:', text_font=("Calibri", -18))
     RefLabel.grid(row=7, column=1, sticky=tk.W)
-    RefEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    RefEntry = ct.CTkEntry(master=input_frame, width=150, text_font=("Calibri", -14))
     RefEntry.grid(row=7, column=2, sticky=tk.W)
+
+    def Ref():
+        global path
+        file = filedialog.askopenfilename(title='Open HOR H2 file', initialdir=path, filetypes=[('Textfile', '*.txt')])
+        if file.strip():
+            file_path = file.split('/')
+            del file_path[-1]
+            file_path = '/'.join(file_path) + '/'
+
+            path = f'PathFile\n'f'{file_path}\n'
+            pathfile = open('Pathfile.txt', 'w')
+            pathfile.write(path)
+            pathfile.close()
+
+            Ref_cathodic, Ref_anodic = scan.multiplescan(file, 2, sepvalue='\t', headervalue=0, decimalvalue='.', skip=0, pot=2, u_V=1, cur=3, u_A=1)
+
+            pot_cat = Ref_cathodic['Potential/V'].iloc[abs(Ref_cathodic['Current/A']).nsmallest(1).index[0]]
+            pot_an = Ref_anodic['Potential/V'].iloc[abs(Ref_anodic['Current/A']).nsmallest(1).index[0]]
+
+            Ref = (pot_cat + pot_an) / 2
+
+
+            RefEntry.delete(0, 'end')
+            RefEntry.insert(0, Ref)
+
+    ct.CTkButton(master=input_frame, text='Ref', command=Ref, text_font=("Calibri", -16), width=40, height=20).grid(row=7, column=3, sticky=tk.W, padx=5)
+
 
     RadiusLabel = ct.CTkLabel(master=input_frame, text='Radius [cm]:', text_font=("Calibri", -18))
     RadiusLabel.grid(row=9, column=1, sticky=tk.W)
     RadiusEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
-    RadiusEntry.grid(row=9, column=2, sticky=tk.W)
-    RadiusEntry.insert(0, '0.2')
+    RadiusEntry.grid(row=9, column=2, sticky=tk.W, columnspan=2)
+    RadiusEntry.insert(0, '0.25')
 
     HUPDLabel = ct.CTkLabel(master=input_frame, text='Ar CV:', text_font=("Calibri", -18))
     HUPDLabel.grid(row=1, column=4, sticky=tk.W)

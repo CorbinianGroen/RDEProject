@@ -6,6 +6,7 @@ O2 = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE
 Ar_orr = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-Ar-1(1).txt'
 CO_Strip = "C:/CloudStation/Doktor/Data/RRDE/RDETesting/20220822-RRDE3/GC-16507-COStrip.txt"
 Kr_test = 'C:/CloudStation/Master/Forschungspraktikum Krischer/Data/nSi-Pt_20220225/5_ar_cv_-0pt67_-0pt3_20mvs_200rpm_3cyc - Kopie.txt'
+Imp_test = 'C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/CG2 PtC/GC-21305-Ar-200rpm-0,9356689453125V-Impedance.txt'
 #end of testing values
 
 
@@ -176,6 +177,21 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
 
         return CV_cathodic, CV_anodic
 
+def HFRscan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, R=2, u_R=1):
+
+    if headervalue is None:
+        Imp = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=None, decimal=decimalvalue)
+
+    else:
+        Imp = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=headervalue, decimal=decimalvalue)
+
+    Imp = Imp.iloc[:, R]
+    HFR = float(Imp.nsmallest(1))
+
+    HFR = HFR / u_R
+
+    return HFR
+
 
 #for testing
 
@@ -191,3 +207,5 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
 #Kr1, Kr2 = multiplescan(Kr_test, 2, sepvalue='\s+', headervalue=None, decimalvalue='.', skip=19, pot=2, cur=3)
 #print(Kr1)
 #print(Kr2)
+
+#HFRscan(Imp_test, sepvalue='\t', headervalue=None, decimalvalue='.', skip=1, R=3, u_R=1)
