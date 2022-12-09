@@ -139,7 +139,7 @@ def CO_plot(df1, df2):
     df = interpolation(df1, df2)
     df['Diff'] = df['Current/A_1'] - df['Current/A_2']
     higher0 = df[df['Diff'] >= 0]
-    higher0 = higher0[higher0['Potential/V'] >= 0.06]
+    higher0 = higher0[higher0['Potential/V'] >= 0.2]
     integration = np.trapz(x=higher0['Potential/V'], y=higher0['Diff'])
     global co_area
     co_area = ((integration / 0.01) / 420e-6)

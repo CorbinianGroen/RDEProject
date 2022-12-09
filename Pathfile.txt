@@ -1,2 +1,2 @@
 PathFile
-C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/CG2 PtC/
+C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/GC3 PtTiOxC_HT/
