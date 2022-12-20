@@ -59,7 +59,6 @@ def singlescan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, 
 
     CV_cathodic = pd.concat([CV_cathodic_V, CV_cathodic_A], axis=1, join='inner')
 
-
     return CV_cathodic, CV_anodic
 
 

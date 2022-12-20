@@ -1286,7 +1286,6 @@ if __name__ == '__main__':
     HUPDEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
     HUPDEntry.grid(row=1, column=5, sticky=tk.W)
 
-
     def HUPD():
         global path
         file = filedialog.askopenfilename(title='Open HUPD file', initialdir=path, filetypes=[('Textfile', '*.txt')])
