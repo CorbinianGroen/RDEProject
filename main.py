@@ -1331,6 +1331,7 @@ if __name__ == '__main__':
                   'Multiple': scan.multiplescan(Ar, int(Ar_config[2]), sepvalue=Ar_sep_dic[Ar_config[3]], headervalue=Ar_header, decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), u_V=Ar_unit_dic[Ar_config[8]], cur=int(Ar_config[9]), u_A=Ar_unit_1_dic[Ar_config[10]])}
         Ar_cathodic, Ar_anodic = Ar_dic[Ar_config[0]]
 
+
         Ar_Plot(Ar_anodic, Ar_cathodic)
 
 
