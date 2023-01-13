@@ -9,6 +9,7 @@ from scipy import interpolate
 import matplotlib.lines as lines
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+import matplotlib.pyplot as plt
 
 #imports of files
 from importfilter import importwindow
@@ -762,10 +763,18 @@ def O2_plot(O2, Ar):
     ax_o2.spines['right'].set_color(fgcolor)
     ax_o2.spines['bottom'].set_color(fgcolor)
 
+    print(O2, Ar)
+
+    O2['Potential/V'] = O2['Potential/V'] - (O2['Current/A'] * float(R)) - float(Ref)
+    Ar['Potential/V'] = Ar['Potential/V'] - (Ar['Current/A'] * float(R)) - float(Ref)
+
+    print(O2, Ar)
+
     df = interpolation(O2, Ar)
+
     df['Diff/A'] = df['Current/A_1'] - df['Current/A_2']
 
-    df['E-iR/V'] = df['Potential/V'] - (df['Diff/A'] * float(R)) - float(Ref)
+    df['E-iR/V'] = df['Potential/V'] #- (df['Diff/A'] * float(R)) - float(Ref)
 
     v = df['E-iR/V']
     df = df.drop(['E-iR/V'], axis=1)
@@ -1321,6 +1330,7 @@ if __name__ == '__main__':
         Ar_dic = {'Single': scan.singlescan(Ar, sepvalue=Ar_sep_dic[Ar_config[3]], headervalue=Ar_header, decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), u_V=Ar_unit_dic[Ar_config[8]], cur=int(Ar_config[9]), u_A=Ar_unit_1_dic[Ar_config[10]]),
                   'Multiple': scan.multiplescan(Ar, int(Ar_config[2]), sepvalue=Ar_sep_dic[Ar_config[3]], headervalue=Ar_header, decimalvalue=Ar_config[5], skip=int(Ar_config[6]), pot=int(Ar_config[7]), u_V=Ar_unit_dic[Ar_config[8]], cur=int(Ar_config[9]), u_A=Ar_unit_1_dic[Ar_config[10]])}
         Ar_cathodic, Ar_anodic = Ar_dic[Ar_config[0]]
+
         Ar_Plot(Ar_anodic, Ar_cathodic)
 
 
@@ -1475,6 +1485,8 @@ if __name__ == '__main__':
 
             ORR_cathodic, ORR_anodic = ORR_dic[ORR_config[0]]
             ORRa_cathodic, ORRa_anodic = ORRa_dic[ORRa_config[0]]
+
+            print(ORRa_anodic)
 
             O2_plot(ORR_anodic, ORRa_anodic)
 
