@@ -763,22 +763,14 @@ def O2_plot(O2, Ar):
     ax_o2.spines['right'].set_color(fgcolor)
     ax_o2.spines['bottom'].set_color(fgcolor)
 
-    print(O2, Ar)
-
     O2['Potential/V'] = O2['Potential/V'] - (O2['Current/A'] * float(R)) - float(Ref)
     Ar['Potential/V'] = Ar['Potential/V'] - (Ar['Current/A'] * float(R)) - float(Ref)
-
-    print(O2, Ar)
 
     df = interpolation(O2, Ar)
 
     df['Diff/A'] = df['Current/A_1'] - df['Current/A_2']
 
-    df['E-iR/V'] = df['Potential/V'] #- (df['Diff/A'] * float(R)) - float(Ref)
-
-    v = df['E-iR/V']
-    df = df.drop(['E-iR/V'], axis=1)
-    df.insert(0, 'E-iR/V', v)
+    df = df.rename(columns={'Potential/V':'E-iR/V'})
 
     max_current = df['Diff/A'].loc[df['Diff/A'].nlargest(1).index[0]]
     min_current = df['Diff/A'].loc[df['Diff/A'].nsmallest(1).index[0]]
@@ -786,23 +778,29 @@ def O2_plot(O2, Ar):
     index_low = df.iloc[(df['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
     index_high = df.iloc[(df['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
 
+    global i_limiting
     i_limiting = df['Diff/A'].loc[index_low:index_high].mean()
 
-    index_0pt9 = df.iloc[(df['E-iR/V'] - 0.9).abs().argsort()[:1]].index[0]
+    global dflim
+    dflim= df[(df['Diff/A'] >= (i_limiting * 0.5)) & (df['Diff/A'] <= (i_limiting * 0.01))].reset_index()
+    dflim = dflim.rename(columns={'E-iR/V': 'E-iR(lim)/V', 'Diff/A': 'Diff(lim)/A'})
+    dflim.drop(columns={'index', 'Current/A_1', 'Current/A_2'}, inplace=True)
 
-    df['ik/A'] = (i_limiting * df['Diff/A']) / (i_limiting - df['Diff/A'])
+    dflim['ik/A'] = (i_limiting * dflim['Diff(lim)/A']) / (i_limiting - dflim['Diff(lim)/A'])
+
+    index_0pt9 = df.iloc[(dflim['E-iR(lim)/V'] - 0.9).abs().argsort()[:1]].index[0]
 
     if 'area' in globals():
-        df['is/A'] = abs(df['ik/A']) / area * 1000 * 1000
+        dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
         global i_surface_0pt9
-        i_surface_0pt9 = df['is/A'].loc[index_0pt9]
+        i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
 
     if LoadingEntry.get() != '':
         global loading
         loading = float(LoadingEntry.get())
-        df['im/A'] = abs(df['ik/A']) / loading
+        dflim['im/A'] = abs(dflim['ik/A']) / loading
         global i_mass_0pt9
-        i_mass_0pt9 = df['im/A'].loc[index_0pt9]
+        i_mass_0pt9 = dflim['im/A'].loc[index_0pt9]
 
     ax_o2.plot(df['E-iR/V'], df['Diff/A'], label='ORR_corrected')
     ax_o2.plot(df['E-iR/V'], df['Current/A_1'],'w--', label='O2')
@@ -818,17 +816,24 @@ def O2_plot(O2, Ar):
 
         index_low = df.iloc[(df['E-iR/V'] - lower_potential).abs().argsort()[:1]].index[0]
         index_high = df.iloc[(df['E-iR/V'] - upper_potential).abs().argsort()[:1]].index[0]
-
+        global i_limiting
         i_limiting = df['Diff/A'].loc[index_low:index_high].mean()
-        index_0pt9 = df.iloc[(df['E-iR/V'] - 0.9).abs().argsort()[:1]].index[0]
 
-        df['ik/A'] = (i_limiting * df['Diff/A']) / (i_limiting - df['Diff/A'])
+        global dflim
+        dflim = df[(df['Diff/A'] >= (i_limiting * 0.5)) & (df['Diff/A'] <= (i_limiting * 0.01))].reset_index()
+        dflim = dflim.rename(columns={'E-iR/V': 'E-iR(lim)/V', 'Diff/A': 'Diff(lim)/A'})
+        dflim.drop(columns={'index', 'Current/A_1', 'Current/A_2'}, inplace=True)
+
+        dflim['ik/A'] = (i_limiting * dflim['Diff(lim)/A']) / (i_limiting - dflim['Diff(lim)/A'])
+
+        index_0pt9 = df.iloc[(dflim['E-iR(lim)/V'] - 0.9).abs().argsort()[:1]].index[0]
+
         il_label.config(text='{0:.3e}'.format(i_limiting))
 
         if 'area' in globals():
-            df['is/A'] = abs(df['ik/A']) / area * 1000 * 1000
+            dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
             global i_surface_0pt9
-            i_surface_0pt9 = df['is/A'].loc[index_0pt9]
+            i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
             is_label.config(text='{0:.3f}'.format(i_surface_0pt9))
         else:
             is_label.config(text='n.a.')
@@ -836,9 +841,9 @@ def O2_plot(O2, Ar):
         if LoadingEntry.get() != '':
             global loading
             loading = float(LoadingEntry.get())
-            df['im/A'] = abs(df['ik/A']) / loading
+            dflim['im/A'] = abs(dflim['ik/A']) / loading
             global i_mass_0pt9
-            i_mass_0pt9 = df['im/A'].loc[index_0pt9]
+            i_mass_0pt9 = dflim['im/A'].loc[index_0pt9]
             im_label.config(text='{0:.3f}'.format(i_mass_0pt9))
         else:
             im_label.config(text='n.a.')
@@ -1034,18 +1039,25 @@ def O2_plot(O2, Ar):
 
         df.rename(columns={'E-iR/V': 'E-iR/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
         df.rename(columns={'Diff/A': 'Current/A_' + 'ORR_' + str(z)}, inplace=True)
-        df.rename(columns={'ik/A': 'ik/A_' + 'ORR_' + str(z)}, inplace=True)
-        if 'is/A' in df:
-            df.rename(columns={'is/A': 'is/A_' + 'ORR_' + str(z)}, inplace=True)
-        if 'im/A' in df:
-            df.rename(columns={'im/A': 'im/A_' + 'ORR_' + str(z)}, inplace=True)
-
-        del df['Potential/V']
         del df['Current/A_1']
         del df['Current/A_2']
+        #del df['Potential/V']
+
+
+        dflim.rename(columns={'E-iR(lim)/V': 'E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
+        dflim.rename(columns={'Diff/A': 'Diff/A_' + 'ORR_' + str(z)}, inplace=True)
+        dflim.rename(columns={'ik/A': 'ik/A_' + 'ORR_' + str(z)}, inplace=True)
+
+        if 'is/A' in dflim:
+            dflim.rename(columns={'is/A': 'is/A_' + 'ORR_' + str(z)}, inplace=True)
+        if 'im/A' in dflim:
+            dflim.rename(columns={'im/A': 'im/A_' + 'ORR_' + str(z)}, inplace=True)
+
 
         global savefile
         savefile = pd.concat([savefile, df], axis=1)
+        savefile = pd.concat([savefile, dflim], axis=1)
+
 
         if LoadingEntry.get() != '':
             i_m = i_mass_0pt9
@@ -1486,8 +1498,6 @@ if __name__ == '__main__':
 
             ORR_cathodic, ORR_anodic = ORR_dic[ORR_config[0]]
             ORRa_cathodic, ORRa_anodic = ORRa_dic[ORRa_config[0]]
-
-            print(ORRa_anodic)
 
             O2_plot(ORR_anodic, ORRa_anodic)
 
