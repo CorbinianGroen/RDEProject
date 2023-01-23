@@ -3,6 +3,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from scipy.stats import linregress
 
+
 test = "C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/test_tafel.txt"
 
 df = pd.read_csv(test, sep='\t', skiprows=0, header=0, decimal='.')
