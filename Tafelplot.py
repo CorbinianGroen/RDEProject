@@ -11,19 +11,28 @@ df = df[['E-iR(lim)/V_ORR__0', 'im/A_ORR_0']].dropna()
 df = df.iloc[::-1].reset_index()
 del df['index']
 
-for i in range(df.shape[0]):
-    window = 10
-    if i % 10 == 0:
-        df1 = df.head(window + i)
-        linear = linregress(np.log10(df1['im/A_ORR_0']), df1['E-iR(lim)/V_ORR__0'])
-        if linear[2] >= 0.99:
-            plt.plot(df['im/A_ORR_0'], linear[0] * np.log10(df['im/A_ORR_0']) + linear[1])
-            print(linear)
-    else:
-        pass
+z = 0
+
+if int(df.shape[0]*0.01) >= 5:
+    window = int(df.shape[0]*0.01)
+else:
+    window = 5
+
+for i in range(df.shape[0]-window):
+
+    df1 = df.head(window + i)
+    linear = linregress(np.log10(df1['im/A_ORR_0']), df1['E-iR(lim)/V_ORR__0'])
+
+    if (-1*linear[2]) >= z:
+        z = (-1*linear[2])
+        coefficents = linear
 
 
+
+print(z)
+print(coefficents[0])
 plt.plot(df['im/A_ORR_0'], df['E-iR(lim)/V_ORR__0'])
-plt.plot(df['im/A_ORR_0'], linear[0]*np.log10(df['im/A_ORR_0'])+linear[1])
+plt.plot(df['im/A_ORR_0'], coefficents[0]*np.log10(df['im/A_ORR_0'])+coefficents[1])
+plt.plot(df['im/A_ORR_0'], np.linspace(0.9, 0.9, df['im/A_ORR_0'].shape[0]))
 plt.xscale('log')
 plt.show()

@@ -1,2 +1,2 @@
 PathFile
-C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/GC3 PtTiOxC_HT/
+W:/RRDE-02/EC-Praktikum/20230116-RRDE3/
