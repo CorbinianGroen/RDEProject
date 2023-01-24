@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 # testing values
@@ -7,7 +8,7 @@ from scipy.signal import find_peaks
 Ar = 'C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/GC3 PtTiOxC_HT/GC-21305-ORR-Ar-CV-0,05-1,05mV-0,01mVs-1600rpm-3cycles.txt'
 Ar1 = 'C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/GC3 PtTiOxC_HT/GC-21305-ORR-Ar-CV-0,05-1,05mV-0,01mVs-1600rpm-3cyclestest.txt'
 O2 = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-O2-1(1).txt'
-Ar_orr = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-Ar-1(1).txt'
+Ar_orr = 'C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/CG5 PtC/GC-19866-ORR-Ar-CV-0,05-1,05mV-0,01mVs-1600rpm-3cycles.txt'
 CO_Strip = "C:/CloudStation/Doktor/Data/RRDE/RDETesting/20220822-RRDE3/GC-16507-COStrip.txt"
 Kr_test = 'C:/CloudStation/Master/Forschungspraktikum Krischer/Data/nSi-Pt_20220225/5_ar_cv_-0pt67_-0pt3_20mvs_200rpm_3cyc - Kopie.txt'
 Imp_test = 'C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/CG2 PtC/GC-21305-Ar-200rpm-0,9356689453125V-Impedance.txt'
@@ -132,6 +133,7 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
     else:
         CVs = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=headervalue, decimal=decimalvalue)
 
+
     if 'Scan1' in CVs:
         CV_scan = CVs[CVs['Scan'] == scan].reset_index()
         CV_reduced = CV_scan.loc[:, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
@@ -140,6 +142,24 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
     else:
         max = find_peaks(CVs['WE(1).Potential (V)'], width=10)[0]
         min = find_peaks(-CVs['WE(1).Potential (V)'], width=10)[0]
+
+        max1 = np.array([0])
+        min1 = np.array([0])
+        for i in range(len(max)-1):
+            c = max[i+1] - max[i]
+            if c < 10:
+                max1 = np.delete(max, i+1)
+
+        if len(max1) > 1:
+            max = max1
+
+        for i in range(len(min)-1):
+            c = min[i+1] - min[i]
+            if c < 10:
+                min1 = np.delete(max, i+1)
+
+        if len(min1) > 1:
+            min = max1
 
         first_value = CVs['WE(1).Potential (V)'].iloc[0]
 
@@ -233,7 +253,7 @@ def HFRscan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, R=2
 # ORR = lsvscan(O2, headervalue=None)
 # print(ORR)
 
-#AR1, AR2 = multiplescan(Ar, 2, sepvalue='\t')  # , headervalue=None, skip=1)
+#AR1, AR2 = multiplescan(Ar_orr, 2, sepvalue='\t')  # , headervalue=None, skip=1)
 #AR3, AR4 = multiplescan(Ar1, 1, sepvalue='\t', headervalue=None, skip=1)
 
 #plt.plot(AR2['Potential/V'], AR2['Current/A'])

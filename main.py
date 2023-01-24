@@ -12,6 +12,8 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 import matplotlib.pyplot as plt
 
 #imports of files
+from scipy.stats import linregress
+
 from importfilter import importwindow
 import scanimport as scan
 
@@ -1045,13 +1047,43 @@ def O2_plot(O2, Ar):
 
 
         dflim.rename(columns={'E-iR(lim)/V': 'E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
-        dflim.rename(columns={'Diff/A': 'Diff/A_' + 'ORR_' + str(z)}, inplace=True)
+        dflim.rename(columns={'Diff(lim)/A': 'Current(lim)/A_' + 'ORR_' + str(z)}, inplace=True)
         dflim.rename(columns={'ik/A': 'ik/A_' + 'ORR_' + str(z)}, inplace=True)
+
+        tafel = dflim[['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z), 'ik/A_' + 'ORR_' + str(z)]].dropna()
+        tafel = tafel.iloc[::-1].reset_index()
+        del tafel['index']
+        tafel['ik/A_' + 'ORR_' + str(z)] = abs(tafel['ik/A_' + 'ORR_' + str(z)])
+        c = 0
+
+        if int(tafel.shape[0] * 0.01) >= 5:
+            start = int(tafel.shape[0] * 0.01)
+        else:
+            start = 5
+
+        for i in range(tafel.shape[0] - start):
+
+            df1 = tafel.head(start + i)
+            linear = linregress(np.log10(df1['ik/A_' + 'ORR_' + str(z)]), df1['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
+
+            if (-1 * linear[2]) >= c:
+                c = (-1 * linear[2])
+                coefficents = linear
+
+        plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], tafel['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
+        plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1])
+        plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], np.linspace(0.9, 0.9, tafel['ik/A_' + 'ORR_' + str(z)].shape[0]))
+        plt.xscale('log')
+        plt.show()
+
+        ik_expol = interpolate.interp1d(x=(coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1]), y=tafel['ik/A_' + 'ORR_' + str(z)], kind='linear')(0.9)
+
 
         if 'is/A' in dflim:
             dflim.rename(columns={'is/A': 'is/A_' + 'ORR_' + str(z)}, inplace=True)
         if 'im/A' in dflim:
             dflim.rename(columns={'im/A': 'im/A_' + 'ORR_' + str(z)}, inplace=True)
+
 
 
         global savefile
@@ -1061,15 +1093,22 @@ def O2_plot(O2, Ar):
 
         if LoadingEntry.get() != '':
             i_m = i_mass_0pt9
+            global loading
+            loading = float(LoadingEntry.get())
+            i_m_ex = ik_expol / loading
         else:
             i_m = 'n.a.'
+            i_m_ex = 'n.a.'
 
         if 'area' in globals():
             i_s = i_surface_0pt9
+            i_s_ex = ik_expol/ area * 1000 * 1000
+
         else:
             i_s = 'n.a.'
+            i_s_ex = 'n.a.'
 
-        result = pd.DataFrame({'ORR_i_lim_A_' + NameEntry.get() + '_' + str(z): [i_limiting], 'ORR_i_s_A/cm^2_Pt_' + str(z): [i_s], 'ORR_i_m_mA/mg_Pt_' + str(z): [i_m]})
+        result = pd.DataFrame({'ORR_i_lim_A_' + NameEntry.get() + '_' + str(z): [i_limiting], 'ORR_i_s_A/cm^2_Pt_' + str(z): [i_s], 'ORR_i_m_mA/mg_Pt_' + str(z): [i_m], 'ORR_i_k_ex_A_' + str(z): [ik_expol], 'ORR_i_s_ex_A/cm^2_Pt_' + str(z): [i_s_ex], 'ORR_i_m_ex_A/cm^2_Pt_' + str(z): [i_m_ex]})
         global results
         results = pd.concat([results, result], axis=1)
 

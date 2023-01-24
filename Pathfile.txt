@@ -1,2 +1,2 @@
 PathFile
-W:/RRDE-02/EC-Praktikum/20230116-RRDE3/
+C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/CG5 PtC/
