@@ -143,25 +143,29 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
         max = find_peaks(CVs['WE(1).Potential (V)'], width=10)[0]
         min = find_peaks(-CVs['WE(1).Potential (V)'], width=10)[0]
 
-        max1 = np.array([0])
-        min1 = np.array([0])
+        max_list = list()
+        min_list = list()
+
         for i in range(len(max)-1):
             c = max[i+1] - max[i]
             if c < 10:
-                max1 = np.delete(max, i+1)
-
-        if len(max1) > 1:
-            max = max1
+                lst = [(i+1)]
+                max_list = max_list + lst
 
         for i in range(len(min)-1):
             c = min[i+1] - min[i]
             if c < 10:
-                min1 = np.delete(max, i+1)
+                lst = [(i + 1)]
+                min_list = min_list + lst
 
-        if len(min1) > 1:
-            min = max1
+        if len(max_list) > 0:
+            max = np.delete(max, max_list)
+
+        if len(min_list) > 0:
+            min = np.delete(min, min_list)
 
         first_value = CVs['WE(1).Potential (V)'].iloc[0]
+
 
         if max[0] < min[0]:
             if scan == 1:
@@ -169,6 +173,7 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
             else:
                 beginning = CVs.loc[min[scan - 2]:max[scan - 1], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
             end = CVs.loc[min[scan - 1]:max[scan], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+
             endofscan = abs(end['WE(1).Potential (V)'] - first_value).idxmin()
             beginningofscan = abs(beginning['WE(1).Potential (V)'] - first_value).idxmin()
 
