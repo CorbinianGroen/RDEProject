@@ -19,6 +19,7 @@ import scanimport as scan
 
 #testing values
 loading = 3.847E-6
+Temp = 273+20
 #R = 32.7
 #Ref = 0.0035
 Ar = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-Ar-0.02mVs-CV-0.05-0.925mV-2.txt'
@@ -786,6 +787,9 @@ def O2_plot(O2, Ar):
     global dflim
     dflim= df[(df['Diff/A'] >= (i_limiting * 0.5)) & (df['Diff/A'] <= (i_limiting * 0.01))].reset_index()
     dflim = dflim.rename(columns={'E-iR/V': 'E-iR(lim)/V', 'Diff/A': 'Diff(lim)/A'})
+
+    dflim['E-iR-etadiff(lim)/V'] = dflim['E-iR(lim)/V'] - ((8.31446/Temp)/(2*9648.533)*(1-(dflim['Diff(lim)/A']/i_limiting)))
+
     dflim.drop(columns={'index', 'Current/A_1', 'Current/A_2'}, inplace=True)
 
     dflim['ik/A'] = (i_limiting * dflim['Diff(lim)/A']) / (i_limiting - dflim['Diff(lim)/A'])
@@ -824,8 +828,8 @@ def O2_plot(O2, Ar):
         global dflim
         dflim = df[(df['Diff/A'] >= (i_limiting * 0.5)) & (df['Diff/A'] <= (i_limiting * 0.01))].reset_index()
         dflim = dflim.rename(columns={'E-iR/V': 'E-iR(lim)/V', 'Diff/A': 'Diff(lim)/A'})
+        dflim['E-iR-etadiff(lim)/V'] = dflim['E-iR(lim)/V'] - ((8.31446 / Temp) / (2 * 9648.533) * (1 - (dflim['Diff(lim)/A'] / i_limiting)))
         dflim.drop(columns={'index', 'Current/A_1', 'Current/A_2'}, inplace=True)
-
         dflim['ik/A'] = (i_limiting * dflim['Diff(lim)/A']) / (i_limiting - dflim['Diff(lim)/A'])
 
         index_0pt9 = df.iloc[(dflim['E-iR(lim)/V'] - 0.9).abs().argsort()[:1]].index[0]
@@ -1045,16 +1049,18 @@ def O2_plot(O2, Ar):
         del df['Current/A_2']
         #del df['Potential/V']
 
-
+        global dflim
         dflim.rename(columns={'E-iR(lim)/V': 'E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
+        dflim.rename(columns={'E-iR-etadiff(lim)/V': 'E-iR-etadiff(lim)/V_' + 'ORR_' + '_' + str(z)}, inplace=True)
         dflim.rename(columns={'Diff(lim)/A': 'Current(lim)/A_' + 'ORR_' + str(z)}, inplace=True)
         dflim.rename(columns={'ik/A': 'ik/A_' + 'ORR_' + str(z)}, inplace=True)
 
-        tafel = dflim[['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z), 'ik/A_' + 'ORR_' + str(z)]].dropna()
+        tafel = dflim[['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z), 'E-iR-etadiff(lim)/V_' + 'ORR_' + '_' + str(z), 'ik/A_' + 'ORR_' + str(z)]].dropna()
         tafel = tafel.iloc[::-1].reset_index()
         del tafel['index']
         tafel['ik/A_' + 'ORR_' + str(z)] = abs(tafel['ik/A_' + 'ORR_' + str(z)])
         c = 0
+        e = 0
 
         if int(tafel.shape[0] * 0.01) >= 5:
             start = int(tafel.shape[0] * 0.01)
@@ -1065,19 +1071,26 @@ def O2_plot(O2, Ar):
 
             df1 = tafel.head(start + i)
             linear = linregress(np.log10(df1['ik/A_' + 'ORR_' + str(z)]), df1['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
+            linear1 = linregress(np.log10(df1['ik/A_' + 'ORR_' + str(z)]), df1['E-iR-etadiff(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
 
             if (-1 * linear[2]) >= c:
                 c = (-1 * linear[2])
                 coefficents = linear
+            if (-1 * linear1[2]) >= e:
+                e = (-1 * linear1[2])
+                coefficents1 = linear1
 
         plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], tafel['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
+        plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], tafel['E-iR-etadiff(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
         plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1])
+        plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], coefficents1[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents1[1])
         plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], np.linspace(0.9, 0.9, tafel['ik/A_' + 'ORR_' + str(z)].shape[0]))
         plt.xscale('log')
         plt.show()
 
         ik_expol = interpolate.interp1d(x=(coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1]), y=tafel['ik/A_' + 'ORR_' + str(z)], kind='linear')(0.9)
-
+        ik_expol_etadiff = interpolate.interp1d(x=(coefficents1[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents1[1]), y=tafel['ik/A_' + 'ORR_' + str(z)], kind='linear')(0.9)
+        print(ik_expol, ik_expol_etadiff)
 
         if 'is/A' in dflim:
             dflim.rename(columns={'is/A': 'is/A_' + 'ORR_' + str(z)}, inplace=True)
