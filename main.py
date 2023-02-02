@@ -788,7 +788,7 @@ def O2_plot(O2, Ar):
     dflim= df[(df['Diff/A'] >= (i_limiting * 0.5)) & (df['Diff/A'] <= (i_limiting * 0.01))].reset_index()
     dflim = dflim.rename(columns={'E-iR/V': 'E-iR(lim)/V', 'Diff/A': 'Diff(lim)/A'})
 
-    dflim['E-iR-etadiff(lim)/V'] = dflim['E-iR(lim)/V'] - ((8.31446/Temp)/(2*9648.533)*(1-(dflim['Diff(lim)/A']/i_limiting)))
+    dflim['E-iR-etadiff(lim)/V'] = dflim['E-iR(lim)/V'] - ((8.31446*Temp)/(4*96485)*np.log(1-(dflim['Diff(lim)/A']/i_limiting)))
 
     dflim.drop(columns={'index', 'Current/A_1', 'Current/A_2'}, inplace=True)
 
@@ -828,7 +828,7 @@ def O2_plot(O2, Ar):
         global dflim
         dflim = df[(df['Diff/A'] >= (i_limiting * 0.5)) & (df['Diff/A'] <= (i_limiting * 0.01))].reset_index()
         dflim = dflim.rename(columns={'E-iR/V': 'E-iR(lim)/V', 'Diff/A': 'Diff(lim)/A'})
-        dflim['E-iR-etadiff(lim)/V'] = dflim['E-iR(lim)/V'] - ((8.31446 / Temp) / (2 * 9648.533) * (1 - (dflim['Diff(lim)/A'] / i_limiting)))
+        dflim['E-iR-etadiff(lim)/V'] = dflim['E-iR(lim)/V'] - ((8.31446*Temp)/(4*96485)*np.log(1-(dflim['Diff(lim)/A']/i_limiting)))
         dflim.drop(columns={'index', 'Current/A_1', 'Current/A_2'}, inplace=True)
         dflim['ik/A'] = (i_limiting * dflim['Diff(lim)/A']) / (i_limiting - dflim['Diff(lim)/A'])
 
@@ -1051,11 +1051,11 @@ def O2_plot(O2, Ar):
 
         global dflim
         dflim.rename(columns={'E-iR(lim)/V': 'E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
-        dflim.rename(columns={'E-iR-etadiff(lim)/V': 'E-iR-etadiff(lim)/V_' + 'ORR_' + '_' + str(z)}, inplace=True)
+        dflim.rename(columns={'E-iR-etadiff(lim)/V': 'E-iR-etadiff(lim)/V_' + 'ORR_' + str(z)}, inplace=True)
         dflim.rename(columns={'Diff(lim)/A': 'Current(lim)/A_' + 'ORR_' + str(z)}, inplace=True)
         dflim.rename(columns={'ik/A': 'ik/A_' + 'ORR_' + str(z)}, inplace=True)
 
-        tafel = dflim[['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z), 'E-iR-etadiff(lim)/V_' + 'ORR_' + '_' + str(z), 'ik/A_' + 'ORR_' + str(z)]].dropna()
+        tafel = dflim[['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z), 'E-iR-etadiff(lim)/V_' + 'ORR_'  + str(z), 'ik/A_' + 'ORR_' + str(z)]].dropna()
         tafel = tafel.iloc[::-1].reset_index()
         del tafel['index']
         tafel['ik/A_' + 'ORR_' + str(z)] = abs(tafel['ik/A_' + 'ORR_' + str(z)])
@@ -1071,7 +1071,7 @@ def O2_plot(O2, Ar):
 
             df1 = tafel.head(start + i)
             linear = linregress(np.log10(df1['ik/A_' + 'ORR_' + str(z)]), df1['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
-            linear1 = linregress(np.log10(df1['ik/A_' + 'ORR_' + str(z)]), df1['E-iR-etadiff(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
+            linear1 = linregress(np.log10(df1['ik/A_' + 'ORR_' + str(z)]), df1['E-iR-etadiff(lim)/V_' + 'ORR_' + str(z)])
 
             if (-1 * linear[2]) >= c:
                 c = (-1 * linear[2])
@@ -1080,24 +1080,27 @@ def O2_plot(O2, Ar):
                 e = (-1 * linear1[2])
                 coefficents1 = linear1
 
-        plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], tafel['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
-        plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], tafel['E-iR-etadiff(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)])
+        plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], tafel['E-iR(lim)/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)], label='iR-free')
+        plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], tafel['E-iR-etadiff(lim)/V_' + 'ORR_' + str(z)], label='etadiff-free')
         plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1])
         plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], coefficents1[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents1[1])
         plt.plot(tafel['ik/A_' + 'ORR_' + str(z)], np.linspace(0.9, 0.9, tafel['ik/A_' + 'ORR_' + str(z)].shape[0]))
         plt.xscale('log')
+        plt.legend()
         plt.show()
 
         ik_expol = interpolate.interp1d(x=(coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1]), y=tafel['ik/A_' + 'ORR_' + str(z)], kind='linear')(0.9)
         ik_expol_etadiff = interpolate.interp1d(x=(coefficents1[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents1[1]), y=tafel['ik/A_' + 'ORR_' + str(z)], kind='linear')(0.9)
-        print(ik_expol, ik_expol_etadiff)
+
 
         if 'is/A' in dflim:
             dflim.rename(columns={'is/A': 'is/A_' + 'ORR_' + str(z)}, inplace=True)
         if 'im/A' in dflim:
             dflim.rename(columns={'im/A': 'im/A_' + 'ORR_' + str(z)}, inplace=True)
 
-
+        dflim['ik/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)]
+        dflim['E-iR/V_tafel_' + 'ORR_' + str(z)] = coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1]
+        dflim['E-iR-etadiff/V_tafel_' + 'ORR_' + str(z)] = coefficents1[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents1[1]
 
         global savefile
         savefile = pd.concat([savefile, df], axis=1)
@@ -1109,19 +1112,27 @@ def O2_plot(O2, Ar):
             global loading
             loading = float(LoadingEntry.get())
             i_m_ex = ik_expol / loading
+            i_m_ex_eta = ik_expol_etadiff / loading
         else:
             i_m = 'n.a.'
             i_m_ex = 'n.a.'
+            i_m_ex_eta = 'n.a.'
 
         if 'area' in globals():
             i_s = i_surface_0pt9
-            i_s_ex = ik_expol/ area * 1000 * 1000
+            i_s_ex = ik_expol / area * 1000 * 1000
+            i_s_ex_eta = ik_expol_etadiff / area * 1000 * 1000
 
         else:
             i_s = 'n.a.'
             i_s_ex = 'n.a.'
+            i_s_ex_eta = 'n.a.'
 
-        result = pd.DataFrame({'ORR_i_lim_A_' + NameEntry.get() + '_' + str(z): [i_limiting], 'ORR_i_s_A/cm^2_Pt_' + str(z): [i_s], 'ORR_i_m_mA/mg_Pt_' + str(z): [i_m], 'ORR_i_k_ex_A_' + str(z): [ik_expol], 'ORR_i_s_ex_A/cm^2_Pt_' + str(z): [i_s_ex], 'ORR_i_m_ex_A/cm^2_Pt_' + str(z): [i_m_ex]})
+        result = pd.DataFrame({'ORR_i_lim_A_' + NameEntry.get() + '_' + str(z): [i_limiting], 'ORR_i_s_A/cm^2_Pt_' + str(z): [i_s], 'ORR_i_m_mA/mg_Pt_' + str(z): [i_m],
+                               'ORR_i_k_ex_A_' + str(z): [ik_expol], 'ORR_i_s_ex_A/cm^2_Pt_' + str(z): [i_s_ex], 'ORR_i_m_ex_A/cm^2_Pt_' + str(z): [i_m_ex],
+                               'ORR_i_k_ex_eta_A_' + str(z): [ik_expol_etadiff], 'ORR_i_s_ex_eta_A/cm^2_Pt_' + str(z): [i_s_ex_eta], 'ORR_i_m_ex_eta_A/cm^2_Pt_' + str(z): [i_m_ex_eta],
+                               'ORR_Tafel_slope' + str(z): [coefficents[0]], 'ORR_Tafel_intercept' + str(z): [coefficents[1]], 'ORR_Tafel_R' + str(z): [coefficents[2]],
+                               'ORR_Tafel_slope_eta' + str(z): [coefficents1[0]], 'ORR_Tafel_intercept' + str(z): [coefficents1[1]], 'ORR_Tafel_R' + str(z): [coefficents1[2]]})
         global results
         results = pd.concat([results, result], axis=1)
 
@@ -1152,6 +1163,317 @@ def O2_plot(O2, Ar):
     window.protocol("WM_DELETE_WINDOW", on_closing)
 
     window.mainloop()
+
+def HOR_plot(df1, df2):
+    d_x = root.winfo_x()
+    d_y = root.winfo_y()
+    window = tk.Toplevel(root)
+    window.grab_set()
+    window.title('HOR Evaluation')
+    window.geometry(str(int(widthfactor * (width * 0.752))) + 'x' + str(int(heightfactor * (height * 0.615))) + '+' + str(int(d_x + widthfactor*8)) + '+' + str(int(d_y + heightfactor * 299)))
+    # window.configure(background='white')
+    if ct.get_appearance_mode() == 'Dark':
+        color = '#4D4D4D'
+        fgcolor = 'white'
+        bgcolor = '#333333'
+        window.configure(bg='grey10')
+    else:
+        color = '#B3B3B3'
+        fgcolor = 'black'
+        bgcolor = '#CDCDCD'
+        window.configure(bg='grey90')
+    window.overrideredirect(True)
+    window.attributes("-topmost", True)
+
+    window.grid_columnconfigure(0, weight=3)
+    window.grid_columnconfigure(1, weight=2, minsize=350)
+    window.grid_rowconfigure(0, weight=1)
+
+    hor_info_frame = ct.CTkFrame(master=window, corner_radius=10, fg_color=("grey80", 'grey20'))
+    hor_info_frame.grid(row=0, column=1, sticky='nswe', pady=10, padx=10)
+
+    hor_info_frame.grid_rowconfigure(0, weight=10)
+    hor_info_frame.grid_rowconfigure(1, weight=1)
+    hor_info_frame.grid_rowconfigure(2, weight=10)
+    hor_info_frame.grid_columnconfigure(0, weight=0)
+    hor_info_frame.grid_columnconfigure(1, weight=1)
+    hor_info_frame.grid_columnconfigure(2, weight=0)
+
+    button_frame = ct.CTkFrame(master=hor_info_frame, corner_radius=10, fg_color=("grey80", 'grey20'))
+    button_frame.grid(row=2, column=1, sticky='nswe', pady=10, padx=10)
+    button_frame.grid_rowconfigure(0, weight=1)
+    button_frame.grid_rowconfigure(1, weight=0)
+    button_frame.grid_columnconfigure(0, weight=1)
+    button_frame.grid_columnconfigure(1, weight=0)
+    button_frame.grid_columnconfigure(2, weight=0)
+
+    def exit2():
+        window.destroy()
+
+    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, text_font=("Calibri", -24),
+                 text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
+
+    def on_closing():
+        window.destroy()
+
+    window.protocol("WM_DELETE_WINDOW", on_closing)
+
+
+    hor_graph_frame = ct.CTkFrame(master=window, corner_radius=10, fg_color=('grey80', 'grey20'))
+    hor_graph_frame.grid(row=0, column=0, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
+
+    hor_graph_frame.grid_rowconfigure(0, weight=0)
+    hor_graph_frame.grid_rowconfigure(1, weight=1)
+    hor_graph_frame.grid_columnconfigure(0, weight=0, minsize=10)
+    hor_graph_frame.grid_columnconfigure(1, weight=1)
+    hor_graph_frame.grid_columnconfigure(2, weight=0, minsize=10)
+
+    hor_f = Figure(figsize=(28 * cm, 18 * cm), facecolor=bgcolor)
+
+    canvas = FigureCanvasTkAgg(hor_f, master=hor_graph_frame)
+    canvas.get_tk_widget().grid(row=1, column=1)
+    NavigationToolbar2Tk(canvas, hor_graph_frame, pack_toolbar=False).grid(row=0, column=1, sticky=tk.W, pady=10)
+
+    df1['Potential/V'] = df1['Potential/V'] - (df1['Current/A'] * float(R)) - float(Ref)
+    df2['Potential/V'] = df2['Potential/V'] - (df2['Current/A'] * float(R)) - float(Ref)
+
+    df1.rename(columns={'Potential/V': 'E-iR/V'}, inplace=True)
+    df2.rename(columns={'Potential/V': 'E-iR/V'}, inplace=True)
+
+    max_current = df1['Current/A'].loc[df1['Current/A'].nlargest(1).index[0]]
+    min_current = df1['Current/A'].loc[df1['Current/A'].nsmallest(1).index[0]]
+
+    index_low = df1.iloc[(df1['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
+    index_high = df1.iloc[(df1['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
+
+    global i_limiting_h
+    i_limiting_h = df1['Current/A'].loc[index_low:index_high].mean()
+
+    min_lim = df1[df1['Current/A'] > 0].iloc[0].name
+
+    upper_limit = 0.95 * i_limiting_h
+    max_lim = df1[(df1['Current/A'] >= upper_limit) & (df1['Current/A'] <= i_limiting_h)].iloc[0].name
+
+    df_diff = df1.iloc[min_lim:max_lim].reset_index()
+    del df_diff['index']
+
+    df_diff['etadiff/V'] = ((-8.314*Temp)/(2*96485))*(np.log(1-(df_diff['Current/A']/i_limiting_h)))
+
+    ax_hor = hor_f.add_subplot(1,1,1)
+    ax_hor.set_ylabel("Current [A]")
+    ax_hor.set_xlabel("Potential [V]")
+    ax_hor.set_facecolor(bgcolor)
+    ax_hor.xaxis.label.set_color(fgcolor)
+    ax_hor.yaxis.label.set_color(fgcolor)
+    ax_hor.tick_params(axis='x', colors=fgcolor)
+    ax_hor.tick_params(axis='y', colors=fgcolor)
+    ax_hor.spines['left'].set_color(fgcolor)
+    ax_hor.spines['top'].set_color(fgcolor)
+    ax_hor.spines['right'].set_color(fgcolor)
+    ax_hor.spines['bottom'].set_color(fgcolor)
+    ax_hor.plot(df1['E-iR/V'], df1['Current/A'], label='anodic HOR')
+    ax_hor.plot(df2['E-iR/V'], df2['Current/A'], label='cathodic HOR')
+    ax_hor.axhline(y=0, color='0.4', xmin=df1['E-iR/V'].nsmallest(1), xmax=df1['E-iR/V'].nlargest(1), linestyle='dashed')
+    diff_lim_plt = ax_hor.plot(df_diff['etadiff/V'], df_diff['Current/A'], label= 'DiffusionLimitation')
+    legend = ax_hor.legend(loc='lower right', frameon=False)
+    for text in legend.get_texts():
+        text.set_color(fgcolor)
+
+
+
+
+
+    def dragged():
+        lower_potential = Tline.getvalue()
+        upper_potential = Tline2.getvalue()
+
+        index_low = df1.iloc[(df1['E-iR/V'] - lower_potential).abs().argsort()[:1]].index[0]
+        index_high = df1.iloc[(df1['E-iR/V'] - upper_potential).abs().argsort()[:1]].index[0]
+        global i_limiting_h
+        i_limiting_h = df1['Current/A'].loc[index_low:index_high].mean()
+
+        upper_limit = 0.95 * i_limiting_h
+        max_lim = df1[(df1['Current/A'] >= upper_limit) & (df1['Current/A'] <= i_limiting_h)].iloc[0].name
+
+        df_diff = df1.iloc[min_lim:max_lim].reset_index()
+        del df_diff['index']
+
+        df_diff['etadiff/V'] = ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df_diff['Current/A'] / i_limiting_h)))
+
+        '''
+        
+        for line in diff_lim_plt:
+            if line.get_label() == 'DiffusionLimitaion':
+                line_update = line
+
+                line_update.set_data(df_diff['etadiff/V'], df_diff['Current/A'])
+                line_update.set_label('DiffusionLimitation')
+                ax_hor.draw()
+        '''
+
+    class draggable_line_h:
+        def __init__(self,canvas, ax, kind, XorY):
+            self.ax = ax
+            self.c = canvas
+            self.o = kind
+            self.XorY = XorY
+
+            if kind == "h":
+                x = [-1, 1]
+                y = [XorY, XorY]
+
+            elif kind == "v":
+                x = [XorY, XorY]
+                y = [min_current, max_current]
+            self.line = lines.Line2D(x, y, picker=5, color=fgcolor, linestyle='dashed', linewidth=0.5)
+            self.ax.add_line(self.line)
+            self.c.draw_idle()
+            self.c.mpl_connect('pick_event', self.clickonline)
+
+        def clickonline(self, event):
+            if event.artist == self.line:
+                #print("line selected ", event.artist)
+                self.follower = self.c.mpl_connect("motion_notify_event", self.followmouse)
+                self.releaser = self.c.mpl_connect("button_press_event", self.releaseonclick)
+
+        def followmouse(self, event):
+            if self.o == "h":
+                self.line.set_ydata([event.ydata, event.ydata])
+            else:
+                self.line.set_xdata([event.xdata, event.xdata])
+            self.c.draw_idle()
+
+        def releaseonclick(self, event):
+            if self.o == "h":
+                self.XorY = self.line.get_ydata()[0]
+            else:
+                self.XorY = self.line.get_xdata()[0]
+
+            #print(self.XorY)
+            dragged()
+            self.c.mpl_disconnect(self.releaser)
+            self.c.mpl_disconnect(self.follower)
+
+        def getvalue(self):
+            return self.XorY
+
+    Tline = draggable_line_h(canvas, ax_hor, "v", 0.3)
+    Tline2 = draggable_line_h(canvas, ax_hor, "v", 0.5)
+
+
+    canvas.draw_idle()
+
+
+    hor_variable_frame = ct.CTkFrame(master=hor_info_frame, corner_radius=10, fg_color=("grey70", 'grey30'))
+    hor_variable_frame.grid(row=1, column=1, sticky='nswe', pady=10, padx=10)
+    hor_variable_frame.grid_columnconfigure(0, weight=1, minsize=300)
+    hor_variable_frame.grid_rowconfigure(0, weight=1)
+    hor_variable_frame.grid_rowconfigure(1, weight=1)
+    hor_variable_frame.grid_rowconfigure(2, weight=1)
+
+
+
+    def exit1(df1, df2):
+        window.destroy()
+        global z
+        a = z
+        d['v_f_{0}'.format(z)] = ct.CTkFrame(master=data_frame, corner_radius=10, fg_color=("grey70", 'grey30'))
+        d['v_f_{0}'.format(z)].grid(row=z * 2 + 1, column=1, sticky='nswe')
+        d['v_f_{0}'.format(z)].grid_columnconfigure(0, weight=1, minsize=160)
+        d['v_f_{0}'.format(z)].grid_columnconfigure(0, weight=1, minsize=125)
+        d['v_f_{0}'.format(z)].grid_columnconfigure(0, weight=1, minsize=20)
+        d['v_f_{0}'.format(z)].grid_rowconfigure(0, weight=0)
+        d['v_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
+        d['v_f_{0}'.format(z)].grid_rowconfigure(2, weight=1)
+        d['v_f_{0}'.format(z)].grid_rowconfigure(3, weight=1)
+        ct.CTkLabel(d['v_f_{0}'.format(z)], text='HOR Scan - ', text_font=("Calibri", -20),width=140).grid(row=0, column=0,sticky=tk.W,padx=2, pady=5)
+
+        d['v_n_{0}'.format(z)] = ct.CTkEntry(d['v_f_{0}'.format(z)], width=125, border_width=0, bg_color=("grey70", 'grey30'), fg_color=("grey70", 'grey30'), text_font=("Calibri", -19), text_color=('black', 'white'))
+        d['v_n_{0}'.format(z)].insert(0, NameEntry.get())
+        d['v_n_{0}'.format(z)].configure(state='disabled')
+        d['v_n_{0}'.format(z)].grid(row=0, column=1, sticky='ws', pady=5)
+
+        ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x', width=8, height=8, command=lambda: remove(a), text_font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
+        data_frame.grid_rowconfigure(z * 2 + 2, minsize=10)
+
+        d['a_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
+        d['a_f_{0}'.format(z)].grid(row=1, column=0, sticky='nswe', pady=5, padx=5, ipadx=2, ipady=2, columnspan=3)
+        d['a_f_{0}'.format(z)].grid_rowconfigure(0, weight=0)
+        d['a_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
+        d['a_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
+        d['a_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
+        d['a_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
+        d['a_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
+        d['a_l_{0}'.format(z)] = ct.CTkLabel(d['a_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+        d['a_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+        ct.CTkLabel(d['a_f_{0}'.format(z)], text='Area Pt:', text_font=("Calibri", -20), width=1).grid(row=1,column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_f_{0}'.format(z)], text='cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1,column=2, sticky=tk.E, padx=2)
+
+        d['rf_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
+        d['rf_f_{0}'.format(z)].grid(row=2, column=0, sticky='nswe', pady=0, padx=5, ipadx=2, ipady=2, columnspan=3)
+        d['rf_f_{0}'.format(z)].grid_rowconfigure(0, weight=0)
+        d['rf_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
+        d['rf_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
+        d['rf_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
+        d['rf_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
+        d['rf_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
+        d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.',text_font=("Calibri", -20), width=1)
+        d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='rf:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='cm²ₚₜ/cm²₉ₑₒ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+
+        d['a_n_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
+        d['a_n_f_{0}'.format(z)].grid(row=3, column=0, sticky='nswe', pady=5, padx=5, ipady=2, ipadx=2, columnspan=3)
+        d['a_n_f_{0}'.format(z)].grid_rowconfigure(0, weight=0)
+        d['a_n_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
+        d['a_n_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
+        d['a_n_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
+        d['a_n_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
+        d['a_n_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
+        if LoadingEntry.get() != '':
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.',text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+        else:
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='ECSA:', text_font=("Calibri", -20), width=1).grid(row=1,column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='m²ₚₜ/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1,  column=2, sticky=tk.E, padx=2)
+
+        data_canvas.update_idletasks()
+        data_canvas.config(scrollregion=data_frame.bbox())
+
+        df1.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
+        df2.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
+        df1.rename(columns={'Current/A_1': 'Current_anodic/A_' + str(z)}, inplace=True)
+        df2.rename(columns={'Current/A_2': 'Current_cathodic/A_' + str(z)}, inplace=True)
+
+        global savefile
+        savefile = pd.concat([savefile, df1], axis=1)
+        savefile = pd.concat([savefile, df2], axis=1)
+        '''
+        if LoadingEntry.get() != '':
+            ecsa = hor_area_norm
+        else:
+            ecsa = 'n.a.'
+
+        result = pd.DataFrame({'COStrip_Area_cm^2_Pt_' + NameEntry.get() + '_' + str(z): [hor_area], 'COStrip_rf_cm^2_Pt/cm^2_geo_' + str(z): [hor_rf], 'COStrip_ECSA_cm^2_Pt/g_Pt_' + str(z): [ecsa]})
+        global results
+        results = pd.concat([results, result], axis=1)
+        '''
+        save_enable()
+
+        z += 1
+
+
+    ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=lambda: exit1(df1, df2), text_font=("Calibri", -24),
+                 text_color=("grey20", 'grey80')).grid(row=1, column=2, sticky="se", pady=10, padx=10)
+
+
+    window.mainloop()
+
+
+
+
 
 if __name__ == '__main__':
     root = ct.CTk()
@@ -1202,6 +1524,7 @@ if __name__ == '__main__':
     CO_config = config_txt[4].replace('\n', '').split()
     ORR_config = config_txt[6].replace('\n', '').split()
     ORRa_config = config_txt[8].replace('\n', '').split()
+    HOR_config = config_txt[10].replace('\n', '').split()
 
     #open Savpath:
     pathfile = open('Pathfile.txt')
@@ -1581,8 +1904,8 @@ if __name__ == '__main__':
             pathfile.write(path)
             pathfile.close()
 
-            if HORArEntry.get() != '':
-                HOREval.configure(state=tk.NORMAL)
+            #if HORArEntry.get() != '':
+            HOREval.configure(state=tk.NORMAL)
 
 
     ct.CTkButton(master=input_frame, text='Open', command=HOR, text_font=("Calibri", -18), width=80).grid(row=9, column=6, sticky=tk.W, padx=20)
@@ -1619,12 +1942,36 @@ if __name__ == '__main__':
     HORButton.configure(state=tk.DISABLED)
 
     def HOR_graph():
-        pass
-        # H2 = HOREntry.get()
-        # Ar_hor = HORArEntry.get()
-        # H2_anodic = lsvscan(H2, headervalue=None)
-        # Ar_anodic_HOR = lsvscan(Ar_hor, headervalue=None)
-        # H2_plot(O2_anodic, Ar_anodic_HOR)
+        HOR = HOREntry.get()
+        global R
+        R = None
+        global Ref
+        Ref = None
+        if REntry.get() != '':
+            R = REntry.get()
+            REntry.configure(fg_color=('white', 'grey25'))
+        else:
+            REntry.configure(fg_color=('red'))
+        if RefEntry.get() != '':
+            Ref = RefEntry.get()
+            RefEntry.configure(fg_color=('white', 'grey25'))
+        else:
+            RefEntry.configure(fg_color=('red'))
+        if R is not None and Ref is not None:
+
+            if HOR_config[4] == 'None':
+                HOR_header = None
+            else:
+                HOR_header = int(Ar_config[4])
+
+            HOR_sep_dic = {';': ';', 'spaces': '\s+', 'tabs': '\t'}
+            HOR_unit_dic = {'V': 1, 'mV': 1000, 'µV': 1000000}
+            HOR_unit_1_dic = {'A': 1, 'mA': 1000, 'µA': 1000000}
+            HOR_dic = {'Single': scan.singlescan(HOR, sepvalue=HOR_sep_dic[Ar_config[3]], headervalue=HOR_header, decimalvalue=HOR_config[5], skip=int(HOR_config[6]), pot=int(HOR_config[7]), u_V=HOR_unit_dic[HOR_config[8]], cur=int(HOR_config[9]), u_A=HOR_unit_1_dic[HOR_config[10]]),
+                        'Multiple': scan.multiplescan(HOR, int(HOR_config[2]), sepvalue=HOR_sep_dic[Ar_config[3]], headervalue=HOR_header, decimalvalue=HOR_config[5], skip=int(HOR_config[6]), pot=int(HOR_config[7]), u_V=HOR_unit_dic[HOR_config[8]], cur=int(HOR_config[9]), u_A=HOR_unit_1_dic[HOR_config[10]])}
+            HOR_cathodic, HOR_anodic = HOR_dic[HOR_config[0]]
+
+            HOR_plot(HOR_anodic, HOR_cathodic)
 
 
     HOREval = ct.CTkButton(master=input_frame, text='Eval', command=HOR_graph, text_font=("Calibri", -18), width=80)

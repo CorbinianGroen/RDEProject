@@ -322,7 +322,9 @@ def importwindow(master, widthfactor, heightfactor):
                    f'ORR\n'\
                    f'{ORRScan.get()}\t{ORRScanRate.get()}\t{ORRScanNumber.get()}\t{ORRSep.get()}\t{ORRHead.get()}\t{ORRDecimal.get()}\t{ORRSkip.get()}\t{ORRPot.get()}\t{ORRCur.get()}\n'\
                    f'ORRa\n' \
-                   f'{ORRaScan.get()}\t{ORRaScanRate.get()}\t{ORRaScanNumber.get()}\t{ORRaSep.get()}\t{ORRaHead.get()}\t{ORRaDecimal.get()}\t{ORRaSkip.get()}\t{ORRaPot.get()}\t{ORRaCur.get()}\n'
+                   f'{ORRaScan.get()}\t{ORRaScanRate.get()}\t{ORRaScanNumber.get()}\t{ORRaSep.get()}\t{ORRaHead.get()}\t{ORRaDecimal.get()}\t{ORRaSkip.get()}\t{ORRaPot.get()}\t{ORRaCur.get()}\n' \
+                   f'HOR\n' \
+                   f'{ArScan.get()}\t{ArScanRate.get()}\t{ArScanNumber.get()}\t{ArSep.get()}\t{ArHead.get()}\t{ArDecimal.get()}\t{ArSkip.get()}\t{ArPot.get()}\t{ArV.get()}\t{ArCur.get()}\t{ArA.get()}\n'
         config = open('Importconfig.txt', 'w')
         config.write(SaveText)
         config.close()
