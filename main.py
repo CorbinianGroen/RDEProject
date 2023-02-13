@@ -1131,8 +1131,8 @@ def O2_plot(O2, Ar):
         result = pd.DataFrame({'ORR_i_lim_A_' + NameEntry.get() + '_' + str(z): [i_limiting], 'ORR_i_s_A/cm^2_Pt_' + str(z): [i_s], 'ORR_i_m_mA/mg_Pt_' + str(z): [i_m],
                                'ORR_i_k_ex_A_' + str(z): [ik_expol], 'ORR_i_s_ex_A/cm^2_Pt_' + str(z): [i_s_ex], 'ORR_i_m_ex_A/cm^2_Pt_' + str(z): [i_m_ex],
                                'ORR_i_k_ex_eta_A_' + str(z): [ik_expol_etadiff], 'ORR_i_s_ex_eta_A/cm^2_Pt_' + str(z): [i_s_ex_eta], 'ORR_i_m_ex_eta_A/cm^2_Pt_' + str(z): [i_m_ex_eta],
-                               'ORR_Tafel_slope' + str(z): [coefficents[0]], 'ORR_Tafel_intercept' + str(z): [coefficents[1]], 'ORR_Tafel_R' + str(z): [coefficents[2]],
-                               'ORR_Tafel_slope_eta' + str(z): [coefficents1[0]], 'ORR_Tafel_intercept' + str(z): [coefficents1[1]], 'ORR_Tafel_R' + str(z): [coefficents1[2]]})
+                               'ORR_Tafel_slope_' + str(z): [coefficents[0]], 'ORR_Tafel_intercept_' + str(z): [coefficents[1]], 'ORR_Tafel_R_' + str(z): [coefficents[2]],
+                               'ORR_Tafel_slope_eta' + str(z): [coefficents1[0]], 'ORR_Tafel_intercept_eta_' + str(z): [coefficents1[1]], 'ORR_Tafel_R_eta_' + str(z): [coefficents1[2]]})
         global results
         results = pd.concat([results, result], axis=1)
 
@@ -1444,8 +1444,8 @@ def HOR_plot(df1, df2):
 
         df1.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
         df2.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
-        df1.rename(columns={'Current/A_1': 'Current_anodic/A_' + str(z)}, inplace=True)
-        df2.rename(columns={'Current/A_2': 'Current_cathodic/A_' + str(z)}, inplace=True)
+        df1.rename(columns={'Current/A': 'Current_anodic/A_' + str(z)}, inplace=True)
+        df2.rename(columns={'Current/A': 'Current_cathodic/A_' + str(z)}, inplace=True)
 
         global savefile
         savefile = pd.concat([savefile, df1], axis=1)
