@@ -796,10 +796,43 @@ def O2_plot(O2, Ar):
 
     index_0pt9 = df.iloc[(dflim['E-iR(lim)/V'] - 0.9).abs().argsort()[:1]].index[0]
 
+    tafel = dflim[['E-iR(lim)/V', 'E-iR-etadiff(lim)/V', 'ik/A']].dropna()
+    tafel = tafel.iloc[::-1].reset_index()
+    del tafel['index']
+    tafel['ik/A'] = abs(tafel['ik/A'])
+    c = 0
+    e = 0
+
+    if int(tafel.shape[0] * 0.01) >= 5:
+        start = int(tafel.shape[0] * 0.01)
+    else:
+        start = 5
+
+    for i in range(tafel.shape[0] - start):
+
+        df1 = tafel.head(start + i)
+        linear = linregress(np.log10(df1['ik/A']), df1['E-iR(lim)/V'])
+        linear1 = linregress(np.log10(df1['ik/A']), df1['E-iR-etadiff(lim)/V'])
+
+        if (-1 * linear[2]) >= c:
+            c = (-1 * linear[2])
+            coefficents = linear
+        if (-1 * linear1[2]) >= e:
+            e = (-1 * linear1[2])
+            coefficents1 = linear1
+
+    ik_expol = 10 ** ((0.9 - coefficents[1]) / (coefficents[0]))
+    ik_expol_etadiff = 10 ** ((0.9 - coefficents1[1]) / (coefficents1[0]))
+
+
     if 'area' in globals():
         dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
         global i_surface_0pt9
         i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
+        global i_s_expol
+        global i_s_expol_etadiff
+        i_s_expol = ik_expol / area * 1000 * 1000
+        i_s_expol_etadiff = ik_expol_etadiff / area * 1000 * 1000
 
     if LoadingEntry.get() != '':
         global loading
@@ -807,6 +840,11 @@ def O2_plot(O2, Ar):
         dflim['im/A'] = abs(dflim['ik/A']) / loading
         global i_mass_0pt9
         i_mass_0pt9 = dflim['im/A'].loc[index_0pt9]
+        global i_m_expol
+        global i_m_expol_etadiff
+        i_m_expol = ik_expol / loading
+        i_m_expol_etadiff = ik_expol_etadiff / loading
+
 
     ax_o2.plot(df['E-iR/V'], df['Diff/A'], label='ORR_corrected')
     ax_o2.plot(df['E-iR/V'], df['Current/A_1'],'w--', label='O2')
@@ -836,13 +874,49 @@ def O2_plot(O2, Ar):
 
         il_label.config(text='{0:.3e}'.format(i_limiting))
 
+        tafel = dflim[['E-iR(lim)/V', 'E-iR-etadiff(lim)/V', 'ik/A']].dropna()
+        tafel = tafel.iloc[::-1].reset_index()
+        del tafel['index']
+        tafel['ik/A'] = abs(tafel['ik/A'])
+        c = 0
+        e = 0
+
+        if int(tafel.shape[0] * 0.01) >= 5:
+            start = int(tafel.shape[0] * 0.01)
+        else:
+            start = 5
+
+        for i in range(tafel.shape[0] - start):
+
+            df1 = tafel.head(start + i)
+            linear = linregress(np.log10(df1['ik/A']), df1['E-iR(lim)/V'])
+            linear1 = linregress(np.log10(df1['ik/A']), df1['E-iR-etadiff(lim)/V'])
+
+            if (-1 * linear[2]) >= c:
+                c = (-1 * linear[2])
+                coefficents = linear
+            if (-1 * linear1[2]) >= e:
+                e = (-1 * linear1[2])
+                coefficents1 = linear1
+
+        ik_expol = 10 ** ((0.9 - coefficents[1]) / (coefficents[0]))
+        ik_expol_etadiff = 10 ** ((0.9 - coefficents1[1]) / (coefficents1[0]))
+
         if 'area' in globals():
             dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
             global i_surface_0pt9
             i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
             is_label.config(text='{0:.3f}'.format(i_surface_0pt9))
+            global i_s_expol
+            global i_s_expol_etadiff
+            i_s_expol = ik_expol / area *1000 *1000
+            i_s_expol_etadiff = ik_expol_etadiff / area * 1000 * 1000
+            is_label_ex.configure(text='{0:.3f}'.format(i_s_expol))
+
+
         else:
             is_label.config(text='n.a.')
+            is_label_ex.configure(text='n.a.')
 
         if LoadingEntry.get() != '':
             global loading
@@ -851,8 +925,15 @@ def O2_plot(O2, Ar):
             global i_mass_0pt9
             i_mass_0pt9 = dflim['im/A'].loc[index_0pt9]
             im_label.config(text='{0:.3f}'.format(i_mass_0pt9))
+            global i_m_expol
+            global i_m_expol_etadiff
+            i_m_expol = ik_expol / loading
+            i_m_expol_etadiff = ik_expol_etadiff / loading
+            im_label_ex.config(text='{0:.3f}'.format(i_m_expol))
+
         else:
             im_label.config(text='n.a.')
+            im_label_ex.config(text='n.a.')
 
 
     class draggable_line:
@@ -929,34 +1010,50 @@ def O2_plot(O2, Ar):
     is_frame.grid_rowconfigure(0, weight=0)
     is_frame.grid_rowconfigure(1, weight=1)
     is_frame.grid_rowconfigure(2, weight=0)
+    is_frame.grid_rowconfigure(3, weight=1)
+    is_frame.grid_rowconfigure(4, weight=0)
     is_frame.grid_columnconfigure(0, weight=0, minsize=80)
     is_frame.grid_columnconfigure(1, weight=1, minsize=115)
     is_frame.grid_columnconfigure(2, weight=0, minsize=90)
     if 'area' in globals():
         is_label = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_surface_0pt9), text_font=("Calibri", -20), width=1)
         is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
+        is_label_ex = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_s_expol), text_font=("Calibri", -20), width=1)
+        is_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
     else:
         is_label = ct.CTkLabel(is_frame, text='n.a.', text_font=("Calibri", -20), width=1)
         is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
+        is_label_ex = ct.CTkLabel(is_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        is_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
     ct.CTkLabel(is_frame, text='iₛ:',text_font=("Calibri", -20),  width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
     ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='iₛ ex:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
     im_frame = ct.CTkFrame(master=variable_frame, corner_radius=10, fg_color=('grey80', 'grey20'))
     im_frame.grid(row=2, column=0, sticky='nswe', pady=5, padx=5)
     im_frame.grid_rowconfigure(0, weight=0)
     im_frame.grid_rowconfigure(1, weight=1)
     im_frame.grid_rowconfigure(2, weight=0)
+    im_frame.grid_rowconfigure(3, weight=1)
+    im_frame.grid_rowconfigure(4, weight=0)
     im_frame.grid_columnconfigure(0, weight=0, minsize=80)
     im_frame.grid_columnconfigure(1, weight=1, minsize=115)
     im_frame.grid_columnconfigure(2, weight=0, minsize=90)
     if LoadingEntry.get() != '':
         im_label = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_mass_0pt9), text_font=("Calibri", -20), width=1)
         im_label.grid(row=1, column=1, sticky=tk.E, padx=0)
+        im_label_ex = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_m_expol), text_font=("Calibri", -20), width=1)
+        im_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
     else:
         im_label = ct.CTkLabel(im_frame, text='n.a.', text_font=("Calibri", -20), width=1)
         im_label.grid(row=1, column=1, sticky=tk.E, padx=0)
+        im_label_ex = ct.CTkLabel(im_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        im_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
     ct.CTkLabel(im_frame, text='iₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(im_frame, text='mA/mgₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='iₘ ex:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
     il_frame = ct.CTkFrame(master=variable_frame, corner_radius=10, fg_color=('grey80', 'grey20'))
     il_frame.grid(row=0, column=0, sticky='nswe', pady=5, padx=5)
@@ -1011,22 +1108,32 @@ def O2_plot(O2, Ar):
         d['rf_f_{0}'.format(z)].grid_rowconfigure(0, weight=0)
         d['rf_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
         d['rf_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
+        d['rf_f_{0}'.format(z)].grid_rowconfigure(3, weight=1)
+        d['rf_f_{0}'.format(z)].grid_rowconfigure(4, weight=0)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
         if 'area' in globals():
             d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_surface_0pt9), text_font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_s_expol), text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
         else:
             d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
         ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
         ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ ex:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
         d['a_n_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['a_n_f_{0}'.format(z)].grid(row=3, column=0, sticky='nswe', pady=5, padx=5, ipady=2, ipadx=2, columnspan=3)
         d['a_n_f_{0}'.format(z)].grid_rowconfigure(0, weight=0)
         d['a_n_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
+        d['a_n_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
+        d['a_n_f_{0}'.format(z)].grid_rowconfigure(3, weight=1)
         d['a_n_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
@@ -1034,11 +1141,17 @@ def O2_plot(O2, Ar):
         if LoadingEntry.get() != '':
             d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_mass_0pt9), text_font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_m_expol), text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
         else:
             d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
         ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='mA/mgₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ ex:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
         data_canvas.update_idletasks()
         data_canvas.config(scrollregion=data_frame.bbox())
@@ -1089,8 +1202,12 @@ def O2_plot(O2, Ar):
         plt.legend()
         plt.show()
 
-        ik_expol = interpolate.interp1d(x=(coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1]), y=tafel['ik/A_' + 'ORR_' + str(z)], kind='linear')(0.9)
-        ik_expol_etadiff = interpolate.interp1d(x=(coefficents1[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents1[1]), y=tafel['ik/A_' + 'ORR_' + str(z)], kind='linear')(0.9)
+        ik_expol = 10**((0.9-coefficents[1])/(coefficents[0]))
+        ik_expol_etadiff = 10**((0.9-coefficents1[1])/(coefficents1[0]))
+
+
+        #ik_expol = interpolate.interp1d(x=(coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1]), y=tafel['ik/A_' + 'ORR_' + str(z)], kind='linear')(0.9)
+        #ik_expol_etadiff = interpolate.interp1d(x=(coefficents1[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents1[1]), y=tafel['ik/A_' + 'ORR_' + str(z)], kind='linear')(0.9)
 
 
         if 'is/A' in dflim:
@@ -1113,6 +1230,8 @@ def O2_plot(O2, Ar):
             loading = float(LoadingEntry.get())
             i_m_ex = ik_expol / loading
             i_m_ex_eta = ik_expol_etadiff / loading
+
+
         else:
             i_m = 'n.a.'
             i_m_ex = 'n.a.'
@@ -1131,8 +1250,8 @@ def O2_plot(O2, Ar):
         result = pd.DataFrame({'ORR_i_lim_A_' + NameEntry.get() + '_' + str(z): [i_limiting], 'ORR_i_s_A/cm^2_Pt_' + str(z): [i_s], 'ORR_i_m_mA/mg_Pt_' + str(z): [i_m],
                                'ORR_i_k_ex_A_' + str(z): [ik_expol], 'ORR_i_s_ex_A/cm^2_Pt_' + str(z): [i_s_ex], 'ORR_i_m_ex_A/cm^2_Pt_' + str(z): [i_m_ex],
                                'ORR_i_k_ex_eta_A_' + str(z): [ik_expol_etadiff], 'ORR_i_s_ex_eta_A/cm^2_Pt_' + str(z): [i_s_ex_eta], 'ORR_i_m_ex_eta_A/cm^2_Pt_' + str(z): [i_m_ex_eta],
-                               'ORR_Tafel_slope' + str(z): [coefficents[0]], 'ORR_Tafel_intercept' + str(z): [coefficents[1]], 'ORR_Tafel_R' + str(z): [coefficents[2]],
-                               'ORR_Tafel_slope_eta' + str(z): [coefficents1[0]], 'ORR_Tafel_intercept' + str(z): [coefficents1[1]], 'ORR_Tafel_R' + str(z): [coefficents1[2]]})
+                               'ORR_Tafel_slope_' + str(z): [coefficents[0]], 'ORR_Tafel_intercept_' + str(z): [coefficents[1]], 'ORR_Tafel_R_' + str(z): [coefficents[2]],
+                               'ORR_Tafel_slope_eta_' + str(z): [coefficents1[0]], 'ORR_Tafel_intercept_eta_' + str(z): [coefficents1[1]], 'ORR_Tafel_R_eta' + str(z): [coefficents1[2]]})
         global results
         results = pd.concat([results, result], axis=1)
 
@@ -1444,8 +1563,8 @@ def HOR_plot(df1, df2):
 
         df1.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
         df2.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
-        df1.rename(columns={'Current/A_1': 'Current_anodic/A_' + str(z)}, inplace=True)
-        df2.rename(columns={'Current/A_2': 'Current_cathodic/A_' + str(z)}, inplace=True)
+        df1.rename(columns={'Current/A': 'Current_anodic/A_' + str(z)}, inplace=True)
+        df2.rename(columns={'Current/A': 'Current_cathodic/A_' + str(z)}, inplace=True)
 
         global savefile
         savefile = pd.concat([savefile, df1], axis=1)
