@@ -1,2 +1,2 @@
 PathFile
-C:/CloudStation/Doktor/Data/RRDE/Pt-TiOx-C/CG7 PtC/GC-17378/
+W:/RRDE/Corbi/CG2_PtC_10mVs/
