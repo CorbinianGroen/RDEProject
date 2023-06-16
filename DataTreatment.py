@@ -26,7 +26,13 @@ def import_data(data, results):
             coefficient0 = results['ORR_Tafel_slope_2'].iloc[0]
             coefficient1 = results['ORR_Tafel_intercept_2'].iloc[0]
 
-            data['E/V_tafel_ORR_2'] = coefficient0 * np.log10(data['ik/A_tafel_ORR_2']) + coefficient1
+            data['E-iR/V_tafel_ORR_2'] = coefficient0 * np.log10(data['ik/A_tafel_ORR_2']) + coefficient1
+
+        if 'ORR_Tafel_slope_eta_2' in results.columns:
+            coefficient0 = results['ORR_Tafel_slope_eta_2'].iloc[0]
+            coefficient1 = results['ORR_Tafel_intercept_eta_2'].iloc[0]
+
+            data['E-iR-etadiff/V_tafel_ORR_2'] = coefficient0 * np.log10(data['ik/A_tafel_ORR_2']) + coefficient1
 
     return (data)
 
@@ -678,7 +684,7 @@ if __name__ == '__main__':
     E1L.grid(row=1, column=4, sticky=tk.W)
     E1entry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
     E1entry.grid(row=1, column=5, sticky=tk.W)
-    E1entry.insert(0,'W:/RRDE/Corbi/CG2_PtC_10mVs/CG2-PtC-16507.txt')
+    #E1entry.insert(0,'W:/RRDE/Corbi/CG2_PtC_10mVs/CG2-PtC-16507.txt')
 
 
     def E1():
@@ -687,7 +693,7 @@ if __name__ == '__main__':
         if file.strip():
             E1entry.delete(0, 'end')
             E1entry.insert(0, file)
-            #Eval.configure(state=tk.NORMAL)
+            Eval.configure(state=tk.NORMAL)
 
             file_path = file.split('/')
             del file_path[-1]
@@ -768,6 +774,10 @@ if __name__ == '__main__':
 
     def Evaluate():
 
+        global E1_data
+        global E2_data
+        global E3_data
+
         Electrode1 = E1entry.get()
         Electrode1_results = E1entry.get().replace(".txt", "_results.txt")
 
@@ -775,9 +785,6 @@ if __name__ == '__main__':
         E1rpd = pd.read_csv(Electrode1_results, sep='\t', header=0, decimal='.')
 
         E1_data = import_data(E1pd, E1rpd)
-
-
-
 
         Electrode2 = E2entry.get()
 
@@ -800,8 +807,10 @@ if __name__ == '__main__':
 
             E3_data = import_data(E3pd, E3rpd)
 
+
         else:
             E3_data = pd.DataFrame()
+
 
         HUPD(E1_data, E2_data, E3_data)
         COStrip(E1_data, E2_data, E3_data)
@@ -809,12 +818,60 @@ if __name__ == '__main__':
         im(E1_data, E2_data, E3_data)
         HOR(E1_data, E2_data, E3_data)
 
+        SaveButton.config(state=tk.NORMAL)
+
 
 
     Eval = ct.CTkButton(master=input_frame, text='Eval', command=Evaluate, text_font=("Calibri", -18), width=80)
     Eval.grid(row=1, column=7, sticky=tk.W, padx=20)
-    #Eval.configure(state=tk.DISABLED)
+    Eval.configure(state=tk.DISABLED)
 
+    def save():
+        global E1_data
+        global E2_data
+        global E3_data
+
+        file = filedialog.askdirectory(title='Save As', initialdir=path)
+
+        if file.strip():
+
+            if not E1_data.empty:
+
+                name1 = E1_data.columns[0].split('_')[2]
+
+                file1 = file + '/' + name1 + '_treated.txt'
+
+                E1_data.to_csv(file1, sep='\t', index=False, header=True)
+
+            if not E2_data.empty:
+
+                name2 = E2_data.columns[0].split('_')[2]
+
+                file2 = file + '/' + name2 + '_treated.txt'
+                E2_data.to_csv(file2, sep='\t', index=False, header=True)
+
+
+            if not E3_data.empty:
+
+                name3 = E3_data.columns[0].split('_')[2]
+
+                file3 = file + '/' + name3 + '_treated.txt'
+                E3_data.to_csv(file3, sep='\t', index=False, header=True)
+
+            #reinitialize the dataframes
+
+            E1_data = pd.DataFrame()
+            E2_data = pd.DataFrame()
+            E3_data = pd.DataFrame()
+
+
+        else:
+            pass
+
+
+    SaveButton = ct.CTkButton(master=bottom_frame, text="Save", command=save, text_font=("Calibri", -18), width=80, height=10)
+    SaveButton.grid(row=1, column=2, sticky=tk.E, padx=10)
+    SaveButton.config(state=tk.DISABLED)
 
     def on_closing():
         root.destroy()

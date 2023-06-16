@@ -2114,6 +2114,15 @@ if __name__ == '__main__':
         file = filedialog.asksaveasfilename(title='Save As', initialdir=path, filetypes=[('Textfile', '*.txt')], initialfile=NameEntry.get())
         if file.strip():
             del savefile['ignore']
+
+            if LoadingEntry.get() != '':
+                global loading
+                loading = float(LoadingEntry.get())
+
+                result = pd.DataFrame({'loading_' + NameEntry.get(): [loading]})
+                global results
+                results = pd.concat([results, result], axis=1)
+
             del results['ignore']
             file1 = file + '.txt'
             file2 = file + '_results.txt'
