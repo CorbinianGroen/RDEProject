@@ -306,7 +306,8 @@ def CO_plot(df1, df2):
         df.rename(columns={'Potential/V': 'Potential/V_' + 'COStrip_' + NameEntry.get() + '_' + str(z)}, inplace=True)
         df.rename(columns={'Current/A_1': 'Current/A-1_' + 'first_scan_' + str(z)}, inplace=True)
         df.rename(columns={'Current/A_2': 'Current/A-2_' + 'second_scan_' + str(z)}, inplace=True)
-        del df['Diff']
+        df.rename(columns={'Diff': 'Diff-Current/A' + str(z)}, inplace=True)
+
         global savefile
         savefile = pd.concat([savefile, df], axis=1)
 
@@ -1216,6 +1217,8 @@ def O2_plot(O2, Ar):
             dflim.rename(columns={'im/A': 'im/A_' + 'ORR_' + str(z)}, inplace=True)
 
         dflim['ik/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)]
+        dflim['im/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / float(LoadingEntry.get())
+        dflim['is/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / area * 1000 * 1000
         dflim['E-iR/V_tafel_' + 'ORR_' + str(z)] = coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents[1]
         dflim['E-iR-etadiff/V_tafel_' + 'ORR_' + str(z)] = coefficents1[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + coefficents1[1]
 

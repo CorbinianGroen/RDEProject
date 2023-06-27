@@ -21,7 +21,7 @@ def import_data(data, results):
 
     if 'ik/A_tafel_ORR_2' in data.columns:
         data['im/A_tafel_ORR_2'] = data['ik/A_tafel_ORR_2'] / float(LoadingEntry.get())
-
+    '''
         if 'ORR_Tafel_slope_2' in results.columns:
             coefficient0 = results['ORR_Tafel_slope_2'].iloc[0]
             coefficient1 = results['ORR_Tafel_intercept_2'].iloc[0]
@@ -33,7 +33,7 @@ def import_data(data, results):
             coefficient1 = results['ORR_Tafel_intercept_eta_2'].iloc[0]
 
             data['E-iR-etadiff/V_tafel_ORR_2'] = coefficient0 * np.log10(data['ik/A_tafel_ORR_2']) + coefficient1
-
+    '''
     return (data)
 
 
@@ -50,13 +50,14 @@ def HUPD(data, data2, data3):
         bgcolor = '#CDCDCD'
         #window.configure(bg='grey90')
 
-    HUPD_f = Figure(figsize=(5,3),facecolor=bgcolor)
+    HUPD_f = Figure(figsize=(14*cm,7*cm), facecolor=bgcolor)
 
     canvas = FigureCanvasTkAgg(HUPD_f, master=HUPD_frame)
     canvas.get_tk_widget().grid(row=1, column=1)
     NavigationToolbar2Tk(canvas, HUPD_frame, pack_toolbar=False).grid(row=0, column=1, sticky=tk.W, pady=10)
-
+    HUPD_f.subplots_adjust(bottom=0.2)
     ax = HUPD_f.add_subplot(1, 1, 1)
+
     ax.set_ylabel("Current [A]")
     ax.set_xlabel("Potential [V]")
     ax.set_facecolor(bgcolor)
@@ -130,6 +131,8 @@ def HUPD(data, data2, data3):
     for text in legend.get_texts():
         text.set_color(fgcolor)
 
+
+
 def COStrip(data, data2, data3):
 
     if ct.get_appearance_mode() == 'Dark':
@@ -143,11 +146,13 @@ def COStrip(data, data2, data3):
         bgcolor = '#CDCDCD'
         #window.configure(bg='grey90')
 
-    COStrip_f = Figure(figsize=(5, 3) , facecolor=bgcolor)
+    COStrip_f = Figure(figsize=(14*cm,7*cm), facecolor=bgcolor)
 
     canvas = FigureCanvasTkAgg(COStrip_f, master=COStrip_frame)
     canvas.get_tk_widget().grid(row=1, column=1)
     NavigationToolbar2Tk(canvas, COStrip_frame, pack_toolbar=False).grid(row=0, column=1, sticky=tk.W, pady=10)
+
+    COStrip_f.subplots_adjust(bottom=0.2)
 
     ax = COStrip_f.add_subplot(1, 1, 1)
     ax.set_ylabel("Current [A]")
@@ -231,11 +236,13 @@ def ORR(data, data2, data3):
         bgcolor = '#CDCDCD'
         # window.configure(bg='grey90')
 
-    ORR_f = Figure(figsize=(5, 3), facecolor=bgcolor)
+    ORR_f = Figure(figsize=(14*cm,7*cm), facecolor=bgcolor)
 
     canvas = FigureCanvasTkAgg(ORR_f, master=ORR_frame)
     canvas.get_tk_widget().grid(row=1, column=1)
     NavigationToolbar2Tk(canvas, ORR_frame, pack_toolbar=False).grid(row=0, column=1, sticky=tk.W, pady=10)
+
+    ORR_f.subplots_adjust(bottom=0.2)
 
     ax = ORR_f.add_subplot(1, 1, 1)
     ax.set_ylabel("Current [A]")
@@ -322,11 +329,13 @@ def im(data, data2, data3):
         bgcolor = '#CDCDCD'
         # window.configure(bg='grey90')
 
-    im_f = Figure(figsize=(5, 3), facecolor=bgcolor)
+    im_f = Figure(figsize=(14*cm,7*cm), facecolor=bgcolor)
 
     canvas = FigureCanvasTkAgg(im_f, master=im_frame)
     canvas.get_tk_widget().grid(row=1, column=1)
     NavigationToolbar2Tk(canvas, im_frame, pack_toolbar=False).grid(row=0, column=1, sticky=tk.W, pady=10)
+
+    im_f.subplots_adjust(bottom=0.2)
 
     ax = im_f.add_subplot(1, 1, 1)
     ax.set_ylabel("Potential [V]")
@@ -355,7 +364,7 @@ def im(data, data2, data3):
         Pot = data.loc[:, matching_columns[0]]
         name = matching_columns[0].replace(partial_name, '').replace("_", "").rstrip("2")
 
-    partial_name = 'E/V_tafel_ORR'
+    partial_name = 'E-iR/V_tafel_ORR'
     matching_columns = [col for col in data.columns if partial_name in col]
 
     if matching_columns:
@@ -373,7 +382,7 @@ def im(data, data2, data3):
         name2 = matching_columns2[0].replace(partial_name2, '').replace("_", "").rstrip("2")
 
 
-    partial_name2 = 'E/V_tafel_ORR'
+    partial_name2 = 'E-iR/V_tafel_ORR'
     matching_columns2 = [col for col in data2.columns if partial_name2 in col]
 
     if matching_columns2:
@@ -390,7 +399,7 @@ def im(data, data2, data3):
         name3 = matching_columns3[0].replace(partial_name3, '').replace("_", "").rstrip("2")
 
 
-    partial_name3 = 'E/V_tafel_ORR'
+    partial_name3 = 'E-iR/V_tafel_ORR'
     matching_columns3 = [col for col in data3.columns if partial_name3 in col]
 
     if matching_columns3:
@@ -460,15 +469,17 @@ def HOR(data, data2, data3):
         bgcolor = '#CDCDCD'
         # window.configure(bg='grey90')
 
-    HOR_f = Figure(figsize=(5, 3), facecolor=bgcolor)
+    HOR_f = Figure(figsize=(14*cm,7*cm), facecolor=bgcolor)
 
     canvas = FigureCanvasTkAgg(HOR_f, master=HOR_frame)
     canvas.get_tk_widget().grid(row=1, column=1)
     NavigationToolbar2Tk(canvas, HOR_frame, pack_toolbar=False).grid(row=0, column=1, sticky=tk.W, pady=10)
 
+    HOR_f.subplots_adjust(bottom=0.2)
+
     ax = HOR_f.add_subplot(1, 1, 1)
-    ax.set_ylabel("Potential [V]")
-    ax.set_xlabel("i_mass [A/gPt]")
+    ax.set_ylabel("Current [A]")
+    ax.set_xlabel("Potential [V]")
     ax.set_facecolor(bgcolor)
     ax.xaxis.label.set_color(fgcolor)
     ax.yaxis.label.set_color(fgcolor)
@@ -662,10 +673,10 @@ if __name__ == '__main__':
     graph_frame.grid_columnconfigure(0, weight=0, minsize=10)
     graph_frame.grid_columnconfigure(2, weight=0, minsize=10)
     graph_frame.grid_columnconfigure(4, weight=0, minsize=10)
-    graph_frame.grid_columnconfigure(6, weight=0, minsize=10)
+    #graph_frame.grid_columnconfigure(6, weight=0, minsize=10)
     graph_frame.grid_rowconfigure(2, weight=0, minsize=10)
     graph_frame.grid_rowconfigure(4, weight=0, minsize=10)
-
+    graph_frame.grid_rowconfigure(6, weight=0, minsize=10)
 
 
 
@@ -762,15 +773,29 @@ if __name__ == '__main__':
     # graphs in the graphs frame
     HUPD_frame = ct.CTkFrame(master=graph_frame, corner_radius=10, fg_color=('grey90', 'grey10'))#, width=int((graph_frame.winfo_width() - 50) / 3), height=int((graph_frame.winfo_height() - 30) / 2))
     HUPD_frame.grid(row=1, column=1, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
+    HUPD_frame.grid_columnconfigure(0, weight=0, minsize=10)
+    HUPD_frame.grid_columnconfigure(1, weight=1, minsize=10)
+    HUPD_frame.grid_columnconfigure(2, weight=0, minsize=10)
     COStrip_frame = ct.CTkFrame(master=graph_frame, corner_radius=10, fg_color=('grey90', 'grey10'))#, width=int((graph_frame.winfo_width() - 50) / 3), height=int((graph_frame.winfo_height() - 30) / 2))
     COStrip_frame.grid(row=1, column=3, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
+    COStrip_frame.grid_columnconfigure(0, weight=0, minsize=10)
+    COStrip_frame.grid_columnconfigure(1, weight=1, minsize=10)
+    COStrip_frame.grid_columnconfigure(2, weight=0, minsize=10)
     ORR_frame = ct.CTkFrame(master=graph_frame, corner_radius=10, fg_color=('grey90', 'grey10'))#, width=int((graph_frame.winfo_width() - 50) / 3), height=int((graph_frame.winfo_height() - 30) / 2))
     ORR_frame.grid(row=1, column=5, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
+    ORR_frame.grid_columnconfigure(0, weight=0, minsize=10)
+    ORR_frame.grid_columnconfigure(1, weight=1, minsize=10)
+    ORR_frame.grid_columnconfigure(2, weight=0, minsize=10)
     im_frame = ct.CTkFrame(master=graph_frame, corner_radius=10, fg_color=('grey90', 'grey10'))#, width=int((graph_frame.winfo_width() - 50) / 3), height=int((graph_frame.winfo_height() - 30) / 2))
     im_frame.grid(row=3, column=1, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
+    im_frame.grid_columnconfigure(0, weight=0, minsize=10)
+    im_frame.grid_columnconfigure(1, weight=1, minsize=10)
+    im_frame.grid_columnconfigure(2, weight=0, minsize=10)
     HOR_frame = ct.CTkFrame(master=graph_frame, corner_radius=10, fg_color=('grey90', 'grey10'))#, width=int((graph_frame.winfo_width() - 50) / 3), height=int((graph_frame.winfo_height() - 30) / 2))
     HOR_frame.grid(row=3, column=3, sticky='nswe', pady=10, padx=10, ipadx=10, ipady=10)
-
+    HOR_frame.grid_columnconfigure(0, weight=0, minsize=10)
+    HOR_frame.grid_columnconfigure(1, weight=1, minsize=10)
+    HOR_frame.grid_columnconfigure(2, weight=0, minsize=10)
 
     def Evaluate():
 
