@@ -21,7 +21,8 @@ import scanimport as scan
 loading = 3.847E-6
 Temp = 273+20
 #R = 32.7
-#Ref = 0.0035
+global Ref
+Ref = 0
 Ar = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-Ar-0.02mVs-CV-0.05-0.925mV-2.txt'
 O2 = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-O2-1(1).txt'
 Ar_orr = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-Ar-1(1).txt'
@@ -142,6 +143,9 @@ def CO_plot(df1, df2):
 
     df = interpolation(df1, df2)
     df['Diff'] = df['Current/A_1'] - df['Current/A_2']
+
+    df['Potential/V'] = df['Potential/V'] - float(Ref) #- (df1['Current/A'] * float(R))
+
     higher0 = df[df['Diff'] >= 0]
     higher0 = higher0[higher0['Potential/V'] >= 0.2]
     integration = np.trapz(x=higher0['Potential/V'], y=higher0['Diff'])
@@ -415,6 +419,9 @@ def Ar_Plot(anodic, cathodic):
     ax.spines['right'].set_color(fgcolor)
     ax.spines['bottom'].set_color(fgcolor)
 
+    anodic['Potential/V'] = anodic['Potential/V'] - float(Ref)  # - (df1['Current/A'] * float(R))
+    cathodic['Potential/V'] = cathodic['Potential/V'] - float(Ref)  # - (df1['Current/A'] * float(R))
+
     max_current = anodic['Current/A'].loc[anodic['Current/A'].nlargest(1).index[0]]
     min_current = cathodic['Current/A'].loc[cathodic['Current/A'].nsmallest(1).index[0]]
 
@@ -431,6 +438,9 @@ def Ar_Plot(anodic, cathodic):
                 cathodic.loc[:, 'Current/A'].shift(-2) < cathodic.loc[:, 'Current/A'])]
     init_cathodic_V = cathodic['Potential/V'].loc[init_cathodic.nlargest(1).index[0]]
     init_cathodic_A = cathodic['Current/A'].loc[init_cathodic.nlargest(1).index[0]]
+
+
+
 
     ax.plot(anodic['Potential/V'], anodic['Current/A'], label='anodic')
     ax.plot(cathodic['Potential/V'], cathodic['Current/A'], label='cathodic')
@@ -1376,10 +1386,63 @@ def HOR_plot(df1, df2):
     upper_limit = 0.95 * i_limiting_h
     max_lim = df1[(df1['Current/A'] >= upper_limit) & (df1['Current/A'] <= i_limiting_h)].iloc[0].name
 
+    df2 = df2.iloc[::-1].reset_index(drop=True)
+    max_lim_2 = df2[(df2['Current/A'] >= upper_limit) & (df2['Current/A'] <= i_limiting_h)].iloc[0].name
+
     df_diff = df1.iloc[min_lim:max_lim].reset_index()
     del df_diff['index']
 
     df_diff['etadiff/V'] = ((-8.314*Temp)/(2*96485))*(np.log(1-(df_diff['Current/A']/i_limiting_h)))
+
+    df1_eta = df1.iloc[:max_lim].reset_index()
+    df1_eta['E-iR-eta/V'] = df1['E-iR/V'] - ((-8.314*Temp)/(2*96485))*(np.log(1-(df1['Current/A']/i_limiting_h)))
+
+    df2_eta = df2.iloc[:max_lim_2].reset_index()
+    df2_eta['E-iR-eta/V'] = df2['E-iR/V'] - ((-8.314*Temp)/(2*96485))*(np.log(1-(df2['Current/A']/i_limiting_h)))
+
+    df1_filtered = df1[(df1['E-iR/V'] >= -0.01) & (df1['E-iR/V'] <= 0.01)]
+    df1_filtered_eta = df1_eta[(df1_eta['E-iR-eta/V'] >= -0.01) & (df1_eta['E-iR-eta/V'] <= 0.01)]
+
+    linear_df1 = np.polyfit(df1_filtered['E-iR/V'], df1_filtered['Current/A'], 1)
+    linear_df1_eta = np.polyfit(df1_filtered_eta['E-iR-eta/V'], df1_filtered_eta['Current/A'], 1)
+
+    i_0_k_1 = ((8.31446 * Temp)/96485) * linear_df1[0]
+    i_0_k_eta_1 = ((8.31446 * Temp) / 96485) * linear_df1_eta[0]
+
+    df2_filtered = df2[(df2['E-iR/V'] >= -0.01) & (df2['E-iR/V'] <= 0.01)]
+    df2_filtered_eta = df2_eta[(df2_eta['E-iR-eta/V'] >= -0.01) & (df2_eta['E-iR-eta/V'] <= 0.01)]
+
+    linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current/A'], 1)
+    linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current/A'], 1)
+
+    i_0_k_2 = ((8.31446 * Temp) / 96485) * linear_df2[0]
+    i_0_k_eta_2 = ((8.31446 * Temp) / 96485) * linear_df2_eta[0]
+
+    if 'area' in globals():
+        global i_0_s_1
+        global i_0_s_eta_1
+        global i_0_s_2
+        global i_0_s_eta_2
+
+        i_0_s_1 = i_0_k_1 / area *1000000
+        i_0_s_eta_1 = i_0_k_eta_1 / area *1000000
+        i_0_s_2 = i_0_k_2 / area *1000000
+        i_0_s_eta_2 = i_0_k_eta_2 / area *1000000
+
+    if LoadingEntry.get() != '':
+        global loading
+        loading = float(LoadingEntry.get())
+        global i_0_m_1
+        global i_0_m_eta_1
+        global i_0_m_2
+        global i_0_m_eta_2
+
+        i_0_m_1 = i_0_k_1 / loading
+        i_0_m_eta_1 = i_0_k_eta_1 / loading
+        i_0_m_2 = i_0_k_2 / loading
+        i_0_m_eta_2 = i_0_k_eta_2 / loading
+
+
 
     ax_hor = hor_f.add_subplot(1,1,1)
     ax_hor.set_ylabel("Current [A]")
@@ -1421,6 +1484,66 @@ def HOR_plot(df1, df2):
         del df_diff['index']
 
         df_diff['etadiff/V'] = ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df_diff['Current/A'] / i_limiting_h)))
+
+        df1['E-iR-eta/V'] = df1['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df1['Current/A'] / i_limiting_h)))
+
+        df2['E-iR-eta/V'] = df2['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df2['Current/A'] / i_limiting_h)))
+
+        df1_filtered = df1[(df1['E-iR/V'] >= -0.01) & (df1['E-iR/V'] <= 0.01)]
+        df1_filtered_eta = df1[(df1['E-iR-eta/V'] >= -0.01) & (df1['E-iR-eta/V'] <= 0.01)]
+
+        linear_df1 = np.polyfit(df1_filtered['E-iR/V'], df1_filtered['Current/A'], 1)
+        linear_df1_eta = np.polyfit(df1_filtered_eta['E-iR-eta/V'], df1_filtered_eta['Current/A'], 1)
+
+        i_0_k_1 = ((8.31446 * Temp) / 96485) * linear_df1[0]
+        i_0_k_eta_1 = ((8.31446 * Temp) / 96485) * linear_df1_eta[0]
+
+        df2_filtered = df2[(df2['E-iR/V'] >= -0.01) & (df2['E-iR/V'] <= 0.01)]
+        df2_filtered_eta = df2[(df2['E-iR-eta/V'] >= -0.01) & (df2['E-iR-eta/V'] <= 0.01)]
+
+        linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current/A'], 1)
+        linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current/A'], 1)
+
+        i_0_k_2 = ((8.31446 * Temp) / 96485) * linear_df2[0]
+        i_0_k_eta_2 = ((8.31446 * Temp) / 96485) * linear_df2_eta[0]
+
+        if 'area' in globals():
+            global i_0_s_1
+            global i_0_s_eta_1
+            global i_0_s_2
+            global i_0_s_eta_2
+
+            i_0_s_1 = i_0_k_1 / area *1000000
+            i_0_s_eta_1 = i_0_k_eta_1 / area *1000000
+            i_0_s_2 = i_0_k_2 / area *1000000
+            i_0_s_eta_2 = i_0_k_eta_2 / area *1000000
+
+            is_label.config(text='{0:.3f}'.format(i_0_s_2))
+            is_label_ex.config(text='{0:.3f}'.format(i_0_s_eta_2))
+
+        else:
+            is_label.config(text='n.a.')
+            is_label_ex.config(text='n.a.')
+
+        if LoadingEntry.get() != '':
+            global loading
+            loading = float(LoadingEntry.get())
+            global i_0_m_1
+            global i_0_m_eta_1
+            global i_0_m_2
+            global i_0_m_eta_2
+
+            i_0_m_1 = i_0_k_1 / loading
+            i_0_m_eta_1 = i_0_k_eta_1 / loading
+            i_0_m_2 = i_0_k_2 / loading
+            i_0_m_eta_2 = i_0_k_eta_2 / loading
+
+            im_label.config(text='{0:.3f}'.format(i_0_m_2))
+            im_label_ex.config(text='{0:.3f}'.format(i_0_m_eta_2))
+
+        else:
+            im_label.config(text='n.a.')
+            im_label_ex.config(text='n.a.')
 
         '''
         
@@ -1493,6 +1616,56 @@ def HOR_plot(df1, df2):
     hor_variable_frame.grid_rowconfigure(1, weight=1)
     hor_variable_frame.grid_rowconfigure(2, weight=1)
 
+    is_frame = ct.CTkFrame(master=hor_variable_frame, corner_radius=10, fg_color=('grey80', 'grey20'))
+    is_frame.grid(row=1, column=0, sticky='nswe', pady=0, padx=5)
+    is_frame.grid_rowconfigure(0, weight=0)
+    is_frame.grid_rowconfigure(1, weight=1)
+    is_frame.grid_rowconfigure(2, weight=0)
+    is_frame.grid_rowconfigure(3, weight=1)
+    is_frame.grid_rowconfigure(4, weight=0)
+    is_frame.grid_columnconfigure(0, weight=0, minsize=80)
+    is_frame.grid_columnconfigure(1, weight=1, minsize=115)
+    is_frame.grid_columnconfigure(2, weight=0, minsize=90)
+    if 'area' in globals():
+        is_label = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_0_s_2), text_font=("Calibri", -20), width=1)
+        is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
+        is_label_ex = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_0_s_eta_2), text_font=("Calibri", -20), width=1)
+        is_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
+    else:
+        is_label = ct.CTkLabel(is_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
+        is_label_ex = ct.CTkLabel(is_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        is_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
+    ct.CTkLabel(is_frame, text='iₛ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='iₛ eta:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+
+    im_frame = ct.CTkFrame(master=hor_variable_frame, corner_radius=10, fg_color=('grey80', 'grey20'))
+    im_frame.grid(row=2, column=0, sticky='nswe', pady=5, padx=5)
+    im_frame.grid_rowconfigure(0, weight=0)
+    im_frame.grid_rowconfigure(1, weight=1)
+    im_frame.grid_rowconfigure(2, weight=0)
+    im_frame.grid_rowconfigure(3, weight=1)
+    im_frame.grid_rowconfigure(4, weight=0)
+    im_frame.grid_columnconfigure(0, weight=0, minsize=80)
+    im_frame.grid_columnconfigure(1, weight=1, minsize=115)
+    im_frame.grid_columnconfigure(2, weight=0, minsize=90)
+    if LoadingEntry.get() != '':
+        im_label = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_0_m_2), text_font=("Calibri", -20), width=1)
+        im_label.grid(row=1, column=1, sticky=tk.E, padx=0)
+        im_label_ex = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_0_m_eta_2), text_font=("Calibri", -20), width=1)
+        im_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
+    else:
+        im_label = ct.CTkLabel(im_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        im_label.grid(row=1, column=1, sticky=tk.E, padx=0)
+        im_label_ex = ct.CTkLabel(im_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        im_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
+    ct.CTkLabel(im_frame, text='iₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='iₘ eta:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+
 
 
     def exit1(df1, df2):
@@ -1518,49 +1691,55 @@ def HOR_plot(df1, df2):
         ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x', width=8, height=8, command=lambda: remove(a), text_font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
         data_frame.grid_rowconfigure(z * 2 + 2, minsize=10)
 
-        d['a_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
-        d['a_f_{0}'.format(z)].grid(row=1, column=0, sticky='nswe', pady=5, padx=5, ipadx=2, ipady=2, columnspan=3)
-        d['a_f_{0}'.format(z)].grid_rowconfigure(0, weight=0)
-        d['a_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
-        d['a_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
-        d['a_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
-        d['a_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
-        d['a_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
-        d['a_l_{0}'.format(z)] = ct.CTkLabel(d['a_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
-        d['a_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['a_f_{0}'.format(z)], text='Area Pt:', text_font=("Calibri", -20), width=1).grid(row=1,column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_f_{0}'.format(z)], text='cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1,column=2, sticky=tk.E, padx=2)
-
         d['rf_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['rf_f_{0}'.format(z)].grid(row=2, column=0, sticky='nswe', pady=0, padx=5, ipadx=2, ipady=2, columnspan=3)
         d['rf_f_{0}'.format(z)].grid_rowconfigure(0, weight=0)
         d['rf_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
         d['rf_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
+        d['rf_f_{0}'.format(z)].grid_rowconfigure(3, weight=1)
+        d['rf_f_{0}'.format(z)].grid_rowconfigure(4, weight=0)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
-        d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.',text_font=("Calibri", -20), width=1)
-        d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='rf:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='cm²ₚₜ/cm²₉ₑₒ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        if 'area' in globals():
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_s_2), text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_s_eta_2), text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
+        else:
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ eta:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
         d['a_n_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['a_n_f_{0}'.format(z)].grid(row=3, column=0, sticky='nswe', pady=5, padx=5, ipady=2, ipadx=2, columnspan=3)
         d['a_n_f_{0}'.format(z)].grid_rowconfigure(0, weight=0)
         d['a_n_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
         d['a_n_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
+        d['a_n_f_{0}'.format(z)].grid_rowconfigure(3, weight=1)
+        d['a_n_f_{0}'.format(z)].grid_rowconfigure(2, weight=0)
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
         if LoadingEntry.get() != '':
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.',text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_m_2), text_font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_m_eta_2), text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
         else:
             d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='ECSA:', text_font=("Calibri", -20), width=1).grid(row=1,column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='m²ₚₜ/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1,  column=2, sticky=tk.E, padx=2)
-
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ eta:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
         data_canvas.update_idletasks()
         data_canvas.config(scrollregion=data_frame.bbox())
 
@@ -1784,6 +1963,8 @@ if __name__ == '__main__':
             pot_cat = Ref_cathodic['Potential/V'].iloc[abs(Ref_cathodic['Current/A']).nsmallest(1).index[0]]
             pot_an = Ref_anodic['Potential/V'].iloc[abs(Ref_anodic['Current/A']).nsmallest(1).index[0]]
 
+
+            global Ref
             Ref = (pot_cat + pot_an) / 2
 
 
