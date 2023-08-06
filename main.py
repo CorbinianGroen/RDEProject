@@ -117,7 +117,7 @@ def CO_plot(df1, df2):
     def exit2():
         window.destroy()
 
-    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, text_font=("Calibri", -24),
+    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, font=("Calibri", -24),
                  text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
 
     def on_closing():
@@ -204,13 +204,13 @@ def CO_plot(df1, df2):
     Area_norm_frame.grid_columnconfigure(1, weight=1, minsize=80)
     Area_norm_frame.grid_columnconfigure(2, weight=0, minsize=125)
     if LoadingEntry.get() != '':
-        Area_norm_label = ct.CTkLabel(Area_norm_frame, text='{0:.3f}'.format(co_area_norm), text_font=("Calibri", -20), width=1)
+        Area_norm_label = ct.CTkLabel(Area_norm_frame, text='{0:.3f}'.format(co_area_norm), font=("Calibri", -20), width=1)
         Area_norm_label.grid(row=1, column=1, sticky=tk.E, padx=0)
     else:
-        Area_norm_label = ct.CTkLabel(Area_norm_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        Area_norm_label = ct.CTkLabel(Area_norm_frame, text='n.a.', font=("Calibri", -20), width=1)
         Area_norm_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(Area_norm_frame, text='ECSA:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(Area_norm_frame, text='m²ₚₜ/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(Area_norm_frame, text='ECSA:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(Area_norm_frame, text='m²ₚₜ/gₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
     rf_frame = ct.CTkFrame(master=co_variable_frame, corner_radius=10, fg_color=("grey80", 'grey20'))
     rf_frame.grid(row=1, column=0, sticky='nswe', pady=0, padx=5)
@@ -220,10 +220,10 @@ def CO_plot(df1, df2):
     rf_frame.grid_columnconfigure(0, weight=0, minsize=80)
     rf_frame.grid_columnconfigure(1, weight=1, minsize=80)
     rf_frame.grid_columnconfigure(2, weight=0, minsize=125)
-    rf_label = ct.CTkLabel(rf_frame, text='{0:.3f}'.format(co_rf), text_font=("Calibri", -20), width=1)
+    rf_label = ct.CTkLabel(rf_frame, text='{0:.3f}'.format(co_rf), font=("Calibri", -20), width=1)
     rf_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(rf_frame, text='rf:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(rf_frame, text='cm²ₚₜ/cm²₉ₑₒ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(rf_frame, text='rf:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(rf_frame, text='cm²ₚₜ/cm²₉ₑₒ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
     Area_frame = ct.CTkFrame(master=co_variable_frame, corner_radius=10, fg_color=("grey80", 'grey20'))
     Area_frame.grid(row=0, column=0, sticky='nswe', pady=5, padx=5)
@@ -233,10 +233,10 @@ def CO_plot(df1, df2):
     Area_frame.grid_columnconfigure(0, weight=0, minsize=80)
     Area_frame.grid_columnconfigure(1, weight=1, minsize=80)
     Area_frame.grid_columnconfigure(2, weight=0, minsize=125)
-    Area_label = ct.CTkLabel(Area_frame, text='{0:.3f}'.format(co_area), text_font=("Calibri", -20), width=1)
+    Area_label = ct.CTkLabel(Area_frame, text='{0:.3f}'.format(co_area), font=("Calibri", -20), width=1)
     Area_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(Area_frame, text='Area Pt:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(Area_frame, text='cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(Area_frame, text='Area Pt:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(Area_frame, text='cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
     def exit1(df):
         window.destroy()
@@ -251,14 +251,14 @@ def CO_plot(df1, df2):
         d['v_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
         d['v_f_{0}'.format(z)].grid_rowconfigure(2, weight=1)
         d['v_f_{0}'.format(z)].grid_rowconfigure(3, weight=1)
-        ct.CTkLabel(d['v_f_{0}'.format(z)], text='CO Strip Determination - ', text_font=("Calibri", -20),width=140).grid(row=0, column=0,sticky=tk.W,padx=2, pady=5)
+        ct.CTkLabel(d['v_f_{0}'.format(z)], text='CO Strip Determination - ', font=("Calibri", -20),width=140).grid(row=0, column=0,sticky=tk.W,padx=2, pady=5)
 
-        d['v_n_{0}'.format(z)] = ct.CTkEntry(d['v_f_{0}'.format(z)], width=125, border_width=0, bg_color=("grey70", 'grey30'), fg_color=("grey70", 'grey30'), text_font=("Calibri", -19), text_color=('black', 'white'))
+        d['v_n_{0}'.format(z)] = ct.CTkEntry(d['v_f_{0}'.format(z)], width=125, border_width=0, bg_color=("grey70", 'grey30'), fg_color=("grey70", 'grey30'), font=("Calibri", -19), text_color=('black', 'white'))
         d['v_n_{0}'.format(z)].insert(0, NameEntry.get())
         d['v_n_{0}'.format(z)].configure(state='disabled')
         d['v_n_{0}'.format(z)].grid(row=0, column=1, sticky='ws', pady=5)
 
-        ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x', width=8, height=8, command=lambda: remove(a), text_font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
+        ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x', width=8, height=8, command=lambda: remove(a), font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
         data_frame.grid_rowconfigure(z * 2 + 2, minsize=10)
 
         d['a_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
@@ -269,10 +269,10 @@ def CO_plot(df1, df2):
         d['a_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['a_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['a_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
-        d['a_l_{0}'.format(z)] = ct.CTkLabel(d['a_f_{0}'.format(z)], text='{0:.3f}'.format(co_area), text_font=("Calibri", -20), width=1)
+        d['a_l_{0}'.format(z)] = ct.CTkLabel(d['a_f_{0}'.format(z)], text='{0:.3f}'.format(co_area), font=("Calibri", -20), width=1)
         d['a_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['a_f_{0}'.format(z)], text='Area Pt:', text_font=("Calibri", -20), width=1).grid(row=1,column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_f_{0}'.format(z)], text='cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1,column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_f_{0}'.format(z)], text='Area Pt:', font=("Calibri", -20), width=1).grid(row=1,column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_f_{0}'.format(z)], text='cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=1,column=2, sticky=tk.E, padx=2)
 
         d['rf_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['rf_f_{0}'.format(z)].grid(row=2, column=0, sticky='nswe', pady=0, padx=5, ipadx=2, ipady=2, columnspan=3)
@@ -282,10 +282,10 @@ def CO_plot(df1, df2):
         d['rf_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
-        d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(co_rf),text_font=("Calibri", -20), width=1)
+        d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(co_rf),font=("Calibri", -20), width=1)
         d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='rf:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='cm²ₚₜ/cm²₉ₑₒ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='rf:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='cm²ₚₜ/cm²₉ₑₒ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
         d['a_n_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['a_n_f_{0}'.format(z)].grid(row=3, column=0, sticky='nswe', pady=5, padx=5, ipady=2, ipadx=2, columnspan=3)
@@ -296,13 +296,13 @@ def CO_plot(df1, df2):
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
         if LoadingEntry.get() != '':
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(co_area_norm),text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(co_area_norm),font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
         else:
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='ECSA:', text_font=("Calibri", -20), width=1).grid(row=1,column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='m²ₚₜ/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1,  column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='ECSA:', font=("Calibri", -20), width=1).grid(row=1,column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='m²ₚₜ/gₚₜ', font=("Calibri", -20), width=1).grid(row=1,  column=2, sticky=tk.E, padx=2)
 
         data_canvas.update_idletasks()
         data_canvas.config(scrollregion=data_frame.bbox())
@@ -329,7 +329,7 @@ def CO_plot(df1, df2):
         z += 1
 
 
-    ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=lambda: exit1(df), text_font=("Calibri", -24),
+    ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=lambda: exit1(df), font=("Calibri", -24),
                  text_color=("grey20", 'grey80')).grid(row=1, column=2, sticky="se", pady=10, padx=10)
 
 
@@ -381,7 +381,7 @@ def Ar_Plot(anodic, cathodic):
     def exit2():
         window.destroy()
 
-    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, text_font=("Calibri", -24), text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
+    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, font=("Calibri", -24), text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
 
 
     def on_closing():
@@ -518,12 +518,12 @@ def Ar_Plot(anodic, cathodic):
         area_geo = np.pi * (float(RadiusEntry.get()) ** 2)
         rf = area / area_geo
 
-        rf_label.config(text='{0:.3f}'.format(rf))
-        Area_label.config(text='{0:.3f}'.format(area))
+        rf_label.configure(text='{0:.3f}'.format(rf))
+        Area_label.configure(text='{0:.3f}'.format(area))
         if 'area_norm' in globals():
-            Area_norm_label.config(text='{0:.3f}'.format(area_norm))
+            Area_norm_label.configure(text='{0:.3f}'.format(area_norm))
         else:
-            Area_norm_label.config(text='n.a.')
+            Area_norm_label.configure(text='n.a.')
 
     class draggable_lines:
         def __init__(self, canvas, ax, kind, XorY):
@@ -596,13 +596,13 @@ def Ar_Plot(anodic, cathodic):
     Area_norm_frame.grid_columnconfigure(1, weight=1, minsize=80)
     Area_norm_frame.grid_columnconfigure(2, weight=0, minsize=125)
     if LoadingEntry.get() != '':
-        Area_norm_label = ct.CTkLabel(Area_norm_frame, text='{0:.3f}'.format(area_norm), text_font=("Calibri", -20), width=1)
+        Area_norm_label = ct.CTkLabel(Area_norm_frame, text='{0:.3f}'.format(area_norm), font=("Calibri", -20), width=1)
         Area_norm_label.grid(row=1, column=1, sticky=tk.E, padx=0)
     else:
-        Area_norm_label = ct.CTkLabel(Area_norm_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        Area_norm_label = ct.CTkLabel(Area_norm_frame, text='n.a.', font=("Calibri", -20), width=1)
         Area_norm_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(Area_norm_frame, text='ECSA:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(Area_norm_frame, text='m²ₚₜ/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(Area_norm_frame, text='ECSA:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(Area_norm_frame, text='m²ₚₜ/gₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
     rf_frame = ct.CTkFrame(master=variable_frame, corner_radius=10, fg_color=("grey80", 'grey20'))
     rf_frame.grid(row=1, column=0, sticky='nswe', pady=0, padx=5)
@@ -612,10 +612,10 @@ def Ar_Plot(anodic, cathodic):
     rf_frame.grid_columnconfigure(0, weight=0, minsize=80)
     rf_frame.grid_columnconfigure(1, weight=1, minsize=80)
     rf_frame.grid_columnconfigure(2, weight=0, minsize=125)
-    rf_label = ct.CTkLabel(rf_frame, text='{0:.3f}'.format(rf), text_font=("Calibri", -20), width=1)
+    rf_label = ct.CTkLabel(rf_frame, text='{0:.3f}'.format(rf), font=("Calibri", -20), width=1)
     rf_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(rf_frame, text='rf:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(rf_frame, text='cm²ₚₜ/cm²₉ₑₒ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(rf_frame, text='rf:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(rf_frame, text='cm²ₚₜ/cm²₉ₑₒ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
     Area_frame = ct.CTkFrame(master=variable_frame, corner_radius=10, fg_color=("grey80", 'grey20'))
     Area_frame.grid(row=0, column=0, sticky='nswe', pady=5, padx=5)
@@ -625,10 +625,10 @@ def Ar_Plot(anodic, cathodic):
     Area_frame.grid_columnconfigure(0, weight=0, minsize=80)
     Area_frame.grid_columnconfigure(1, weight=1, minsize=80)
     Area_frame.grid_columnconfigure(2, weight=0, minsize=125)
-    Area_label = ct.CTkLabel(Area_frame, text='{0:.3f}'.format(area), text_font=("Calibri", -20), width=1)
+    Area_label = ct.CTkLabel(Area_frame, text='{0:.3f}'.format(area), font=("Calibri", -20), width=1)
     Area_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(Area_frame, text='Area Pt:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(Area_frame, text='cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(Area_frame, text='Area Pt:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(Area_frame, text='cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
     def exit1():
         window.destroy()
@@ -645,12 +645,12 @@ def Ar_Plot(anodic, cathodic):
         d['v_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
         d['v_f_{0}'.format(z)].grid_rowconfigure(2, weight=1)
         d['v_f_{0}'.format(z)].grid_rowconfigure(3, weight=1)
-        ct.CTkLabel(d['v_f_{0}'.format(z)], text='HUPD Determination - ', text_font=("Calibri", -20), width=140).grid(row=0, column=0, sticky=tk.W, padx=2, pady=5)
-        d['v_n_{0}'.format(z)] = ct.CTkEntry(d['v_f_{0}'.format(z)], width=140, border_width=0, bg_color=("grey70", 'grey30'), fg_color=("grey70", 'grey30'), text_font=("Calibri", -19), text_color=('black', 'white'))
+        ct.CTkLabel(d['v_f_{0}'.format(z)], text='HUPD Determination - ', font=("Calibri", -20), width=140).grid(row=0, column=0, sticky=tk.W, padx=2, pady=5)
+        d['v_n_{0}'.format(z)] = ct.CTkEntry(d['v_f_{0}'.format(z)], width=140, border_width=0, bg_color=("grey70", 'grey30'), fg_color=("grey70", 'grey30'), font=("Calibri", -19), text_color=('black', 'white'))
         d['v_n_{0}'.format(z)].insert(0, NameEntry.get())
         d['v_n_{0}'.format(z)].configure(state='disabled')
         d['v_n_{0}'.format(z)].grid(row=0, column=1, sticky='ws', pady=5)
-        ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x',width=8, height=8, command=lambda: remove(a), text_font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
+        ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x',width=8, height=8, command=lambda: remove(a), font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
 
         data_frame.grid_rowconfigure(z * 2 + 2, minsize=10)
 
@@ -662,10 +662,10 @@ def Ar_Plot(anodic, cathodic):
         d['a_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['a_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['a_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
-        d['a_l_{0}'.format(z)] = ct.CTkLabel(d['a_f_{0}'.format(z)], text='{0:.3f}'.format(area), text_font=("Calibri", -20), width=1)
+        d['a_l_{0}'.format(z)] = ct.CTkLabel(d['a_f_{0}'.format(z)], text='{0:.3f}'.format(area), font=("Calibri", -20), width=1)
         d['a_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['a_f_{0}'.format(z)], text='Area Pt:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_f_{0}'.format(z)], text='cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_f_{0}'.format(z)], text='Area Pt:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_f_{0}'.format(z)], text='cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
         d['rf_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['rf_f_{0}'.format(z)].grid(row=2, column=0, columnspan=3, sticky='nswe', pady=0, padx=5, ipadx=2, ipady=2)
@@ -675,10 +675,10 @@ def Ar_Plot(anodic, cathodic):
         d['rf_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
-        d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(rf), text_font=("Calibri", -20), width=1)
+        d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(rf), font=("Calibri", -20), width=1)
         d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='rf:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='cm²ₚₜ/cm²₉ₑₒ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='rf:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='cm²ₚₜ/cm²₉ₑₒ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
         d['a_n_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['a_n_f_{0}'.format(z)].grid(row=3, column=0,columnspan=3, sticky='nswe', pady=5, padx=5, ipady=2, ipadx=2)
@@ -689,16 +689,16 @@ def Ar_Plot(anodic, cathodic):
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
         if LoadingEntry.get() != '':
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(area_norm), text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(area_norm), font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
         else:
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='ECSA:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='m²ₚₜ/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='ECSA:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='m²ₚₜ/gₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
         data_canvas.update_idletasks()
-        data_canvas.config(scrollregion=data_frame.bbox())
+        data_canvas.configure(scrollregion=data_frame.bbox())
 
         df = pd.concat([anodic, cathodic], ignore_index=True).reset_index()
         df.rename(columns={'Potential/V': 'Potential/V_' + 'HUPD_' + NameEntry.get() + '_' + str(z)}, inplace=True)
@@ -721,7 +721,7 @@ def Ar_Plot(anodic, cathodic):
         z += 1
 
 
-    ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=exit1, text_font=("Calibri", -24), text_color=("grey20", 'grey80')).grid(row=1, column=2, sticky="se", pady=10, padx=10)
+    ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=exit1, font=("Calibri", -24), text_color=("grey20", 'grey80')).grid(row=1, column=2, sticky="se", pady=10, padx=10)
 
     window.mainloop()
 
@@ -883,7 +883,7 @@ def O2_plot(O2, Ar):
 
         index_0pt9 = df.iloc[(dflim['E-iR(lim)/V'] - 0.9).abs().argsort()[:1]].index[0]
 
-        il_label.config(text='{0:.3e}'.format(i_limiting))
+        il_label.configure(text='{0:.3e}'.format(i_limiting))
 
         tafel = dflim[['E-iR(lim)/V', 'E-iR-etadiff(lim)/V', 'ik/A']].dropna()
         tafel = tafel.iloc[::-1].reset_index()
@@ -917,7 +917,7 @@ def O2_plot(O2, Ar):
             dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
             global i_surface_0pt9
             i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
-            is_label.config(text='{0:.3f}'.format(i_surface_0pt9))
+            is_label.configure(text='{0:.3f}'.format(i_surface_0pt9))
             global i_s_expol
             global i_s_expol_etadiff
             i_s_expol = ik_expol / area *1000 *1000
@@ -926,7 +926,7 @@ def O2_plot(O2, Ar):
 
 
         else:
-            is_label.config(text='n.a.')
+            is_label.configure(text='n.a.')
             is_label_ex.configure(text='n.a.')
 
         if LoadingEntry.get() != '':
@@ -935,16 +935,16 @@ def O2_plot(O2, Ar):
             dflim['im/A'] = abs(dflim['ik/A']) / loading
             global i_mass_0pt9
             i_mass_0pt9 = dflim['im/A'].loc[index_0pt9]
-            im_label.config(text='{0:.3f}'.format(i_mass_0pt9))
+            im_label.configure(text='{0:.3f}'.format(i_mass_0pt9))
             global i_m_expol
             global i_m_expol_etadiff
             i_m_expol = ik_expol / loading
             i_m_expol_etadiff = ik_expol_etadiff / loading
-            im_label_ex.config(text='{0:.3f}'.format(i_m_expol))
+            im_label_ex.configure(text='{0:.3f}'.format(i_m_expol))
 
         else:
-            im_label.config(text='n.a.')
-            im_label_ex.config(text='n.a.')
+            im_label.configure(text='n.a.')
+            im_label_ex.configure(text='n.a.')
 
 
     class draggable_line:
@@ -1027,19 +1027,19 @@ def O2_plot(O2, Ar):
     is_frame.grid_columnconfigure(1, weight=1, minsize=115)
     is_frame.grid_columnconfigure(2, weight=0, minsize=90)
     if 'area' in globals():
-        is_label = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_surface_0pt9), text_font=("Calibri", -20), width=1)
+        is_label = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_surface_0pt9), font=("Calibri", -20), width=1)
         is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-        is_label_ex = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_s_expol), text_font=("Calibri", -20), width=1)
+        is_label_ex = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_s_expol), font=("Calibri", -20), width=1)
         is_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
     else:
-        is_label = ct.CTkLabel(is_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        is_label = ct.CTkLabel(is_frame, text='n.a.', font=("Calibri", -20), width=1)
         is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-        is_label_ex = ct.CTkLabel(is_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        is_label_ex = ct.CTkLabel(is_frame, text='n.a.', font=("Calibri", -20), width=1)
         is_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(is_frame, text='iₛ:',text_font=("Calibri", -20),  width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
-    ct.CTkLabel(is_frame, text='iₛ ex:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='iₛ:',font=("Calibri", -20),  width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='iₛ ex:', font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
     im_frame = ct.CTkFrame(master=variable_frame, corner_radius=10, fg_color=('grey80', 'grey20'))
     im_frame.grid(row=2, column=0, sticky='nswe', pady=5, padx=5)
@@ -1052,19 +1052,19 @@ def O2_plot(O2, Ar):
     im_frame.grid_columnconfigure(1, weight=1, minsize=115)
     im_frame.grid_columnconfigure(2, weight=0, minsize=90)
     if LoadingEntry.get() != '':
-        im_label = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_mass_0pt9), text_font=("Calibri", -20), width=1)
+        im_label = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_mass_0pt9), font=("Calibri", -20), width=1)
         im_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-        im_label_ex = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_m_expol), text_font=("Calibri", -20), width=1)
+        im_label_ex = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_m_expol), font=("Calibri", -20), width=1)
         im_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
     else:
-        im_label = ct.CTkLabel(im_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        im_label = ct.CTkLabel(im_frame, text='n.a.', font=("Calibri", -20), width=1)
         im_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-        im_label_ex = ct.CTkLabel(im_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        im_label_ex = ct.CTkLabel(im_frame, text='n.a.', font=("Calibri", -20), width=1)
         im_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(im_frame, text='iₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(im_frame, text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
-    ct.CTkLabel(im_frame, text='iₘ ex:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(im_frame, text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='iₘ:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='A/gₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='iₘ ex:', font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='A/gₚₜ', font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
     il_frame = ct.CTkFrame(master=variable_frame, corner_radius=10, fg_color=('grey80', 'grey20'))
     il_frame.grid(row=0, column=0, sticky='nswe', pady=5, padx=5)
@@ -1074,10 +1074,10 @@ def O2_plot(O2, Ar):
     il_frame.grid_columnconfigure(0, weight=0, minsize=80)
     il_frame.grid_columnconfigure(1, weight=1, minsize=115)
     il_frame.grid_columnconfigure(2, weight=0, minsize=90)
-    il_label = ct.CTkLabel(il_frame, text='{0:.3e}'.format(i_limiting), text_font=("Calibri", -20), width=1)
+    il_label = ct.CTkLabel(il_frame, text='{0:.3e}'.format(i_limiting), font=("Calibri", -20), width=1)
     il_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(il_frame, text='iₗᵢₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(il_frame, text='A', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(il_frame, text='iₗᵢₘ:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(il_frame, text='A', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
     def exit1(df):
         window.destroy()
@@ -1092,12 +1092,12 @@ def O2_plot(O2, Ar):
         d['v_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
         d['v_f_{0}'.format(z)].grid_rowconfigure(2, weight=1)
         d['v_f_{0}'.format(z)].grid_rowconfigure(3, weight=1)
-        ct.CTkLabel(d['v_f_{0}'.format(z)], text='ORR Determination - ', text_font=("Calibri", -20), width=140).grid(row=0, column=0, sticky=tk.W, padx=2, pady=5)
-        d['v_n_{0}'.format(z)] = ct.CTkEntry(d['v_f_{0}'.format(z)], width=160, border_width=0, bg_color=("grey70", 'grey30'), fg_color=("grey70", 'grey30'), text_font=("Calibri", -19), text_color=('black', 'white'))
+        ct.CTkLabel(d['v_f_{0}'.format(z)], text='ORR Determination - ', font=("Calibri", -20), width=140).grid(row=0, column=0, sticky=tk.W, padx=2, pady=5)
+        d['v_n_{0}'.format(z)] = ct.CTkEntry(d['v_f_{0}'.format(z)], width=160, border_width=0, bg_color=("grey70", 'grey30'), fg_color=("grey70", 'grey30'), font=("Calibri", -19), text_color=('black', 'white'))
         d['v_n_{0}'.format(z)].insert(0, NameEntry.get())
         d['v_n_{0}'.format(z)].configure(state='disabled')
         d['v_n_{0}'.format(z)].grid(row=0, column=1, sticky='ws', pady=5)
-        ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x', width=8, height=8, command=lambda: remove(a), text_font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
+        ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x', width=8, height=8, command=lambda: remove(a), font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
 
         data_frame.grid_rowconfigure(z * 2 + 2, minsize=10)
 
@@ -1109,10 +1109,10 @@ def O2_plot(O2, Ar):
         d['a_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['a_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['a_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
-        d['a_l_{0}'.format(z)] = ct.CTkLabel(d['a_f_{0}'.format(z)], text='{0:.3e}'.format(i_limiting), text_font=("Calibri", -20), width=1)
+        d['a_l_{0}'.format(z)] = ct.CTkLabel(d['a_f_{0}'.format(z)], text='{0:.3e}'.format(i_limiting), font=("Calibri", -20), width=1)
         d['a_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['a_f_{0}'.format(z)], text='iₗᵢₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_f_{0}'.format(z)], text='A', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_f_{0}'.format(z)], text='iₗᵢₘ:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_f_{0}'.format(z)], text='A', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
 
         d['rf_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['rf_f_{0}'.format(z)].grid(row=2, column=0, sticky='nswe', pady=0, padx=5, ipadx=2, ipady=2, columnspan=3)
@@ -1125,19 +1125,19 @@ def O2_plot(O2, Ar):
         d['rf_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
         if 'area' in globals():
-            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_surface_0pt9), text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_surface_0pt9), font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_s_expol), text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_s_expol), font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
         else:
-            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ ex:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ ex:', font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
         d['a_n_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['a_n_f_{0}'.format(z)].grid(row=3, column=0, sticky='nswe', pady=5, padx=5, ipady=2, ipadx=2, columnspan=3)
@@ -1150,22 +1150,22 @@ def O2_plot(O2, Ar):
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
         if LoadingEntry.get() != '':
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_mass_0pt9), text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_mass_0pt9), font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_m_expol), text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_m_expol), font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
         else:
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ ex:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ ex:', font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
         data_canvas.update_idletasks()
-        data_canvas.config(scrollregion=data_frame.bbox())
+        data_canvas.configure(scrollregion=data_frame.bbox())
 
         df.rename(columns={'E-iR/V': 'E-iR/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
         df.rename(columns={'Diff/A': 'Current/A_' + 'ORR_' + str(z)}, inplace=True)
@@ -1280,12 +1280,12 @@ def O2_plot(O2, Ar):
     button_frame.grid_columnconfigure(0, weight=1)
     button_frame.grid_columnconfigure(1, weight=0)
     button_frame.grid_columnconfigure(2, weight=0)
-    ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=lambda: exit1(df), text_font=("Calibri", -24),text_color=("grey20", 'grey80')).grid(row=1, column=2, sticky="se", pady=10, padx=10)
+    ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=lambda: exit1(df), font=("Calibri", -24),text_color=("grey20", 'grey80')).grid(row=1, column=2, sticky="se", pady=10, padx=10)
 
     def exit2():
         window.destroy()
 
-    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, text_font=("Calibri", -24),
+    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, font=("Calibri", -24),
                  text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
 
     def on_closing():
@@ -1342,7 +1342,7 @@ def HOR_plot(df1, df2):
     def exit2():
         window.destroy()
 
-    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, text_font=("Calibri", -24),
+    ct.CTkButton(button_frame, text='Cancel', width=100, height=50, command=exit2, font=("Calibri", -24),
                  text_color=("grey20", 'grey80')).grid(row=1, column=1, sticky="se", pady=10, padx=10)
 
     def on_closing():
@@ -1366,57 +1366,70 @@ def HOR_plot(df1, df2):
     canvas.get_tk_widget().grid(row=1, column=1)
     NavigationToolbar2Tk(canvas, hor_graph_frame, pack_toolbar=False).grid(row=0, column=1, sticky=tk.W, pady=10)
 
+    df2 = df2.iloc[::-1].reset_index()
+
+
     df1['Potential/V'] = df1['Potential/V'] - (df1['Current/A'] * float(R)) - float(Ref)
     df2['Potential/V'] = df2['Potential/V'] - (df2['Current/A'] * float(R)) - float(Ref)
 
     df1.rename(columns={'Potential/V': 'E-iR/V'}, inplace=True)
     df2.rename(columns={'Potential/V': 'E-iR/V'}, inplace=True)
 
-    max_current = df1['Current/A'].loc[df1['Current/A'].nlargest(1).index[0]]
-    min_current = df1['Current/A'].loc[df1['Current/A'].nsmallest(1).index[0]]
+    max_current = df2['Current/A'].loc[df1['Current/A'].nlargest(1).index[0]]
+    min_current = df2['Current/A'].loc[df1['Current/A'].nsmallest(1).index[0]]
 
-    index_low = df1.iloc[(df1['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
-    index_high = df1.iloc[(df1['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
+    index_low = df2.iloc[(df1['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
+    index_high = df2.iloc[(df1['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
 
     global i_limiting_h
-    i_limiting_h = df1['Current/A'].loc[index_low:index_high].mean()
+    i_limiting_h = df2['Current/A'].loc[index_low:index_high].mean()
 
-    min_lim = df1[df1['Current/A'] > 0].iloc[0].name
+    min_lim = df2[df2['Current/A'] > 0].iloc[0].name
 
     upper_limit = 0.95 * i_limiting_h
-    max_lim = df1[(df1['Current/A'] >= upper_limit) & (df1['Current/A'] <= i_limiting_h)].iloc[0].name
+    max_lim = df2[(df2['Current/A'] >= upper_limit) & (df2['Current/A'] <= i_limiting_h)].iloc[0].name
+    max_lim_1 = df1[(df1['Current/A'] >= upper_limit) & (df1['Current/A'] <= i_limiting_h)].iloc[0].name
 
-    df2 = df2.iloc[::-1].reset_index(drop=True)
-    max_lim_2 = df2[(df2['Current/A'] >= upper_limit) & (df2['Current/A'] <= i_limiting_h)].iloc[0].name
 
-    df_diff = df1.iloc[min_lim:max_lim].reset_index()
+    df_diff = df2.iloc[0:max_lim].reset_index()
     del df_diff['index']
 
     df_diff['etadiff/V'] = ((-8.314*Temp)/(2*96485))*(np.log(1-(df_diff['Current/A']/i_limiting_h)))
 
-    df1_eta = df1.iloc[:max_lim].reset_index()
-    df1_eta['E-iR-eta/V'] = df1['E-iR/V'] - ((-8.314*Temp)/(2*96485))*(np.log(1-(df1['Current/A']/i_limiting_h)))
+    df1_red = df1.iloc[0:max_lim_1].reset_index()
+    df2_red = df2.iloc[0:max_lim].reset_index()
 
-    df2_eta = df2.iloc[:max_lim_2].reset_index()
-    df2_eta['E-iR-eta/V'] = df2['E-iR/V'] - ((-8.314*Temp)/(2*96485))*(np.log(1-(df2['Current/A']/i_limiting_h)))
+    df1_red['E-iR-eta/V'] = df1_red['E-iR/V'] - ((-8.314*Temp)/(2*96485))*(np.log(1-(df1_red['Current/A']/i_limiting_h)))
 
-    df1_filtered = df1[(df1['E-iR/V'] >= -0.01) & (df1['E-iR/V'] <= 0.01)]
-    df1_filtered_eta = df1_eta[(df1_eta['E-iR-eta/V'] >= -0.01) & (df1_eta['E-iR-eta/V'] <= 0.01)]
+    df2_red['E-iR-eta/V'] = df2_red['E-iR/V'] - ((-8.314*Temp)/(2*96485))*(np.log(1-(df2_red['Current/A']/i_limiting_h)))
+
+    df1_filtered = df1_red[(df1_red['E-iR/V'] >= -0.01) & (df1_red['E-iR/V'] <= 0.01)]
+    df1_filtered_eta = df1_red[(df1_red['E-iR-eta/V'] >= -0.01) & (df1_red['E-iR-eta/V'] <= 0.01)]
 
     linear_df1 = np.polyfit(df1_filtered['E-iR/V'], df1_filtered['Current/A'], 1)
     linear_df1_eta = np.polyfit(df1_filtered_eta['E-iR-eta/V'], df1_filtered_eta['Current/A'], 1)
 
-    i_0_k_1 = ((8.31446 * Temp)/96485) * linear_df1[0]
-    i_0_k_eta_1 = ((8.31446 * Temp) / 96485) * linear_df1_eta[0]
 
-    df2_filtered = df2[(df2['E-iR/V'] >= -0.01) & (df2['E-iR/V'] <= 0.01)]
-    df2_filtered_eta = df2_eta[(df2_eta['E-iR-eta/V'] >= -0.01) & (df2_eta['E-iR-eta/V'] <= 0.01)]
+
+    df2_filtered = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0.01)]
+    df2_filtered_eta = df2_red[(df2_red['E-iR-eta/V'] >= -0.01) & (df2_red['E-iR-eta/V'] <= 0.01)]
 
     linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current/A'], 1)
     linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current/A'], 1)
 
+    df2_f = df2_filtered.copy()
+    df2_f_eta = df2_filtered_eta.copy()
+
+    global i_0_k_1
+    global i_0_k_eta_1
+    global i_0_k_2
+    global i_0_k_eta_1
+
+    i_0_k_1 = ((8.31446 * Temp) / 96485) * linear_df1[0]
+    i_0_k_eta_1 = ((8.31446 * Temp) / 96485) * linear_df1_eta[0]
     i_0_k_2 = ((8.31446 * Temp) / 96485) * linear_df2[0]
     i_0_k_eta_2 = ((8.31446 * Temp) / 96485) * linear_df2_eta[0]
+
 
     if 'area' in globals():
         global i_0_s_1
@@ -1472,38 +1485,54 @@ def HOR_plot(df1, df2):
         lower_potential = Tline.getvalue()
         upper_potential = Tline2.getvalue()
 
-        index_low = df1.iloc[(df1['E-iR/V'] - lower_potential).abs().argsort()[:1]].index[0]
-        index_high = df1.iloc[(df1['E-iR/V'] - upper_potential).abs().argsort()[:1]].index[0]
+        index_low = df2.iloc[(df1['E-iR/V'] - lower_potential).abs().argsort()[:1]].index[0]
+        index_high = df2.iloc[(df1['E-iR/V'] - upper_potential).abs().argsort()[:1]].index[0]
+
         global i_limiting_h
-        i_limiting_h = df1['Current/A'].loc[index_low:index_high].mean()
+        i_limiting_h = df2['Current/A'].loc[index_low:index_high].mean()
+
+        min_lim = df2[df2['Current/A'] > 0].iloc[0].name
 
         upper_limit = 0.95 * i_limiting_h
-        max_lim = df1[(df1['Current/A'] >= upper_limit) & (df1['Current/A'] <= i_limiting_h)].iloc[0].name
+        max_lim = df2[(df2['Current/A'] >= upper_limit) & (df2['Current/A'] <= i_limiting_h)].iloc[0].name
+        max_lim_1 = df1[(df1['Current/A'] >= upper_limit) & (df1['Current/A'] <= i_limiting_h)].iloc[0].name
 
-        df_diff = df1.iloc[min_lim:max_lim].reset_index()
+        df_diff = df2.iloc[0:max_lim].reset_index()
         del df_diff['index']
 
         df_diff['etadiff/V'] = ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df_diff['Current/A'] / i_limiting_h)))
 
-        df1['E-iR-eta/V'] = df1['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df1['Current/A'] / i_limiting_h)))
+        df1_red = df1.iloc[0:max_lim_1].reset_index()
+        df2_red = df2.iloc[0:max_lim].reset_index()
 
-        df2['E-iR-eta/V'] = df2['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df2['Current/A'] / i_limiting_h)))
+        df1_red['E-iR-eta/V'] = df1_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (
+            np.log(1 - (df1_red['Current/A'] / i_limiting_h)))
 
-        df1_filtered = df1[(df1['E-iR/V'] >= -0.01) & (df1['E-iR/V'] <= 0.01)]
-        df1_filtered_eta = df1[(df1['E-iR-eta/V'] >= -0.01) & (df1['E-iR-eta/V'] <= 0.01)]
+        df2_red['E-iR-eta/V'] = df2_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (
+            np.log(1 - (df2_red['Current/A'] / i_limiting_h)))
+
+        df1_filtered = df1_red[(df1_red['E-iR/V'] >= -0.01) & (df1_red['E-iR/V'] <= 0.01)]
+        df1_filtered_eta = df1_red[(df1_red['E-iR-eta/V'] >= -0.01) & (df1_red['E-iR-eta/V'] <= 0.01)]
 
         linear_df1 = np.polyfit(df1_filtered['E-iR/V'], df1_filtered['Current/A'], 1)
         linear_df1_eta = np.polyfit(df1_filtered_eta['E-iR-eta/V'], df1_filtered_eta['Current/A'], 1)
 
-        i_0_k_1 = ((8.31446 * Temp) / 96485) * linear_df1[0]
-        i_0_k_eta_1 = ((8.31446 * Temp) / 96485) * linear_df1_eta[0]
-
-        df2_filtered = df2[(df2['E-iR/V'] >= -0.01) & (df2['E-iR/V'] <= 0.01)]
-        df2_filtered_eta = df2[(df2['E-iR-eta/V'] >= -0.01) & (df2['E-iR-eta/V'] <= 0.01)]
+        df2_filtered = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0.01)]
+        df2_filtered_eta = df2_red[(df2_red['E-iR-eta/V'] >= -0.01) & (df2_red['E-iR-eta/V'] <= 0.01)]
 
         linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current/A'], 1)
         linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current/A'], 1)
 
+        df2_f = df2_filtered.copy()
+        df2_f_eta = df2_filtered_eta.copy()
+
+        global i_0_k_1
+        global i_0_k_eta_1
+        global i_0_k_2
+        global i_0_k_eta_1
+
+        i_0_k_1 = ((8.31446 * Temp) / 96485) * linear_df1[0]
+        i_0_k_eta_1 = ((8.31446 * Temp) / 96485) * linear_df1_eta[0]
         i_0_k_2 = ((8.31446 * Temp) / 96485) * linear_df2[0]
         i_0_k_eta_2 = ((8.31446 * Temp) / 96485) * linear_df2_eta[0]
 
@@ -1513,17 +1542,17 @@ def HOR_plot(df1, df2):
             global i_0_s_2
             global i_0_s_eta_2
 
-            i_0_s_1 = i_0_k_1 / area *1000000
-            i_0_s_eta_1 = i_0_k_eta_1 / area *1000000
-            i_0_s_2 = i_0_k_2 / area *1000000
-            i_0_s_eta_2 = i_0_k_eta_2 / area *1000000
+            i_0_s_1 = i_0_k_1 / area * 1000000
+            i_0_s_eta_1 = i_0_k_eta_1 / area * 1000000
+            i_0_s_2 = i_0_k_2 / area * 1000000
+            i_0_s_eta_2 = i_0_k_eta_2 / area * 1000000
 
-            is_label.config(text='{0:.3f}'.format(i_0_s_2))
-            is_label_ex.config(text='{0:.3f}'.format(i_0_s_eta_2))
+            is_label.configure(text='{0:.3f}'.format(i_0_s_2))
+            is_label_ex.configure(text='{0:.3f}'.format(i_0_s_eta_2))
 
         else:
-            is_label.config(text='n.a.')
-            is_label_ex.config(text='n.a.')
+            is_label.configure(text='n.a.')
+            is_label_ex.configure(text='n.a.')
 
         if LoadingEntry.get() != '':
             global loading
@@ -1538,12 +1567,12 @@ def HOR_plot(df1, df2):
             i_0_m_2 = i_0_k_2 / loading
             i_0_m_eta_2 = i_0_k_eta_2 / loading
 
-            im_label.config(text='{0:.3f}'.format(i_0_m_2))
-            im_label_ex.config(text='{0:.3f}'.format(i_0_m_eta_2))
+            im_label.configure(text='{0:.3f}'.format(i_0_m_2))
+            im_label_ex.configure(text='{0:.3f}'.format(i_0_m_eta_2))
 
         else:
-            im_label.config(text='n.a.')
-            im_label_ex.config(text='n.a.')
+            im_label.configure(text='n.a.')
+            im_label_ex.configure(text='n.a.')
 
         '''
         
@@ -1627,19 +1656,19 @@ def HOR_plot(df1, df2):
     is_frame.grid_columnconfigure(1, weight=1, minsize=115)
     is_frame.grid_columnconfigure(2, weight=0, minsize=90)
     if 'area' in globals():
-        is_label = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_0_s_2), text_font=("Calibri", -20), width=1)
+        is_label = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_0_s_2), font=("Calibri", -20), width=1)
         is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-        is_label_ex = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_0_s_eta_2), text_font=("Calibri", -20), width=1)
+        is_label_ex = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_0_s_eta_2), font=("Calibri", -20), width=1)
         is_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
     else:
-        is_label = ct.CTkLabel(is_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        is_label = ct.CTkLabel(is_frame, text='n.a.', font=("Calibri", -20), width=1)
         is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-        is_label_ex = ct.CTkLabel(is_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        is_label_ex = ct.CTkLabel(is_frame, text='n.a.', font=("Calibri", -20), width=1)
         is_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(is_frame, text='iₛ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
-    ct.CTkLabel(is_frame, text='iₛ eta:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='iₛ:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='iₛ eta:', font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(is_frame, text='µA/cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
     im_frame = ct.CTkFrame(master=hor_variable_frame, corner_radius=10, fg_color=('grey80', 'grey20'))
     im_frame.grid(row=2, column=0, sticky='nswe', pady=5, padx=5)
@@ -1652,23 +1681,23 @@ def HOR_plot(df1, df2):
     im_frame.grid_columnconfigure(1, weight=1, minsize=115)
     im_frame.grid_columnconfigure(2, weight=0, minsize=90)
     if LoadingEntry.get() != '':
-        im_label = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_0_m_2), text_font=("Calibri", -20), width=1)
+        im_label = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_0_m_2), font=("Calibri", -20), width=1)
         im_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-        im_label_ex = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_0_m_eta_2), text_font=("Calibri", -20), width=1)
+        im_label_ex = ct.CTkLabel(im_frame, text='{0:.3f}'.format(i_0_m_eta_2), font=("Calibri", -20), width=1)
         im_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
     else:
-        im_label = ct.CTkLabel(im_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        im_label = ct.CTkLabel(im_frame, text='n.a.', font=("Calibri", -20), width=1)
         im_label.grid(row=1, column=1, sticky=tk.E, padx=0)
-        im_label_ex = ct.CTkLabel(im_frame, text='n.a.', text_font=("Calibri", -20), width=1)
+        im_label_ex = ct.CTkLabel(im_frame, text='n.a.', font=("Calibri", -20), width=1)
         im_label_ex.grid(row=3, column=1, sticky=tk.E, padx=0)
-    ct.CTkLabel(im_frame, text='iₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(im_frame, text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
-    ct.CTkLabel(im_frame, text='iₘ eta:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
-    ct.CTkLabel(im_frame, text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='iₘ:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='A/gₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='iₘ eta:', font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+    ct.CTkLabel(im_frame, text='A/gₚₜ', font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
 
 
-    def exit1(df1, df2):
+    def exit1(df1, df2, df2_f, df2_f_eta):
         window.destroy()
         global z
         a = z
@@ -1681,14 +1710,14 @@ def HOR_plot(df1, df2):
         d['v_f_{0}'.format(z)].grid_rowconfigure(1, weight=1)
         d['v_f_{0}'.format(z)].grid_rowconfigure(2, weight=1)
         d['v_f_{0}'.format(z)].grid_rowconfigure(3, weight=1)
-        ct.CTkLabel(d['v_f_{0}'.format(z)], text='HOR Scan - ', text_font=("Calibri", -20),width=140).grid(row=0, column=0,sticky=tk.W,padx=2, pady=5)
+        ct.CTkLabel(d['v_f_{0}'.format(z)], text='HOR Scan - ', font=("Calibri", -20),width=140).grid(row=0, column=0,sticky=tk.W,padx=2, pady=5)
 
-        d['v_n_{0}'.format(z)] = ct.CTkEntry(d['v_f_{0}'.format(z)], width=125, border_width=0, bg_color=("grey70", 'grey30'), fg_color=("grey70", 'grey30'), text_font=("Calibri", -19), text_color=('black', 'white'))
+        d['v_n_{0}'.format(z)] = ct.CTkEntry(d['v_f_{0}'.format(z)], width=125, border_width=0, bg_color=("grey70", 'grey30'), fg_color=("grey70", 'grey30'), font=("Calibri", -19), text_color=('black', 'white'))
         d['v_n_{0}'.format(z)].insert(0, NameEntry.get())
         d['v_n_{0}'.format(z)].configure(state='disabled')
         d['v_n_{0}'.format(z)].grid(row=0, column=1, sticky='ws', pady=5)
 
-        ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x', width=8, height=8, command=lambda: remove(a), text_font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
+        ct.CTkButton(master=d['v_f_{0}'.format(z)], text='x', width=8, height=8, command=lambda: remove(a), font=("Calibri", -20), text_color=("grey20", 'grey80')).grid(row=0, column=2, sticky=tk.E, pady=5, padx=5)
         data_frame.grid_rowconfigure(z * 2 + 2, minsize=10)
 
         d['rf_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
@@ -1702,19 +1731,19 @@ def HOR_plot(df1, df2):
         d['rf_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
         if 'area' in globals():
-            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_s_2), text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_s_2), font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_s_eta_2), text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_s_eta_2), font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
         else:
-            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ eta:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='iₛ eta:', font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['rf_f_{0}'.format(z)], text='µA/cm²ₚₜ', font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
 
         d['a_n_f_{0}'.format(z)] = ct.CTkFrame(master=d['v_f_{0}'.format(z)], corner_radius=10, fg_color=('grey80', 'grey20'))
         d['a_n_f_{0}'.format(z)].grid(row=3, column=0, sticky='nswe', pady=5, padx=5, ipady=2, ipadx=2, columnspan=3)
@@ -1727,46 +1756,90 @@ def HOR_plot(df1, df2):
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['a_n_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
         if LoadingEntry.get() != '':
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_m_2), text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_m_2), font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_m_eta_2), text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_m_eta_2), font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
         else:
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
-            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', text_font=("Calibri", -20), width=1)
+            d['a_n_l_{0}'.format(z)] = ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='n.a.', font=("Calibri", -20), width=1)
             d['a_n_l_{0}'.format(z)].grid(row=3, column=1, sticky=tk.E, padx=0)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ:', text_font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ eta:', text_font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
-        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', text_font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ:', font=("Calibri", -20), width=1).grid(row=1, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', font=("Calibri", -20), width=1).grid(row=1, column=2, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='iₘ eta:', font=("Calibri", -20), width=1).grid(row=3, column=0, sticky=tk.E, padx=2)
+        ct.CTkLabel(d['a_n_f_{0}'.format(z)], text='A/gₚₜ', font=("Calibri", -20), width=1).grid(row=3, column=2, sticky=tk.E, padx=2)
         data_canvas.update_idletasks()
-        data_canvas.config(scrollregion=data_frame.bbox())
+        data_canvas.configure(scrollregion=data_frame.bbox())
 
-        df1.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
-        df2.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
+        df1.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_an_' + NameEntry.get() + '_' + str(z)}, inplace=True)
+        df2.rename(columns={'E-iR/V': 'E-iR/V_' + 'HOR_ca_' + NameEntry.get() + '_' + str(z)}, inplace=True)
         df1.rename(columns={'Current/A': 'Current_anodic/A_' + str(z)}, inplace=True)
         df2.rename(columns={'Current/A': 'Current_cathodic/A_' + str(z)}, inplace=True)
+        df2.drop('index', axis=1, inplace=True)
+
+        df2_f.drop('E-iR-eta/V', axis=1, inplace=True)
+        df2_f.drop('level_0', axis=1, inplace=True)
+        df2_f.drop('index', axis=1, inplace=True)
+        df2_f['Current_linear/A_' + str(z)] = linear_df2[0] * df2_f['E-iR/V'] + linear_df2[1]
+        df2_f.rename(columns={'E-iR/V': 'E-iR(lim)_ca/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
+        df2_f.rename(columns={'Current/A': 'Current_cathodic(lim)/A_' + str(z)}, inplace=True)
+
+
+        df2_f_eta['Current_linear_eta/A_' + str(z)] = linear_df2_eta[0] * df2_f_eta['E-iR-eta/V'] + linear_df2_eta[1]
+        df2_f_eta.drop('E-iR/V', axis=1, inplace=True)
+        df2_f_eta.drop('level_0', axis=1, inplace=True)
+        df2_f_eta.drop('index', axis=1, inplace=True)
+        df_pop = df2_f_eta.pop('E-iR-eta/V')
+        df2_f_eta.insert(0, 'E-iR-eta/V', df_pop)
+        df2_f_eta.rename(columns={'E-iR-eta/V': 'E-iR-eta(lim)/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
+        df2_f_eta.rename(columns={'Current/A': 'Current_cathodic(lim)_eta/A_' + str(z)}, inplace=True)
+
 
         global savefile
         savefile = pd.concat([savefile, df1], axis=1)
         savefile = pd.concat([savefile, df2], axis=1)
-        '''
-        if LoadingEntry.get() != '':
-            ecsa = hor_area_norm
-        else:
-            ecsa = 'n.a.'
+        savefile = pd.concat([savefile, df2_f], axis=1)
+        savefile = pd.concat([savefile, df2_f_eta], axis=1)
 
-        result = pd.DataFrame({'COStrip_Area_cm^2_Pt_' + NameEntry.get() + '_' + str(z): [hor_area], 'COStrip_rf_cm^2_Pt/cm^2_geo_' + str(z): [hor_rf], 'COStrip_ECSA_cm^2_Pt/g_Pt_' + str(z): [ecsa]})
+
+        #linear coefficients
+
+        slope_cat = linear_df2[0]
+        slope_cat_eta = linear_df2_eta[0]
+        y_inter = linear_df2[1]
+        y_inter_eta = linear_df2_eta[1]
+
+
+        if LoadingEntry.get() != '':
+            i_0_m = i_0_m_2
+            i_0_m_eta = i_0_m_eta_2
+        else:
+            i_0_m = 'n.a.'
+            i_0_m_eta = 'n.a.'
+
+        if 'area' in globals():
+            i_0_s = i_0_s_2
+            i_0_s_eta = i_0_s_eta_2
+
+        else:
+            i_0_s = 'n.a.'
+            i_0_s_eta = 'n.a.'
+
+        result = pd.DataFrame({'HOR_cathodic_i_0_k_A_' + NameEntry.get() + '_' + str(z): [i_0_k_2], 'HOR_cathodic_i_0_k_eta_A_' + str(z): [i_0_k_eta_2],
+                               'HOR_cathodic_i_0_s_µA_cm^2geo_' + str(z): [i_0_s], 'HOR_cathodic_i_0_s_eta_µA_cm^2geo_' + str(z): [i_0_s_eta],
+                               'HOR_cathodic_i_0_m_A_gPt' + str(z): [i_0_m], 'HOR_cathodic_i_0_m_eta_A_gPt' + str(z): [i_0_m_eta],
+                               'HOR_cathodic_slope_' + str(z): [slope_cat], 'HOR_cathodic_slope_eta_' + str(z): [slope_cat_eta],
+                               'HOR_cathodic_y_inter_' + str(z): [y_inter], 'HOR_cathodic_y_inter_eta_' + str(z): [y_inter_eta]})
         global results
         results = pd.concat([results, result], axis=1)
-        '''
+
         save_enable()
 
         z += 1
 
 
-    ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=lambda: exit1(df1, df2), text_font=("Calibri", -24),
+    ct.CTkButton(button_frame, text='Submit', width=100, height=50, command=lambda: exit1(df1, df2, df2_f, df2_f_eta), font=("Calibri", -24),
                  text_color=("grey20", 'grey80')).grid(row=1, column=2, sticky="se", pady=10, padx=10)
 
 
@@ -1782,8 +1855,8 @@ if __name__ == '__main__':
     root.iconphoto(True, tk.PhotoImage(file='iconRDE.png'))
     width = root.winfo_screenwidth()
     height = root.winfo_screenheight()
-    widthfactor = width / 1920
-    heightfactor = height / 1080
+    widthfactor = 1920 / 1920
+    heightfactor = 1080 / 1080
     root.geometry(str(int(width - (widthfactor * 20))) + 'x' + str(int(height - (heightfactor * 90))) + '+0+10')
     root.configure(bg='grey90')
     root.resizable(False, False)
@@ -1869,8 +1942,8 @@ if __name__ == '__main__':
     yscrollbar = tk.Scrollbar(data_over_frame, orient='vertical')
     yscrollbar.grid(row=1, column=2, sticky='nse')
 
-    data_canvas.config(yscrollcommand=yscrollbar.set)
-    yscrollbar.config(command=data_canvas.yview)
+    data_canvas.configure(yscrollcommand=yscrollbar.set)
+    yscrollbar.configure(command=data_canvas.yview)
 
     data_frame = ct.CTkFrame(master=data_canvas, fg_color=fg_color, bg_color=fg_color)
     data_frame.grid(row=0, column=0, sticky='nswe')
@@ -1902,19 +1975,19 @@ if __name__ == '__main__':
 
 
     # input frame
-    NameLabel = ct.CTkLabel(master=input_frame, text='Name:', text_font=("Calibri", -18))
+    NameLabel = ct.CTkLabel(master=input_frame, text='Name:', font=("Calibri", -18))
     NameLabel.grid(row=1, column=1, sticky=tk.W)
-    NameEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    NameEntry = ct.CTkEntry(master=input_frame, width=200, font=("Calibri", -14))
     NameEntry.grid(row=1, column=2, sticky=tk.W, columnspan= 2)
 
-    LoadingLabel = ct.CTkLabel(master=input_frame, text='Loading [g]:', text_font=("Calibri", -18))
+    LoadingLabel = ct.CTkLabel(master=input_frame, text='Loading [g]:', font=("Calibri", -18))
     LoadingLabel.grid(row=3, column=1, sticky=tk.W)
-    LoadingEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    LoadingEntry = ct.CTkEntry(master=input_frame, width=200, font=("Calibri", -14))
     LoadingEntry.grid(row=3, column=2, sticky=tk.W, columnspan=2)
 
-    RLabel = ct.CTkLabel(master=input_frame, text=u'HFR [\u03A9]:', text_font=("Calibri", -18))
+    RLabel = ct.CTkLabel(master=input_frame, text=u'HFR [\u03A9]:', font=("Calibri", -18))
     RLabel.grid(row=5, column=1, sticky=tk.W)
-    REntry = ct.CTkEntry(master=input_frame, width=150, text_font=("Calibri", -14))
+    REntry = ct.CTkEntry(master=input_frame, width=150, font=("Calibri", -14))
     REntry.grid(row=5, column=2, sticky=tk.W)
 
     def HFR():
@@ -1938,11 +2011,11 @@ if __name__ == '__main__':
             REntry.insert(0, HFR)
 
 
-    ct.CTkButton(master=input_frame, text='HFR', command=HFR, text_font=("Calibri", -16), width=40, height=20).grid(row=5, column=3, sticky=tk.W, padx=5)
+    ct.CTkButton(master=input_frame, text='HFR', command=HFR, font=("Calibri", -16), width=40, height=20).grid(row=5, column=3, sticky=tk.W, padx=5)
 
-    RefLabel = ct.CTkLabel(master=input_frame, text='Ref [V]:', text_font=("Calibri", -18))
+    RefLabel = ct.CTkLabel(master=input_frame, text='Ref [V]:', font=("Calibri", -18))
     RefLabel.grid(row=7, column=1, sticky=tk.W)
-    RefEntry = ct.CTkEntry(master=input_frame, width=150, text_font=("Calibri", -14))
+    RefEntry = ct.CTkEntry(master=input_frame, width=150, font=("Calibri", -14))
     RefEntry.grid(row=7, column=2, sticky=tk.W)
 
     def Ref():
@@ -1971,18 +2044,18 @@ if __name__ == '__main__':
             RefEntry.delete(0, 'end')
             RefEntry.insert(0, Ref)
 
-    ct.CTkButton(master=input_frame, text='Ref', command=Ref, text_font=("Calibri", -16), width=40, height=20).grid(row=7, column=3, sticky=tk.W, padx=5)
+    ct.CTkButton(master=input_frame, text='Ref', command=Ref, font=("Calibri", -16), width=40, height=20).grid(row=7, column=3, sticky=tk.W, padx=5)
 
 
-    RadiusLabel = ct.CTkLabel(master=input_frame, text='Radius [cm]:', text_font=("Calibri", -18))
+    RadiusLabel = ct.CTkLabel(master=input_frame, text='Radius [cm]:', font=("Calibri", -18))
     RadiusLabel.grid(row=9, column=1, sticky=tk.W)
-    RadiusEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    RadiusEntry = ct.CTkEntry(master=input_frame, width=200, font=("Calibri", -14))
     RadiusEntry.grid(row=9, column=2, sticky=tk.W, columnspan=2)
     RadiusEntry.insert(0, '0.25')
 
-    HUPDLabel = ct.CTkLabel(master=input_frame, text='Ar CV:', text_font=("Calibri", -18))
+    HUPDLabel = ct.CTkLabel(master=input_frame, text='Ar CV:', font=("Calibri", -18))
     HUPDLabel.grid(row=1, column=4, sticky=tk.W)
-    HUPDEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    HUPDEntry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     HUPDEntry.grid(row=1, column=5, sticky=tk.W)
 
     def HUPD():
@@ -2003,7 +2076,7 @@ if __name__ == '__main__':
             pathfile.close()
 
 
-    ct.CTkButton(master=input_frame, text='Open', command=HUPD, text_font=("Calibri", -18), width=80).grid(row=1, column=6, sticky=tk.W, padx=20)
+    ct.CTkButton(master=input_frame, text='Open', command=HUPD, font=("Calibri", -18), width=80).grid(row=1, column=6, sticky=tk.W, padx=20)
 
 
     def Ar_graph():
@@ -2025,13 +2098,13 @@ if __name__ == '__main__':
         Ar_Plot(Ar_anodic, Ar_cathodic)
 
 
-    HUPDEval = ct.CTkButton(master=input_frame, text='Eval', command=Ar_graph, text_font=("Calibri", -18), width=80)
+    HUPDEval = ct.CTkButton(master=input_frame, text='Eval', command=Ar_graph, font=("Calibri", -18), width=80)
     HUPDEval.grid(row=1, column=7, sticky=tk.W, padx=20)
     HUPDEval.configure(state=tk.DISABLED)
 
-    COStripLabel = ct.CTkLabel(master=input_frame, text='CO Strip:', text_font=("Calibri", -18))
+    COStripLabel = ct.CTkLabel(master=input_frame, text='CO Strip:', font=("Calibri", -18))
     COStripLabel.grid(row=3, column=4, sticky=tk.W)
-    COStripEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    COStripEntry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     COStripEntry.grid(row=3, column=5, sticky=tk.W)
     #COStripEntry.insert(0, CO_Strip)
 
@@ -2055,7 +2128,7 @@ if __name__ == '__main__':
             pathfile.close()
 
 
-    ct.CTkButton(master=input_frame, text='Open', command=COStrip, text_font=("Calibri", -18), width=80).grid(row=3, column=6, sticky=tk.W, padx=20)
+    ct.CTkButton(master=input_frame, text='Open', command=COStrip, font=("Calibri", -18), width=80).grid(row=3, column=6, sticky=tk.W, padx=20)
 
 
     def CO_Strip_graph():
@@ -2072,13 +2145,13 @@ if __name__ == '__main__':
         CO_plot(CO_anodic_1, CO_anodic_2)
 
 
-    COStripEval = ct.CTkButton(master=input_frame, text='Eval', command=CO_Strip_graph, text_font=("Calibri", -18), width=80)
+    COStripEval = ct.CTkButton(master=input_frame, text='Eval', command=CO_Strip_graph, font=("Calibri", -18), width=80)
     COStripEval.grid(row=3, column=7, sticky=tk.W, padx=20)
     # COStripEval.configure(state=tk.DISABLED)
 
-    ORRLabel = ct.CTkLabel(master=input_frame, text='ORR O2:', text_font=("Calibri", -18))
+    ORRLabel = ct.CTkLabel(master=input_frame, text='ORR O2:', font=("Calibri", -18))
     ORRLabel.grid(row=5, column=4, sticky=tk.W)
-    ORREntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    ORREntry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     ORREntry.grid(row=5, column=5, sticky=tk.W)
 
 
@@ -2103,11 +2176,11 @@ if __name__ == '__main__':
                 ORREval.configure(state=tk.NORMAL)
 
 
-    ct.CTkButton(master=input_frame, text='Open', command=ORR, text_font=("Calibri", -18), width=80).grid(row=5, column=6, sticky=tk.W, padx=20)
+    ct.CTkButton(master=input_frame, text='Open', command=ORR, font=("Calibri", -18), width=80).grid(row=5, column=6, sticky=tk.W, padx=20)
 
-    ORRArLabel = ct.CTkLabel(master=input_frame, text='ORR Ar:', text_font=("Calibri", -18))
+    ORRArLabel = ct.CTkLabel(master=input_frame, text='ORR Ar:', font=("Calibri", -18))
     ORRArLabel.grid(row=7, column=4, sticky=tk.W)
-    ORRArEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    ORRArEntry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     ORRArEntry.grid(row=7, column=5, sticky=tk.W)
 
 
@@ -2132,7 +2205,7 @@ if __name__ == '__main__':
                 ORREval.configure(state=tk.NORMAL)
 
 
-    ct.CTkButton(master=input_frame, text='Open', command=ORR_Ar, text_font=("Calibri", -18), width=80).grid(row=7, column=6, sticky=tk.W, padx=20)
+    ct.CTkButton(master=input_frame, text='Open', command=ORR_Ar, font=("Calibri", -18), width=80).grid(row=7, column=6, sticky=tk.W, padx=20)
 
 
     def ORR_graph():
@@ -2180,13 +2253,13 @@ if __name__ == '__main__':
             O2_plot(ORR_anodic, ORRa_anodic)
 
 
-    ORREval = ct.CTkButton(master=input_frame, text='Eval', command=ORR_graph, text_font=("Calibri", -18), width=80)
+    ORREval = ct.CTkButton(master=input_frame, text='Eval', command=ORR_graph, font=("Calibri", -18), width=80)
     ORREval.grid(row=5, column=7, rowspan=3, sticky=tk.W, padx=20)
     ORREval.configure(state=tk.DISABLED)
 
-    HORLabel = ct.CTkLabel(master=input_frame, text='HOR H2:', text_font=("Calibri", -18))
+    HORLabel = ct.CTkLabel(master=input_frame, text='HOR H2:', font=("Calibri", -18))
     HORLabel.grid(row=9, column=4, sticky=tk.W)
-    HOREntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    HOREntry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     HOREntry.grid(row=9, column=5, sticky=tk.W)
 
 
@@ -2211,11 +2284,11 @@ if __name__ == '__main__':
             HOREval.configure(state=tk.NORMAL)
 
 
-    ct.CTkButton(master=input_frame, text='Open', command=HOR, text_font=("Calibri", -18), width=80).grid(row=9, column=6, sticky=tk.W, padx=20)
+    ct.CTkButton(master=input_frame, text='Open', command=HOR, font=("Calibri", -18), width=80).grid(row=9, column=6, sticky=tk.W, padx=20)
 
-    HORArLabel = ct.CTkLabel(master=input_frame, text='HOR Ar:', text_font=("Calibri", -18))
+    HORArLabel = ct.CTkLabel(master=input_frame, text='HOR Ar:', font=("Calibri", -18))
     HORArLabel.grid(row=11, column=4, sticky=tk.W)
-    HORArEntry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    HORArEntry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     HORArEntry.grid(row=11, column=5, sticky=tk.W)
 
 
@@ -2240,7 +2313,7 @@ if __name__ == '__main__':
                 HOREval.configure(state=tk.NORMAL)
 
 
-    HORButton = ct.CTkButton(master=input_frame, text='Open', command=HOR_Ar, text_font=("Calibri", -18), width=80)
+    HORButton = ct.CTkButton(master=input_frame, text='Open', command=HOR_Ar, font=("Calibri", -18), width=80)
     HORButton.grid(row=11, column=6, sticky=tk.W, padx=20)
     HORButton.configure(state=tk.DISABLED)
 
@@ -2277,7 +2350,7 @@ if __name__ == '__main__':
             HOR_plot(HOR_anodic, HOR_cathodic)
 
 
-    HOREval = ct.CTkButton(master=input_frame, text='Eval', command=HOR_graph, text_font=("Calibri", -18), width=80)
+    HOREval = ct.CTkButton(master=input_frame, text='Eval', command=HOR_graph, font=("Calibri", -18), width=80)
     HOREval.grid(row=9, column=7, rowspan=3, sticky=tk.W, padx=20)
     HOREval.configure(state=tk.DISABLED)
 
@@ -2285,9 +2358,9 @@ if __name__ == '__main__':
     def save_enable():
         amount = len(list(data_frame.winfo_children()))
         if amount > 0:
-            SaveButton.config(state=tk.NORMAL)
+            SaveButton.configure(state=tk.NORMAL)
         else:
-            SaveButton.config(state=tk.DISABLED)
+            SaveButton.configure(state=tk.DISABLED)
 
 
     def save():
@@ -2328,9 +2401,9 @@ if __name__ == '__main__':
             pass
 
 
-    SaveButton = ct.CTkButton(master=bottom_frame, text="Save", command=save, text_font=("Calibri", -18), width=80, height=10)
+    SaveButton = ct.CTkButton(master=bottom_frame, text="Save", command=save, font=("Calibri", -18), width=80, height=10)
     SaveButton.grid(row=1, column=2, sticky=tk.E, padx=10)
-    SaveButton.config(state=tk.DISABLED)
+    SaveButton.configure(state=tk.DISABLED)
 
 
     def options():
@@ -2355,7 +2428,7 @@ if __name__ == '__main__':
 
 
 
-    OptionsButton = ct.CTkButton(master=bottom_frame, text="Import Options", command=options, text_font=("Calibri", -18), width=160, height=10)
+    OptionsButton = ct.CTkButton(master=bottom_frame, text="Import Options", command=options, font=("Calibri", -18), width=160, height=10)
     OptionsButton.grid(row=1, column=1, sticky=tk.W, padx=10)
 
 
