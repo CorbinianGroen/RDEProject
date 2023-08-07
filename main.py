@@ -933,7 +933,6 @@ def O2_plot(O2, Ar):
             is_label.configure(text='{0:.3f}'.format(i_surface_0pt9))
             is_label_ex.configure(text='{0:.3f}'.format(i_s_expol))
 
-            print('co-area')
 
         elif 'co_area' not in globals() and 'area' in globals():
             dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
@@ -942,13 +941,11 @@ def O2_plot(O2, Ar):
             i_s_expol_etadiff = ik_expol_etadiff / area * 1000 * 1000
             is_label.configure(text='{0:.3f}'.format(i_surface_0pt9))
             is_label_ex.configure(text='{0:.3f}'.format(i_s_expol))
-            print('wenjjvi')
 
         else:
             is_label.configure(text='n.a.')
             is_label_ex.configure(text='n.a.')
 
-            print('wtf')
 
         if LoadingEntry.get() != '':
             global loading
@@ -1275,7 +1272,7 @@ def O2_plot(O2, Ar):
             i_s = i_surface_0pt9
             i_s_ex = ik_expol / co_area * 1000 * 1000
             i_s_ex_eta = ik_expol_etadiff / co_area * 1000 * 1000
-            print('co-area in save')
+
 
         elif 'co_area' not in globals() and 'area' in globals():
             i_s = i_surface_0pt9
