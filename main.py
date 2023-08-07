@@ -845,11 +845,13 @@ def O2_plot(O2, Ar):
         i_s_expol = ik_expol / co_area * 1000 * 1000
         i_s_expol_etadiff = ik_expol_etadiff / co_area * 1000 * 1000
 
+
     if 'co_area' not in globals() and 'area' in globals():
         dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
         i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
         i_s_expol = ik_expol / area * 1000 * 1000
         i_s_expol_etadiff = ik_expol_etadiff / area * 1000 * 1000
+
 
     if LoadingEntry.get() != '':
         global loading
@@ -1265,6 +1267,7 @@ def O2_plot(O2, Ar):
             i_s = i_surface_0pt9
             i_s_ex = ik_expol / co_area * 1000 * 1000
             i_s_ex_eta = ik_expol_etadiff / co_area * 1000 * 1000
+            print('co-area in save')
 
         if 'co_area' not in globals() and 'area' in globals():
             i_s = i_surface_0pt9
@@ -1453,10 +1456,12 @@ def HOR_plot(df1, df2):
 
     if 'co_area' in globals():
 
-        i_0_s_1 = i_0_k_1 / area *1000000
-        i_0_s_eta_1 = i_0_k_eta_1 / area *1000000
-        i_0_s_2 = i_0_k_2 / area *1000000
-        i_0_s_eta_2 = i_0_k_eta_2 / area *1000000
+        i_0_s_1 = i_0_k_1 / co_area *1000000
+        i_0_s_eta_1 = i_0_k_eta_1 / co_area *1000000
+        i_0_s_2 = i_0_k_2 / co_area *1000000
+        i_0_s_eta_2 = i_0_k_eta_2 / co_area *1000000
+
+
 
     if 'co_area' not in globals() and 'area' in globals():
 
@@ -1464,6 +1469,8 @@ def HOR_plot(df1, df2):
         i_0_s_eta_1 = i_0_k_eta_1 / area * 1000000
         i_0_s_2 = i_0_k_2 / area * 1000000
         i_0_s_eta_2 = i_0_k_eta_2 / area * 1000000
+
+
 
     if LoadingEntry.get() != '':
         global loading
@@ -1564,11 +1571,11 @@ def HOR_plot(df1, df2):
         global i_0_s_2
         global i_0_s_eta_2
 
-        if 'area' in globals():
+        if 'co_area' in globals():
 
-            i_0_s_1 = i_0_k_1 / area * 1000000
-            i_0_s_eta_1 = i_0_k_eta_1 / area * 1000000
-            i_0_s_2 = i_0_k_2 / area * 1000000
+            i_0_s_1 = i_0_k_1 / co_area * 1000000
+            i_0_s_eta_1 = i_0_k_eta_1 / co_area * 1000000
+            i_0_s_2 = i_0_k_2 / co_area * 1000000
             i_0_s_eta_2 = i_0_k_eta_2 / area * 1000000
 
             is_label.configure(text='{0:.3f}'.format(i_0_s_2))
