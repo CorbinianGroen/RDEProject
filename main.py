@@ -835,13 +835,19 @@ def O2_plot(O2, Ar):
     ik_expol = 10 ** ((0.9 - coefficents[1]) / (coefficents[0]))
     ik_expol_etadiff = 10 ** ((0.9 - coefficents1[1]) / (coefficents1[0]))
 
+    global i_surface_0pt9
+    global i_s_expol
+    global i_s_expol_etadiff
 
-    if 'area' in globals():
-        dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
-        global i_surface_0pt9
+    if 'co_area' in globals():
+        dflim['is/A'] = abs(dflim['ik/A']) / co_area * 1000 * 1000
         i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
-        global i_s_expol
-        global i_s_expol_etadiff
+        i_s_expol = ik_expol / co_area * 1000 * 1000
+        i_s_expol_etadiff = ik_expol_etadiff / co_area * 1000 * 1000
+
+    if 'co_area' not in globals() and 'area' in globals():
+        dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
+        i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
         i_s_expol = ik_expol / area * 1000 * 1000
         i_s_expol_etadiff = ik_expol_etadiff / area * 1000 * 1000
 
@@ -913,16 +919,21 @@ def O2_plot(O2, Ar):
         ik_expol = 10 ** ((0.9 - coefficents[1]) / (coefficents[0]))
         ik_expol_etadiff = 10 ** ((0.9 - coefficents1[1]) / (coefficents1[0]))
 
-        if 'area' in globals():
-            dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
-            global i_surface_0pt9
+        global i_surface_0pt9
+        global i_s_expol
+        global i_s_expol_etadiff
+
+        if 'co_area' in globals():
+            dflim['is/A'] = abs(dflim['ik/A']) / co_area * 1000 * 1000
             i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
-            is_label.configure(text='{0:.3f}'.format(i_surface_0pt9))
-            global i_s_expol
-            global i_s_expol_etadiff
-            i_s_expol = ik_expol / area *1000 *1000
+            i_s_expol = ik_expol / co_area * 1000 * 1000
+            i_s_expol_etadiff = ik_expol_etadiff / co_area * 1000 * 1000
+
+        if 'co_area' not in globals() and 'area' in globals():
+            dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
+            i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
+            i_s_expol = ik_expol / area * 1000 * 1000
             i_s_expol_etadiff = ik_expol_etadiff / area * 1000 * 1000
-            is_label_ex.configure(text='{0:.3f}'.format(i_s_expol))
 
 
         else:
@@ -1250,7 +1261,12 @@ def O2_plot(O2, Ar):
             i_m_ex = 'n.a.'
             i_m_ex_eta = 'n.a.'
 
-        if 'area' in globals():
+        if 'co_area' in globals():
+            i_s = i_surface_0pt9
+            i_s_ex = ik_expol / co_area * 1000 * 1000
+            i_s_ex_eta = ik_expol_etadiff / co_area * 1000 * 1000
+
+        if 'co_area' not in globals() and 'area' in globals():
             i_s = i_surface_0pt9
             i_s_ex = ik_expol / area * 1000 * 1000
             i_s_ex_eta = ik_expol_etadiff / area * 1000 * 1000
@@ -1430,17 +1446,24 @@ def HOR_plot(df1, df2):
     i_0_k_2 = ((8.31446 * Temp) / 96485) * linear_df2[0]
     i_0_k_eta_2 = ((8.31446 * Temp) / 96485) * linear_df2_eta[0]
 
+    global i_0_s_1
+    global i_0_s_eta_1
+    global i_0_s_2
+    global i_0_s_eta_2
 
-    if 'area' in globals():
-        global i_0_s_1
-        global i_0_s_eta_1
-        global i_0_s_2
-        global i_0_s_eta_2
+    if 'co_area' in globals():
 
         i_0_s_1 = i_0_k_1 / area *1000000
         i_0_s_eta_1 = i_0_k_eta_1 / area *1000000
         i_0_s_2 = i_0_k_2 / area *1000000
         i_0_s_eta_2 = i_0_k_eta_2 / area *1000000
+
+    if 'co_area' not in globals() and 'area' in globals():
+
+        i_0_s_1 = i_0_k_1 / area * 1000000
+        i_0_s_eta_1 = i_0_k_eta_1 / area * 1000000
+        i_0_s_2 = i_0_k_2 / area * 1000000
+        i_0_s_eta_2 = i_0_k_eta_2 / area * 1000000
 
     if LoadingEntry.get() != '':
         global loading
@@ -1536,11 +1559,22 @@ def HOR_plot(df1, df2):
         i_0_k_2 = ((8.31446 * Temp) / 96485) * linear_df2[0]
         i_0_k_eta_2 = ((8.31446 * Temp) / 96485) * linear_df2_eta[0]
 
+        global i_0_s_1
+        global i_0_s_eta_1
+        global i_0_s_2
+        global i_0_s_eta_2
+
         if 'area' in globals():
-            global i_0_s_1
-            global i_0_s_eta_1
-            global i_0_s_2
-            global i_0_s_eta_2
+
+            i_0_s_1 = i_0_k_1 / area * 1000000
+            i_0_s_eta_1 = i_0_k_eta_1 / area * 1000000
+            i_0_s_2 = i_0_k_2 / area * 1000000
+            i_0_s_eta_2 = i_0_k_eta_2 / area * 1000000
+
+            is_label.configure(text='{0:.3f}'.format(i_0_s_2))
+            is_label_ex.configure(text='{0:.3f}'.format(i_0_s_eta_2))
+
+        if 'co_area' not in globals() and 'area' in globals():
 
             i_0_s_1 = i_0_k_1 / area * 1000000
             i_0_s_eta_1 = i_0_k_eta_1 / area * 1000000
@@ -1818,7 +1852,10 @@ def HOR_plot(df1, df2):
             i_0_m = 'n.a.'
             i_0_m_eta = 'n.a.'
 
-        if 'area' in globals():
+        if 'co_area' in globals():
+            i_0_s = i_0_s_2
+            i_0_s_eta = i_0_s_eta_2
+        if 'co_area' not in globals() and 'area' in globals():
             i_0_s = i_0_s_2
             i_0_s_eta = i_0_s_eta_2
 
@@ -2399,6 +2436,99 @@ if __name__ == '__main__':
                 element.destroy()
             global z
             z = 0
+
+            print(globals())
+
+            if 'area' in globals():
+                global area
+                del area
+            if 'area_norm' in globals():
+                global area_norm
+                del area_norm
+            if 'rf' in globals():
+                global rf
+                del rf
+            if 'co_area' in globals():
+                global co_area
+                del co_area
+            if 'co_area_norm' in globals():
+                global co_area_norm
+                del co_area_norm
+            if 'co_rf' in globals():
+                global co_rf
+                del co_rf
+            if 'i_limiting' in globals():
+                global i_limiting
+                del i_limiting
+            if 'R' in globals():
+                global R
+                del R
+            if 'dflim' in globals():
+                global dflim
+                del dflim
+            if 'i_surface_0pt9' in globals():
+                global i_surface_0pt9
+                del i_surface_0pt9
+            if 'i_s_expol' in globals():
+                global i_s_expol
+                del i_s_expol
+            if 'i_s_expol_etadiff' in globals():
+                global i_s_expol_etadiff
+                del i_s_expol_etadiff
+            if 'i_mass_0pt9' in globals():
+                global i_mass_0pt9
+                del i_mass_0pt9
+            if 'i_m_expol' in globals():
+                global i_m_expol
+                del i_m_expol
+            if 'i_m_expol_etadiff' in globals():
+                global i_m_expol_etadiff
+                del i_m_expol_etadiff
+            if 'i_limiting_h' in globals():
+                global i_limiting_h
+                del i_limiting_h
+            if 'i_0_k_1' in globals():
+                global i_0_k_1
+                del i_0_k_1
+            if 'i_0_k_eta_1' in globals():
+                global i_0_k_eta_1
+                del i_0_k_eta_1
+            if 'i_0_k_2' in globals():
+                global i_0_k_2
+                del i_0_k_2
+            if 'i_0_k_eta_2' in globals():
+                global i_0_k_eta_2
+                del i_0_k_eta_2
+            if 'i_0_s_1' in globals():
+                global i_0_s_1
+                del i_0_s_1
+            if 'i_0_s_eta_1' in globals():
+                global i_0_s_eta_1
+                del i_0_s_eta_1
+            if 'i_0_s_2' in globals():
+                global i_0_s_2
+                del i_0_s_2
+            if 'i_0_s_eta_2' in globals():
+                global i_0_s_eta_2
+                del i_0_s_eta_2
+            if 'i_0_m_1' in globals():
+                global i_0_m_1
+                del i_0_m_1
+            if 'i_0_m_eta_1' in globals():
+                global i_0_m_eta_1
+                del i_0_m_eta_1
+            if 'i_0_m_2' in globals():
+                global i_0_m_2
+                del i_0_m_2
+            if 'i_0_m_eta_2' in globals():
+                global i_0_m_eta_2
+                del i_0_m_eta_2
+
+            print(globals())
+
+
+
+
         else:
             pass
 
