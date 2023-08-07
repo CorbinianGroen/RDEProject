@@ -1375,8 +1375,8 @@ def HOR_plot(df1, df2):
     df1.rename(columns={'Potential/V': 'E-iR/V'}, inplace=True)
     df2.rename(columns={'Potential/V': 'E-iR/V'}, inplace=True)
 
-    max_current = df2['Current/A'].loc[df1['Current/A'].nlargest(1).index[0]]
-    min_current = df2['Current/A'].loc[df1['Current/A'].nsmallest(1).index[0]]
+    max_current = df2['Current/A'].loc[df2['Current/A'].nlargest(1).index[0]] * 1.1
+    min_current = df2['Current/A'].loc[df2['Current/A'].nsmallest(1).index[0]]
 
     index_low = df2.iloc[(df1['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
     index_high = df2.iloc[(df1['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
@@ -1852,7 +1852,9 @@ def HOR_plot(df1, df2):
 if __name__ == '__main__':
     root = ct.CTk()
     root.title('RDE Evaluation')
-    root.iconphoto(True, tk.PhotoImage(file='iconRDE.png'))
+
+    root.iconbitmap('iconRDE.ico')
+
     width = root.winfo_screenwidth()
     height = root.winfo_screenheight()
     widthfactor = 1920 / 1920
