@@ -930,17 +930,25 @@ def O2_plot(O2, Ar):
             i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
             i_s_expol = ik_expol / co_area * 1000 * 1000
             i_s_expol_etadiff = ik_expol_etadiff / co_area * 1000 * 1000
+            is_label.configure(text='{0:.3f}'.format(i_surface_0pt9))
+            is_label_ex.configure(text='{0:.3f}'.format(i_s_expol))
 
-        if 'co_area' not in globals() and 'area' in globals():
+            print('co-area')
+
+        elif 'co_area' not in globals() and 'area' in globals():
             dflim['is/A'] = abs(dflim['ik/A']) / area * 1000 * 1000
             i_surface_0pt9 = dflim['is/A'].loc[index_0pt9]
             i_s_expol = ik_expol / area * 1000 * 1000
             i_s_expol_etadiff = ik_expol_etadiff / area * 1000 * 1000
-
+            is_label.configure(text='{0:.3f}'.format(i_surface_0pt9))
+            is_label_ex.configure(text='{0:.3f}'.format(i_s_expol))
+            print('wenjjvi')
 
         else:
             is_label.configure(text='n.a.')
             is_label_ex.configure(text='n.a.')
+
+            print('wtf')
 
         if LoadingEntry.get() != '':
             global loading
@@ -1039,7 +1047,7 @@ def O2_plot(O2, Ar):
     is_frame.grid_columnconfigure(0, weight=0, minsize=80)
     is_frame.grid_columnconfigure(1, weight=1, minsize=115)
     is_frame.grid_columnconfigure(2, weight=0, minsize=90)
-    if 'area' in globals():
+    if any(var in globals() for var in ['co_area', 'area']):
         is_label = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_surface_0pt9), font=("Calibri", -20), width=1)
         is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
         is_label_ex = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_s_expol), font=("Calibri", -20), width=1)
@@ -1137,7 +1145,7 @@ def O2_plot(O2, Ar):
         d['rf_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
-        if 'area' in globals():
+        if any(var in globals() for var in ['co_area', 'area']):
             d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_surface_0pt9), font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
             d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_s_expol), font=("Calibri", -20), width=1)
@@ -1269,7 +1277,7 @@ def O2_plot(O2, Ar):
             i_s_ex_eta = ik_expol_etadiff / co_area * 1000 * 1000
             print('co-area in save')
 
-        if 'co_area' not in globals() and 'area' in globals():
+        elif 'co_area' not in globals() and 'area' in globals():
             i_s = i_surface_0pt9
             i_s_ex = ik_expol / area * 1000 * 1000
             i_s_ex_eta = ik_expol_etadiff / area * 1000 * 1000
@@ -1581,7 +1589,7 @@ def HOR_plot(df1, df2):
             is_label.configure(text='{0:.3f}'.format(i_0_s_2))
             is_label_ex.configure(text='{0:.3f}'.format(i_0_s_eta_2))
 
-        if 'co_area' not in globals() and 'area' in globals():
+        elif 'co_area' not in globals() and 'area' in globals():
 
             i_0_s_1 = i_0_k_1 / area * 1000000
             i_0_s_eta_1 = i_0_k_eta_1 / area * 1000000
@@ -1696,7 +1704,7 @@ def HOR_plot(df1, df2):
     is_frame.grid_columnconfigure(0, weight=0, minsize=80)
     is_frame.grid_columnconfigure(1, weight=1, minsize=115)
     is_frame.grid_columnconfigure(2, weight=0, minsize=90)
-    if 'area' in globals():
+    if any(var in globals() for var in ['co_area', 'area']):
         is_label = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_0_s_2), font=("Calibri", -20), width=1)
         is_label.grid(row=1, column=1, sticky=tk.E, padx=0)
         is_label_ex = ct.CTkLabel(is_frame, text='{0:.3f}'.format(i_0_s_eta_2), font=("Calibri", -20), width=1)
@@ -1771,7 +1779,7 @@ def HOR_plot(df1, df2):
         d['rf_f_{0}'.format(z)].grid_columnconfigure(0, weight=0, minsize=80)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(1, weight=1, minsize=100)
         d['rf_f_{0}'.format(z)].grid_columnconfigure(2, weight=0, minsize=125)
-        if 'area' in globals():
+        if any(var in globals() for var in ['co_area', 'area']):
             d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_s_2), font=("Calibri", -20), width=1)
             d['rf_l_{0}'.format(z)].grid(row=1, column=1, sticky=tk.E, padx=0)
             d['rf_l_{0}'.format(z)] = ct.CTkLabel(d['rf_f_{0}'.format(z)], text='{0:.3f}'.format(i_0_s_eta_2), font=("Calibri", -20), width=1)
@@ -1862,7 +1870,7 @@ def HOR_plot(df1, df2):
         if 'co_area' in globals():
             i_0_s = i_0_s_2
             i_0_s_eta = i_0_s_eta_2
-        if 'co_area' not in globals() and 'area' in globals():
+        elif 'co_area' not in globals() and 'area' in globals():
             i_0_s = i_0_s_2
             i_0_s_eta = i_0_s_eta_2
 
@@ -2444,7 +2452,7 @@ if __name__ == '__main__':
             global z
             z = 0
 
-            print(globals())
+
 
             if 'area' in globals():
                 global area
@@ -2531,7 +2539,7 @@ if __name__ == '__main__':
                 global i_0_m_eta_2
                 del i_0_m_eta_2
 
-            print(globals())
+
 
 
 
