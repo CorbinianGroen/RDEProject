@@ -246,7 +246,7 @@ def HFRscan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, R=2
         Imp = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=headervalue, decimal=decimalvalue)
 
     Imp = Imp.iloc[:, R]
-    HFR = float(Imp.nsmallest(1))
+    HFR = float(Imp.nsmallest(1).iloc[0])
 
     HFR = HFR / u_R
 

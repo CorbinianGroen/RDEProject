@@ -1,2 +1,2 @@
 PathFile
-W:/RRDE/Corbi/LTCG_2_PtRuC/Alkaline/19935_2/
+//10.162.95.1/data/RRDE/MatthiasR/MR0_TKK_198_PtC/TKK-16893/Alkaline/
