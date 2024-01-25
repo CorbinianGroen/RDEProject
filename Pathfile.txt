@@ -1,2 +1,2 @@
 PathFile
-//10.162.95.1/data/RRDE/MatthiasR/MR0_TKK_198_PtC/TKK-16893/Alkaline/
+//10.162.95.1/data/RRDE/Corbi/CG16-PtZrOxC-HT/21305/

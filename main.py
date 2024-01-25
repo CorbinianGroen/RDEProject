@@ -69,6 +69,19 @@ def interpolation(curve1, curve2):
     Amp_pd2 = pd.DataFrame(Amp_np2, columns=['Current/A_2'])
     df = pd.merge(Volt, Amp_pd1, left_index=True, right_index=True)
     df = pd.merge(df, Amp_pd2, left_index=True, right_index=True)
+
+    if 'RingCurrent/A' in curve1:
+        Amp3 = interpolate.interp1d(x=curve1['Potential/V'], y=curve1['RingCurrent/A'], kind='linear')
+        Amp_np3 = Amp3(Volt['Potential/V'])
+        Amp_pd3 = pd.DataFrame(Amp_np3, columns=['RingCurrent/A_1'])
+        df = pd.merge(df, Amp_pd3, left_index=True, right_index=True)
+
+    if 'RingCurrent/A' in curve2:
+        Amp4 = interpolate.interp1d(x=curve2['Potential/V'], y=curve2['RingCurrent/A'], kind='linear')
+        Amp_np4 = Amp4(Volt['Potential/V'])
+        Amp_pd4 = pd.DataFrame(Amp_np4, columns=['RingCurrent/A_2'])
+        df = pd.merge(df, Amp_pd4, left_index=True, right_index=True)
+
     return df
 
 
@@ -915,6 +928,15 @@ def O2_plot(O2, Ar):
     ax_o2.plot(df['E-iR/V'], df['Current/A_1'], 'w--', label='O2')
     ax_o2.plot(df['E-iR/V'], df['Current/A_2'], 'k--', label='Ar')
 
+    if 'RingCurrent/A_1' in df:
+        ax_o2_r = ax_o2.twinx()
+        ax_o2_r.plot(df['E-iR/V'], df['RingCurrent/A_1'], label='Ring1')
+        ax_o2_r.set_ylabel("Ring Current [A]")
+    if 'RingCurrent/A_2' in df:
+        ax_o2_r2 = ax_o2.twinx()
+        ax_o2_r2.plot(df['E-iR/V'], df['RingCurrent/A_2'], label='Ring2')
+        ax_o2_r2.set_ylabel("Ring Current [A]")
+
     legend = ax_o2.legend(loc='lower right', frameon=False)
     for text in legend.get_texts():
         text.set_color(fgcolor)
@@ -1259,6 +1281,11 @@ def O2_plot(O2, Ar):
 
         df.rename(columns={'E-iR/V': 'E-iR/V_' + 'ORR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
         df.rename(columns={'Diff/A': 'Current/A_' + 'ORR_' + str(z)}, inplace=True)
+        if 'RingCurrent/A_1' in df.columns:
+            df.rename(columns={'RingCurrent/A_1': 'RingCurrent/A1_' + 'ORR_' + str(z)}, inplace=True)
+        if 'RingCurrent/A_2' in df.columns:
+            df.rename(columns={'RingCurrent/A_2': 'RingCurrent/A2_' + 'ORR_' + str(z)}, inplace=True)
+
         del df['Current/A_1']
         del df['Current/A_2']
         # del df['Potential/V']
@@ -1365,14 +1392,14 @@ def O2_plot(O2, Ar):
 
         result = pd.DataFrame(
             {'ORR_i_lim_A_' + NameEntry.get() + '_' + str(z): [i_limiting], 'ORR_i_s_A/cm^2_Pt_' + str(z): [i_s],
-             'ORR_i_m_mA/mg_Pt_' + str(z): [i_m],
+             'ORR_i_m_A/g_Pt_' + str(z): [i_m],
              'ORR_i_k_ex_A_' + str(z): [ik_expol], 'ORR_i_s_ex_A/cm^2_Pt_' + str(z): [i_s_ex],
-             'ORR_i_m_ex_A/cm^2_Pt_' + str(z): [i_m_ex],
+             'ORR_i_m_ex_A/g_Pt_' + str(z): [i_m_ex],
              'ORR_i_k_ex_eta_A_' + str(z): [ik_expol_etadiff], 'ORR_i_s_ex_eta_A/cm^2_Pt_' + str(z): [i_s_ex_eta],
-             'ORR_i_m_ex_eta_A/cm^2_Pt_' + str(z): [i_m_ex_eta],
-             'ORR_Tafel_slope_' + str(z): [coefficents[0]], 'ORR_Tafel_intercept_' + str(z): [coefficents[1]],
+             'ORR_i_m_ex_eta_A/g_Pt_' + str(z): [i_m_ex_eta],
+             'ORR_Tafel_slope_mV/dec_' + str(z): [coefficents[0]], 'ORR_Tafel_intercept_' + str(z): [coefficents[1]],
              'ORR_Tafel_R_' + str(z): [coefficents[2]],
-             'ORR_Tafel_slope_eta_' + str(z): [coefficents1[0]], 'ORR_Tafel_intercept_eta_' + str(z): [coefficents1[1]],
+             'ORR_Tafel_slope_eta_mV/dec_' + str(z): [coefficents1[0]], 'ORR_Tafel_intercept_eta_' + str(z): [coefficents1[1]],
              'ORR_Tafel_R_eta' + str(z): [coefficents1[2]]})
         global results
         results = pd.concat([results, result], axis=1)

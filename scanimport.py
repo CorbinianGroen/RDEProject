@@ -148,7 +148,7 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
         max_list = list()
         min_list = list()
 
-        length = len(CVs['WE(1).Potential (V)']) / len(max) *0.5
+        length = int((len(CVs['WE(1).Potential (V)']) / len(max)) *0.5)
 
         print(length)
 
@@ -248,6 +248,7 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
 
     del CV_cathodic['index']
     del CV_anodic['index']
+
     return CV_cathodic, CV_anodic
 
 
