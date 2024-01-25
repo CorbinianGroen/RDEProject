@@ -150,7 +150,6 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
 
         length = int((len(CVs['WE(1).Potential (V)']) / len(max)) *0.5)
 
-        print(length)
 
         for i in range(len(max)-1):
             c = max[i+1] - max[i]
