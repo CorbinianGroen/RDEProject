@@ -122,12 +122,14 @@ def singlescan(filename, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, 
     return CV_cathodic, CV_anodic
     '''
 
-def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot=2, u_V=1, cur=3, u_A=1):
+def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', skip=0, pot=2, u_V=1, cur=3, u_A=1, pot2=6):
     if headervalue is None:
         CVs = pd.read_csv(filename, sep=sepvalue, skiprows=skip, header=None, decimal=decimalvalue)
         headerlist = list(CVs)
         headerlist[pot] = 'WE(1).Potential (V)'
         headerlist[cur] = 'WE(1).Current (A)'
+        #if trigger vor pot 2 is set:
+            #headerlist[pot2] = 'WE(2).Current (A)'
         CVs.columns = headerlist
 
     else:
@@ -146,15 +148,19 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
         max_list = list()
         min_list = list()
 
+        length = len(CVs['WE(1).Potential (V)']) / len(max) *0.5
+
+        print(length)
+
         for i in range(len(max)-1):
             c = max[i+1] - max[i]
-            if c < 10:
+            if c < length:
                 lst = [(i+1)]
                 max_list = max_list + lst
 
         for i in range(len(min)-1):
             c = min[i+1] - min[i]
-            if c < 10:
+            if c < length:
                 lst = [(i + 1)]
                 min_list = min_list + lst
 
@@ -172,6 +178,7 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
                 beginning = CVs.loc[0:max[scan - 1], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
             else:
                 beginning = CVs.loc[min[scan - 2]:max[scan - 1], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+
             end = CVs.loc[min[scan - 1]:max[scan], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
 
             endofscan = abs(end['WE(1).Potential (V)'] - first_value).idxmin()
@@ -187,7 +194,13 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
             endofscan = abs(end['WE(1).Potential (V)'] - first_value).idxmin()
             beginningofscan = abs(beginning['WE(1).Potential (V)'] - first_value).idxmin()
 
-        CV_reduced = CVs.loc[beginningofscan:endofscan, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+        if 'WE(2).Current (A)' in CVs.columns:
+            CV_reduced = CVs.loc[beginningofscan:endofscan, ['WE(1).Potential (V)', 'WE(1).Current (A)', 'WE(2).Current (A)']]
+            CV_reduced.rename(columns={'WE(2).Current (A)': 'RingCurrent/A'}, inplace=True)
+            CV_reduced['RingCurrent/A'] = CV_reduced['RingCurrent/A'] / u_A
+
+        else:
+            CV_reduced = CVs.loc[beginningofscan:endofscan, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
 
     CV_reduced.rename(columns={'WE(1).Potential (V)': 'Potential/V'}, inplace=True)
     CV_reduced.rename(columns={'WE(1).Current (A)': 'Current/A'}, inplace=True)
