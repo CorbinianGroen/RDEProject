@@ -174,7 +174,7 @@ def CO_plot(df1, df2):
 
     if LoadingEntry.get() != '':
         global loading
-        loading = float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+        loading = float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
         global co_area_norm
         co_area_norm = co_area * 0.0001 / loading
 
@@ -504,7 +504,7 @@ def Ar_Plot(anodic, cathodic):
 
     if LoadingEntry.get() != '':
         global loading
-        loading = float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+        loading = float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
         global area_norm
         area_norm = area / loading * 0.0001
 
@@ -542,7 +542,7 @@ def Ar_Plot(anodic, cathodic):
 
         if LoadingEntry.get() != '':
             global loading
-            loading = float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+            loading = float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
             global area_norm
             area_norm = area / loading * 0.0001
 
@@ -915,7 +915,7 @@ def O2_plot(O2, Ar):
 
     if LoadingEntry.get() != '':
         global loading
-        loading = float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+        loading = float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
         dflim['im/A'] = abs(dflim['ik/A']) / loading
         global i_mass_0pt9
         i_mass_0pt9 = dflim['im/A'].loc[index_0pt9]
@@ -924,18 +924,21 @@ def O2_plot(O2, Ar):
         i_m_expol = ik_expol / loading
         i_m_expol_etadiff = ik_expol_etadiff / loading
 
-    ax_o2.plot(df['E-iR/V'], df['Diff/A'], label='ORR_corrected')
-    ax_o2.plot(df['E-iR/V'], df['Current/A_1'], 'w--', label='O2')
-    ax_o2.plot(df['E-iR/V'], df['Current/A_2'], 'k--', label='Ar')
-
     if 'RingCurrent/A_1' in df:
-        ax_o2_r = ax_o2.twinx()
-        ax_o2_r.plot(df['E-iR/V'], df['RingCurrent/A_1'], label='Ring1')
-        ax_o2_r.set_ylabel("Ring Current [A]")
+        #ax_o2_r = ax_o2.twinx()
+        ax_o2.plot(df['E-iR/V'], df['RingCurrent/A_1'], label='Ring1', zorder=1)
+        #ax_o2_r.set_ylabel("Ring Current [A]")
     if 'RingCurrent/A_2' in df:
-        ax_o2_r2 = ax_o2.twinx()
-        ax_o2_r2.plot(df['E-iR/V'], df['RingCurrent/A_2'], label='Ring2')
-        ax_o2_r2.set_ylabel("Ring Current [A]")
+        #ax_o2_r2 = ax_o2.twinx()
+        ax_o2.plot(df['E-iR/V'], df['RingCurrent/A_2'], label='Ring2', zorder=1)
+        #ax_o2.set_ylabel("Ring Current [A]")
+
+
+    ax_o2.plot(df['E-iR/V'], df['Diff/A'], label='ORR_corrected', zorder=3)
+    ax_o2.plot(df['E-iR/V'], df['Current/A_1'], 'w--', label='O2', zorder=3)
+    ax_o2.plot(df['E-iR/V'], df['Current/A_2'], 'k--', label='Ar', zorder=3)
+
+
 
     legend = ax_o2.legend(loc='lower right', frameon=False)
     for text in legend.get_texts():
@@ -1017,7 +1020,7 @@ def O2_plot(O2, Ar):
 
         if LoadingEntry.get() != '':
             global loading
-            loading = float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+            loading = float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
             dflim['im/A'] = abs(dflim['ik/A']) / loading
             global i_mass_0pt9
             i_mass_0pt9 = dflim['im/A'].loc[index_0pt9]
@@ -1350,7 +1353,7 @@ def O2_plot(O2, Ar):
             dflim.rename(columns={'im/A': 'im/A_' + 'ORR_' + str(z)}, inplace=True)
 
         dflim['ik/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)]
-        dflim['im/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+        dflim['im/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
         dflim['is/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / area * 1000 * 1000
         dflim['E-iR/V_tafel_' + 'ORR_' + str(z)] = coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + \
                                                    coefficents[1]
@@ -1364,7 +1367,7 @@ def O2_plot(O2, Ar):
         if LoadingEntry.get() != '':
             i_m = i_mass_0pt9
             global loading
-            loading = float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+            loading = float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
             i_m_ex = ik_expol / loading
             i_m_ex_eta = ik_expol_etadiff / loading
 
@@ -1594,7 +1597,7 @@ def HOR_plot(df1, df2):
 
     if LoadingEntry.get() != '':
         global loading
-        loading = float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+        loading = float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
         global i_0_m_1
         global i_0_m_eta_1
         global i_0_m_2
@@ -1712,7 +1715,7 @@ def HOR_plot(df1, df2):
 
         if LoadingEntry.get() != '':
             global loading
-            loading = float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+            loading = float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
             global i_0_m_1
             global i_0_m_eta_1
             global i_0_m_2
@@ -2603,7 +2606,7 @@ if __name__ == '__main__':
 
             if LoadingEntry.get() != '':
                 global loading
-                loading = float(LoadingEntry.get()*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
+                loading = float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
 
                 result = pd.DataFrame({'loading_' + NameEntry.get(): [loading]})
                 global results
