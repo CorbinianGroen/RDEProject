@@ -174,7 +174,7 @@ def CO_plot(df1, df2):
 
     if LoadingEntry.get() != '':
         global loading
-        loading = float(LoadingEntry.get())
+        loading = float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
         global co_area_norm
         co_area_norm = co_area * 0.0001 / loading
 
@@ -504,7 +504,7 @@ def Ar_Plot(anodic, cathodic):
 
     if LoadingEntry.get() != '':
         global loading
-        loading = float(LoadingEntry.get())
+        loading = float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
         global area_norm
         area_norm = area / loading * 0.0001
 
@@ -542,7 +542,7 @@ def Ar_Plot(anodic, cathodic):
 
         if LoadingEntry.get() != '':
             global loading
-            loading = float(LoadingEntry.get())
+            loading = float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
             global area_norm
             area_norm = area / loading * 0.0001
 
@@ -915,7 +915,7 @@ def O2_plot(O2, Ar):
 
     if LoadingEntry.get() != '':
         global loading
-        loading = float(LoadingEntry.get())
+        loading = float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
         dflim['im/A'] = abs(dflim['ik/A']) / loading
         global i_mass_0pt9
         i_mass_0pt9 = dflim['im/A'].loc[index_0pt9]
@@ -1017,7 +1017,7 @@ def O2_plot(O2, Ar):
 
         if LoadingEntry.get() != '':
             global loading
-            loading = float(LoadingEntry.get())
+            loading = float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
             dflim['im/A'] = abs(dflim['ik/A']) / loading
             global i_mass_0pt9
             i_mass_0pt9 = dflim['im/A'].loc[index_0pt9]
@@ -1350,7 +1350,7 @@ def O2_plot(O2, Ar):
             dflim.rename(columns={'im/A': 'im/A_' + 'ORR_' + str(z)}, inplace=True)
 
         dflim['ik/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)]
-        dflim['im/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / float(LoadingEntry.get())
+        dflim['im/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
         dflim['is/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / area * 1000 * 1000
         dflim['E-iR/V_tafel_' + 'ORR_' + str(z)] = coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + \
                                                    coefficents[1]
@@ -1364,7 +1364,7 @@ def O2_plot(O2, Ar):
         if LoadingEntry.get() != '':
             i_m = i_mass_0pt9
             global loading
-            loading = float(LoadingEntry.get())
+            loading = float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
             i_m_ex = ik_expol / loading
             i_m_ex_eta = ik_expol_etadiff / loading
 
@@ -1594,7 +1594,7 @@ def HOR_plot(df1, df2):
 
     if LoadingEntry.get() != '':
         global loading
-        loading = float(LoadingEntry.get())
+        loading = float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
         global i_0_m_1
         global i_0_m_eta_1
         global i_0_m_2
@@ -1712,7 +1712,7 @@ def HOR_plot(df1, df2):
 
         if LoadingEntry.get() != '':
             global loading
-            loading = float(LoadingEntry.get())
+            loading = float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
             global i_0_m_1
             global i_0_m_eta_1
             global i_0_m_2
@@ -2156,7 +2156,7 @@ if __name__ == '__main__':
     NameEntry = ct.CTkEntry(master=input_frame, width=200, font=("Calibri", -14))
     NameEntry.grid(row=1, column=2, sticky=tk.W, columnspan=2)
 
-    LoadingLabel = ct.CTkLabel(master=input_frame, text='Loading [g]:', font=("Calibri", -18))
+    LoadingLabel = ct.CTkLabel(master=input_frame, text='Loading [µg/cm²]:', font=("Calibri", -18))
     LoadingLabel.grid(row=3, column=1, sticky=tk.W)
     LoadingEntry = ct.CTkEntry(master=input_frame, width=200, font=("Calibri", -14))
     LoadingEntry.grid(row=3, column=2, sticky=tk.W, columnspan=2)
@@ -2603,7 +2603,7 @@ if __name__ == '__main__':
 
             if LoadingEntry.get() != '':
                 global loading
-                loading = float(LoadingEntry.get())
+                loading = float(LoadingEntry.get()*RadiusEntry.get()*(10**(-6)))
 
                 result = pd.DataFrame({'loading_' + NameEntry.get(): [loading]})
                 global results
