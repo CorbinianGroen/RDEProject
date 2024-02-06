@@ -1353,7 +1353,7 @@ def O2_plot(O2, Ar):
             dflim.rename(columns={'im/A': 'im/A_' + 'ORR_' + str(z)}, inplace=True)
 
         dflim['ik/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)]
-        dflim['im/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6))
+        dflim['im/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / (float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
         dflim['is/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / area * 1000 * 1000
         dflim['E-iR/V_tafel_' + 'ORR_' + str(z)] = coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + \
                                                    coefficents[1]

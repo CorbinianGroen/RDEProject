@@ -683,17 +683,17 @@ if __name__ == '__main__':
 
 
 
-    LoadingLabel = ct.CTkLabel(master=input_frame, text='Loading [g]:', text_font=("Calibri", -18))
+    LoadingLabel = ct.CTkLabel(master=input_frame, text='Loading [g]:', font=("Calibri", -18))
     LoadingLabel.grid(row=3, column=1, sticky=tk.W)
-    LoadingEntry = ct.CTkEntry(master=input_frame, width=200, text_font=("Calibri", -14))
+    LoadingEntry = ct.CTkEntry(master=input_frame, width=200, font=("Calibri", -14))
     LoadingEntry.grid(row=3, column=2, sticky=tk.W, columnspan=2)
     LoadingEntry.insert(0, '2.74889357189107E-06')
 
 
 
-    E1L = ct.CTkLabel(master=input_frame, text='E1:', text_font=("Calibri", -18))
+    E1L = ct.CTkLabel(master=input_frame, text='E1:', font=("Calibri", -18))
     E1L.grid(row=1, column=4, sticky=tk.W)
-    E1entry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    E1entry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     E1entry.grid(row=1, column=5, sticky=tk.W)
     #E1entry.insert(0,'W:/RRDE/Corbi/CG2_PtC_10mVs/CG2-PtC-16507.txt')
 
@@ -716,11 +716,11 @@ if __name__ == '__main__':
             pathfile.close()
 
 
-    ct.CTkButton(master=input_frame, text='Open', command=E1, text_font=("Calibri", -18), width=80).grid(row=1, column=6, sticky=tk.W, padx=20)
+    ct.CTkButton(master=input_frame, text='Open', command=E1, font=("Calibri", -18), width=80).grid(row=1, column=6, sticky=tk.W, padx=20)
 
-    E2L = ct.CTkLabel(master=input_frame, text='E2:', text_font=("Calibri", -18))
+    E2L = ct.CTkLabel(master=input_frame, text='E2:', font=("Calibri", -18))
     E2L.grid(row=3, column=4, sticky=tk.W)
-    E2entry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    E2entry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     E2entry.grid(row=3, column=5, sticky=tk.W)
 
 
@@ -742,11 +742,11 @@ if __name__ == '__main__':
             pathfile.close()
 
 
-    ct.CTkButton(master=input_frame, text='Open', command=E2, text_font=("Calibri", -18), width=80).grid(row=3, column=6, sticky=tk.W, padx=20)
+    ct.CTkButton(master=input_frame, text='Open', command=E2, font=("Calibri", -18), width=80).grid(row=3, column=6, sticky=tk.W, padx=20)
 
-    E3L = ct.CTkLabel(master=input_frame, text='E3:', text_font=("Calibri", -18))
+    E3L = ct.CTkLabel(master=input_frame, text='E3:', font=("Calibri", -18))
     E3L.grid(row=5, column=4, sticky=tk.W)
-    E3entry = ct.CTkEntry(master=input_frame, width=400, text_font=("Calibri", -14))
+    E3entry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     E3entry.grid(row=5, column=5, sticky=tk.W)
 
 
@@ -768,7 +768,7 @@ if __name__ == '__main__':
             pathfile.close()
 
 
-    ct.CTkButton(master=input_frame, text='Open', command=E3, text_font=("Calibri", -18), width=80).grid(row=5, column=6, sticky=tk.W, padx=20)
+    ct.CTkButton(master=input_frame, text='Open', command=E3, font=("Calibri", -18), width=80).grid(row=5, column=6, sticky=tk.W, padx=20)
 
     # graphs in the graphs frame
     HUPD_frame = ct.CTkFrame(master=graph_frame, corner_radius=10, fg_color=('grey90', 'grey10'))#, width=int((graph_frame.winfo_width() - 50) / 3), height=int((graph_frame.winfo_height() - 30) / 2))
@@ -843,11 +843,11 @@ if __name__ == '__main__':
         im(E1_data, E2_data, E3_data)
         HOR(E1_data, E2_data, E3_data)
 
-        SaveButton.config(state=tk.NORMAL)
+        SaveButton.configure(state=tk.NORMAL)
 
 
 
-    Eval = ct.CTkButton(master=input_frame, text='Eval', command=Evaluate, text_font=("Calibri", -18), width=80)
+    Eval = ct.CTkButton(master=input_frame, text='Eval', command=Evaluate, font=("Calibri", -18), width=80)
     Eval.grid(row=1, column=7, sticky=tk.W, padx=20)
     Eval.configure(state=tk.DISABLED)
 
@@ -894,9 +894,9 @@ if __name__ == '__main__':
             pass
 
 
-    SaveButton = ct.CTkButton(master=bottom_frame, text="Save", command=save, text_font=("Calibri", -18), width=80, height=10)
+    SaveButton = ct.CTkButton(master=bottom_frame, text="Save", command=save, font=("Calibri", -18), width=80, height=10)
     SaveButton.grid(row=1, column=2, sticky=tk.E, padx=10)
-    SaveButton.config(state=tk.DISABLED)
+    SaveButton.configure(state=tk.DISABLED)
 
     def on_closing():
         root.destroy()
