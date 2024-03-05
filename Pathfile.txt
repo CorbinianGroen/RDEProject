@@ -1,2 +1,2 @@
 PathFile
-//10.162.95.1/data/RRDE/Corbi/CG13_PtZrOxC_600C/GC-23064-Alkaline/
+//10.162.95.1/data/RRDE/MatthiasR/MR23_PtTaOxC_5%W_600C/18475/Alkaline/
