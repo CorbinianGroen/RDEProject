@@ -1518,17 +1518,25 @@ def HOR_plot(df1, df2):
     max_current = df2['Current/A'].loc[df2['Current/A'].nlargest(1).index[0]] * 1.1
     min_current = df2['Current/A'].loc[df2['Current/A'].nsmallest(1).index[0]]
 
-    index_low = df2.iloc[(df1['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
-    index_high = df2.iloc[(df1['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
+    index_low = df2.iloc[(df2['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
+    index_high = df2.iloc[(df2['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
+
+    index_low_1 = df1.iloc[(df1['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
+    index_high_1 = df1.iloc[(df1['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
 
     global i_limiting_h
     i_limiting_h = df2['Current/A'].loc[index_low:index_high].mean()
 
+    global i_limiting_h_1
+    i_limiting_h_1 = df1['Current/A'].loc[index_low_1:index_high_1].mean()
+
     min_lim = df2[df2['Current/A'] > 0].iloc[0].name
 
     upper_limit = 0.95 * i_limiting_h
+    upper_limit_1 = 0.95 * i_limiting_h_1
+
     max_lim = df2[(df2['Current/A'] >= upper_limit) & (df2['Current/A'] <= i_limiting_h)].iloc[0].name
-    max_lim_1 = df1[(df1['Current/A'] >= upper_limit) & (df1['Current/A'] <= i_limiting_h)].iloc[0].name
+    max_lim_1 = df1[(df1['Current/A'] >= upper_limit_1) & (df1['Current/A'] <= i_limiting_h_1)].iloc[0].name
 
     df_diff = df2.iloc[0:max_lim].reset_index()
     del df_diff['index']
@@ -1564,9 +1572,6 @@ def HOR_plot(df1, df2):
     df2_f_eta = df2_filtered_eta.copy()
 
     plt.show()
-
-    print(i_limiting_h)
-    print(linear_df2_eta[0])
 
     global i_0_k_1
     global i_0_k_eta_1
@@ -1633,17 +1638,25 @@ def HOR_plot(df1, df2):
         lower_potential = Tline.getvalue()
         upper_potential = Tline2.getvalue()
 
-        index_low = df2.iloc[(df1['E-iR/V'] - lower_potential).abs().argsort()[:1]].index[0]
-        index_high = df2.iloc[(df1['E-iR/V'] - upper_potential).abs().argsort()[:1]].index[0]
+        index_low = df2.iloc[(df2['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
+        index_high = df2.iloc[(df2['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
+
+        index_low_1 = df1.iloc[(df1['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
+        index_high_1 = df1.iloc[(df1['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
 
         global i_limiting_h
         i_limiting_h = df2['Current/A'].loc[index_low:index_high].mean()
 
+        global i_limiting_h_1
+        i_limiting_h_1 = df1['Current/A'].loc[index_low_1:index_high_1].mean()
+
         min_lim = df2[df2['Current/A'] > 0].iloc[0].name
 
         upper_limit = 0.95 * i_limiting_h
+        upper_limit_1 = 0.95 * i_limiting_h_1
+
         max_lim = df2[(df2['Current/A'] >= upper_limit) & (df2['Current/A'] <= i_limiting_h)].iloc[0].name
-        max_lim_1 = df1[(df1['Current/A'] >= upper_limit) & (df1['Current/A'] <= i_limiting_h)].iloc[0].name
+        max_lim_1 = df1[(df1['Current/A'] >= upper_limit_1) & (df1['Current/A'] <= i_limiting_h_1)].iloc[0].name
 
         df_diff = df2.iloc[0:max_lim].reset_index()
         del df_diff['index']
