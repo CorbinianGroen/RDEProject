@@ -1567,11 +1567,12 @@ def HOR_plot(df1, df2):
     linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current/A'], 1)
 
 
-
+    global df2_f
+    global df2_f_eta
     df2_f = df2_filtered.copy()
     df2_f_eta = df2_filtered_eta.copy()
 
-    plt.show()
+    #plt.show()
 
     global i_0_k_1
     global i_0_k_eta_1
@@ -1634,15 +1635,16 @@ def HOR_plot(df1, df2):
     for text in legend.get_texts():
         text.set_color(fgcolor)
 
+
     def dragged():
         lower_potential = Tline.getvalue()
         upper_potential = Tline2.getvalue()
 
-        index_low = df2.iloc[(df2['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
-        index_high = df2.iloc[(df2['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
+        index_low = df2.iloc[(df2['E-iR/V'] - lower_potential).abs().argsort()[:1]].index[0]
+        index_high = df2.iloc[(df2['E-iR/V'] - upper_potential).abs().argsort()[:1]].index[0]
 
-        index_low_1 = df1.iloc[(df1['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
-        index_high_1 = df1.iloc[(df1['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
+        index_low_1 = df1.iloc[(df1['E-iR/V'] - lower_potential).abs().argsort()[:1]].index[0]
+        index_high_1 = df1.iloc[(df1['E-iR/V'] - upper_potential).abs().argsort()[:1]].index[0]
 
         global i_limiting_h
         i_limiting_h = df2['Current/A'].loc[index_low:index_high].mean()
@@ -1650,24 +1652,22 @@ def HOR_plot(df1, df2):
         global i_limiting_h_1
         i_limiting_h_1 = df1['Current/A'].loc[index_low_1:index_high_1].mean()
 
-        min_lim = df2[df2['Current/A'] > 0].iloc[0].name
-
         upper_limit = 0.95 * i_limiting_h
         upper_limit_1 = 0.95 * i_limiting_h_1
 
         max_lim = df2[(df2['Current/A'] >= upper_limit) & (df2['Current/A'] <= i_limiting_h)].iloc[0].name
         max_lim_1 = df1[(df1['Current/A'] >= upper_limit_1) & (df1['Current/A'] <= i_limiting_h_1)].iloc[0].name
 
-        df_diff = df2.iloc[0:max_lim].reset_index()
-        del df_diff['index']
+        #df_diff = df2.iloc[0:max_lim].reset_index()
+        #del df_diff['index']
 
-        df_diff['etadiff/V'] = ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df_diff['Current/A'] / i_limiting_h)))
+        #df_diff['etadiff/V'] = ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df_diff['Current/A'] / i_limiting_h)))
 
         df1_red = df1.iloc[0:max_lim_1].reset_index()
         df2_red = df2.iloc[0:max_lim].reset_index()
 
         df1_red['E-iR-eta/V'] = df1_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (
-            np.log(1 - (df1_red['Current/A'] / i_limiting_h)))
+            np.log(1 - (df1_red['Current/A'] / i_limiting_h_1)))
 
         df2_red['E-iR-eta/V'] = df2_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (
             np.log(1 - (df2_red['Current/A'] / i_limiting_h)))
@@ -1676,6 +1676,7 @@ def HOR_plot(df1, df2):
         df1_filtered_eta = df1_red[(df1_red['E-iR-eta/V'] >= -0.01) & (df1_red['E-iR-eta/V'] <= 0.01)]
 
         linear_df1 = np.polyfit(df1_filtered['E-iR/V'], df1_filtered['Current/A'], 1)
+
         linear_df1_eta = np.polyfit(df1_filtered_eta['E-iR-eta/V'], df1_filtered_eta['Current/A'], 1)
 
         df2_filtered = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0.01)]
@@ -1684,6 +1685,8 @@ def HOR_plot(df1, df2):
         linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current/A'], 1)
         linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current/A'], 1)
 
+        global df2_f
+        global df2_f_eta
         df2_f = df2_filtered.copy()
         df2_f_eta = df2_filtered_eta.copy()
 
@@ -1707,10 +1710,11 @@ def HOR_plot(df1, df2):
             i_0_s_1 = i_0_k_1 / co_area * 1000000
             i_0_s_eta_1 = i_0_k_eta_1 / co_area * 1000000
             i_0_s_2 = i_0_k_2 / co_area * 1000000
-            i_0_s_eta_2 = i_0_k_eta_2 / area * 1000000
+            i_0_s_eta_2 = i_0_k_eta_2 / co_area * 1000000
 
             is_label.configure(text='{0:.3f}'.format(i_0_s_2))
             is_label_ex.configure(text='{0:.3f}'.format(i_0_s_eta_2))
+
 
         elif 'co_area' not in globals() and 'area' in globals():
 
@@ -1721,6 +1725,7 @@ def HOR_plot(df1, df2):
 
             is_label.configure(text='{0:.3f}'.format(i_0_s_2))
             is_label_ex.configure(text='{0:.3f}'.format(i_0_s_eta_2))
+
 
         else:
             is_label.configure(text='n.a.')
@@ -1741,6 +1746,7 @@ def HOR_plot(df1, df2):
 
             im_label.configure(text='{0:.3f}'.format(i_0_m_2))
             im_label_ex.configure(text='{0:.3f}'.format(i_0_m_eta_2))
+
 
         else:
             im_label.configure(text='n.a.')

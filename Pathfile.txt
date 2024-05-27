@@ -1,2 +1,2 @@
 PathFile
-//10.162.95.1/data/RRDE/Corbi/LTCG_2_PtRuTiOxC_HT_DMFA/February2024_RRDE/Alkaline/17506/
+//10.162.95.1/data/RRDE/Corbi/LTCG_6_C/alkaline/14940/
