@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import filedialog
 import customtkinter as ct
 
+import os
+import glob
+
 import pandas as pd
 import numpy as np
 from scipy import interpolate
@@ -1560,7 +1563,7 @@ def HOR_plot(df1, df2):
     df2_filtered = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0.01)]
     df2_filtered_eta = df2_red[(df2_red['E-iR-eta/V'] >= -0.01) & (df2_red['E-iR-eta/V'] <= 0.01)]
 
-    df2_filtered_eta.plot(x='E-iR-eta/V', y='Current/A', kind='line', marker='o')
+    #df2_filtered_eta.plot(x='E-iR-eta/V', y='Current/A', kind='line', marker='o')
 
 
     linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current/A'], 1)
@@ -2528,22 +2531,45 @@ if __name__ == '__main__':
                                                                                                      sticky=tk.W,
                                                                                                      padx=20)
 
-    HORArLabel = ct.CTkLabel(master=input_frame, text='HOR Ar:', font=("Calibri", -18))
+    HORArLabel = ct.CTkLabel(master=input_frame, text='Folder:', font=("Calibri", -18))
     HORArLabel.grid(row=11, column=4, sticky=tk.W)
     HORArEntry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     HORArEntry.grid(row=11, column=5, sticky=tk.W)
 
 
-    def HOR_Ar():
-        global path
-        file = filedialog.askopenfilename(title='Open HOR Ar file', initialdir=path, filetypes=[('Textfile', '*.txt')])
-        if file is not None:
-            HORArEntry.delete(0, 'end')
-            HORArEntry.insert(0, file)
+    def get_latest_file(pattern):
+        files = glob.glob(pattern)
+        if not files:
+            return None
+        latest_file = max(files, key=os.path.getmtime)
+        return latest_file
 
-            file_path = file.split('/')
-            del file_path[-1]
-            file_path = '/'.join(file_path) + '/'
+
+    def find_measurement_files(folder_path):
+        # Define patterns for each measurement type
+        patterns = {
+            "Ar_cv_slow": os.path.join(folder_path, "*CV-*0,01mVs-0rpm*cycles.txt"),
+            "CO_strip": os.path.join(folder_path, "*-CO-Strip-*.txt"),
+            "O2_measurement": os.path.join(folder_path, "*-O2-CV-*1600*.txt"),
+            "H2_measurement": os.path.join(folder_path, "*-H2-CV-*1600*.txt"),
+            "Impedance": os.path.join(folder_path, "*-Impedance.txt")
+        }
+
+        # Find the latest file for each pattern
+        files = {}
+        for key, pattern in patterns.items():
+            files[key] = get_latest_file(pattern)
+
+        return files
+
+    def SelectFolder():
+        global path
+        file_path = filedialog.askdirectory(title='Open HOR Ar file', initialdir=path)
+        if file_path is not None:
+            HORArEntry.delete(0, 'end')
+            HORArEntry.insert(0, file_path)
+
+            file_path = os.path.dirname(file_path)
 
             path = f'PathFile\n'f'{file_path}\n'
 
@@ -2551,13 +2577,49 @@ if __name__ == '__main__':
             pathfile.write(path)
             pathfile.close()
 
-            if HOREntry.get() != '':
-                HOREval.configure(state=tk.NORMAL)
+            folder_path = HORArEntry.get()
+
+            # Find and print the latest files based on the criteria
+            latest_files = find_measurement_files(folder_path)
+
+            for measurement, file_path in latest_files.items():
+                if file_path:
+                    file_path = file_path.replace('\\', '/')
+
+                else:
+                    return
+
+            HUPDEntry.insert(0, latest_files['Ar_cv_slow'].replace('\\', '/'))
+            COStripEntry.insert(0, latest_files['CO_strip'].replace('\\', '/'))
+            ORREntry.insert(0, latest_files['O2_measurement'].replace('\\', '/'))
+            ORRArEntry.insert(0, latest_files['Ar_cv_slow'].replace('\\', '/'))
+            HOREntry.insert(0, latest_files['H2_measurement'].replace('\\', '/'))
+
+            if latest_files.get('H2_measurement'):
+                Ref_cathodic, Ref_anodic = scan.multiplescan(latest_files['H2_measurement'].replace('\\', '/'), 2, sepvalue='\t', headervalue=0, decimalvalue='.',
+                                                         skip=0, pot=2, u_V=1, cur=3, u_A=1)
+
+                pot_cat = Ref_cathodic['Potential/V'].iloc[abs(Ref_cathodic['Current/A']).nsmallest(1).index[0]]
+                pot_an = Ref_anodic['Potential/V'].iloc[abs(Ref_anodic['Current/A']).nsmallest(1).index[0]]
+
+                global Ref
+                Ref = (pot_cat + pot_an) / 2
+
+                RefEntry.delete(0, 'end')
+                RefEntry.insert(0, Ref)
+
+            if latest_files.get('Impedance'):
+                HFR = scan.HFRscan(latest_files['Impedance'].replace('\\', '/'), sepvalue='\t', headervalue=None, decimalvalue='.', skip=1, R=3, u_R=1)
+
+                REntry.delete(0, 'end')
+                REntry.insert(0, HFR)
 
 
-    HORButton = ct.CTkButton(master=input_frame, text='Open', command=HOR_Ar, font=("Calibri", -18), width=80)
+
+
+    HORButton = ct.CTkButton(master=input_frame, text='Open', command=SelectFolder, font=("Calibri", -18), width=80)
     HORButton.grid(row=11, column=6, sticky=tk.W, padx=20)
-    HORButton.configure(state=tk.DISABLED)
+    #HORButton.configure(state=tk.DISABLED)
 
 
     def HOR_graph():
