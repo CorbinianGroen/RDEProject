@@ -2582,18 +2582,17 @@ if __name__ == '__main__':
             # Find and print the latest files based on the criteria
             latest_files = find_measurement_files(folder_path)
 
-            for measurement, file_path in latest_files.items():
-                if file_path:
-                    file_path = file_path.replace('\\', '/')
 
-                else:
-                    return
-
-            HUPDEntry.insert(0, latest_files['Ar_cv_slow'].replace('\\', '/'))
-            COStripEntry.insert(0, latest_files['CO_strip'].replace('\\', '/'))
-            ORREntry.insert(0, latest_files['O2_measurement'].replace('\\', '/'))
-            ORRArEntry.insert(0, latest_files['Ar_cv_slow'].replace('\\', '/'))
-            HOREntry.insert(0, latest_files['H2_measurement'].replace('\\', '/'))
+            if latest_files.get('Ar_cv_slow'):
+                HUPDEntry.insert(0, latest_files['Ar_cv_slow'].replace('\\', '/'))
+            if latest_files.get('CO_strip'):
+                COStripEntry.insert(0, latest_files['CO_strip'].replace('\\', '/'))
+            if latest_files.get('O2_measurement'):
+                ORREntry.insert(0, latest_files['O2_measurement'].replace('\\', '/'))
+            if latest_files.get('Ar_cv_slow'):
+                ORRArEntry.insert(0, latest_files['Ar_cv_slow'].replace('\\', '/'))
+            if latest_files.get('H2_measurement'):
+                HOREntry.insert(0, latest_files['H2_measurement'].replace('\\', '/'))
 
             if latest_files.get('H2_measurement'):
                 Ref_cathodic, Ref_anodic = scan.multiplescan(latest_files['H2_measurement'].replace('\\', '/'), 2, sepvalue='\t', headervalue=0, decimalvalue='.',

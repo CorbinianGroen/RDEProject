@@ -1,2 +1,2 @@
 PathFile
-//10.162.95.1/data/RRDE/Corbi/Pt-PVP-F1/pH1/acidic
+//10.162.95.1/data/RRDE/Corbi/Pt-PVP-F1/Pn/400C_1h/alkaline
