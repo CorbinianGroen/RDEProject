@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+from tkinter import filedialog
 
 # Predefined header
 predefined_header = [
@@ -20,7 +21,7 @@ predefined_header = [
 # Columns to include in the additional set of rows
 additional_columns = [
     "HUPD_ECSA_cm^2_Pt/g_Pt", "COStrip_ECSA_cm^2_Pt/g_Pt",
-    "ORR_i_m_ex_eta_A_g_Pt", "ORR_Tafel_slope_eta_mV/dec",
+    "ORR_i_m_ex_eta_A/g_Pt", "ORR_Tafel_slope_eta_mV/dec",
     "HOR_cathodic_i_0_m_eta_A_gPt", "loading"
 ]
 
@@ -161,7 +162,17 @@ def process_files(folder_path, output_csv):
 
 
 # Example usage
-folder_path = '//10.162.95.1/data/RRDE/RRDE_Data/03_LTCG/LTCG_3' # Replace with the path to your folder containing the result files
-output_csv = '//10.162.95.1/data/RRDE/RRDE_Data/03_LTCG/LTCG_3/LTCG_3_results_all.csv' # Replace with your desired output CSV file name
 
-process_files(folder_path, output_csv)
+pathfile = open('Pathfile.txt')
+path_txt = pathfile.readlines()
+pathfile.close()
+path = path_txt[1].replace('\n', '')
+
+file_path = filedialog.askdirectory(title='Open HOR Ar file', initialdir=path)
+
+if file_path is not None:
+
+    folder_path = file_path
+    output_csv = file_path + '/Pt_PVP_F1.csv'
+
+    process_files(folder_path, output_csv)
