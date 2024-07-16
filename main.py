@@ -2584,15 +2584,24 @@ if __name__ == '__main__':
 
 
             if latest_files.get('Ar_cv_slow'):
+                HUPDEntry.delete(0, 'end')
                 HUPDEntry.insert(0, latest_files['Ar_cv_slow'].replace('\\', '/'))
+                HUPDEval.configure(state=tk.NORMAL)
             if latest_files.get('CO_strip'):
+                COStripEntry.delete(0, 'end')
                 COStripEntry.insert(0, latest_files['CO_strip'].replace('\\', '/'))
+                COStripEval.configure(state=tk.NORMAL)
             if latest_files.get('O2_measurement'):
+                ORREntry.delete(0, 'end')
                 ORREntry.insert(0, latest_files['O2_measurement'].replace('\\', '/'))
+                ORREval.configure(state=tk.NORMAL)
             if latest_files.get('Ar_cv_slow'):
+                ORRArEntry.delete(0, 'end')
                 ORRArEntry.insert(0, latest_files['Ar_cv_slow'].replace('\\', '/'))
             if latest_files.get('H2_measurement'):
+                HOREntry.delete(0, 'end')
                 HOREntry.insert(0, latest_files['H2_measurement'].replace('\\', '/'))
+                HOREval.configure(state=tk.NORMAL)
 
             if latest_files.get('H2_measurement'):
                 Ref_cathodic, Ref_anodic = scan.multiplescan(latest_files['H2_measurement'].replace('\\', '/'), 2, sepvalue='\t', headervalue=0, decimalvalue='.',
@@ -2662,7 +2671,7 @@ if __name__ == '__main__':
 
 
     HOREval = ct.CTkButton(master=input_frame, text='Eval', command=HOR_graph, font=("Calibri", -18), width=80)
-    HOREval.grid(row=9, column=7, rowspan=3, sticky=tk.W, padx=20)
+    HOREval.grid(row=9, column=7, sticky=tk.W, padx=20)
     HOREval.configure(state=tk.DISABLED)
 
 
