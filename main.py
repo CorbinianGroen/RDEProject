@@ -2222,7 +2222,7 @@ if __name__ == '__main__':
     RefEntry.grid(row=7, column=2, sticky=tk.W)
 
 
-    def Ref():
+    def Reference():
         global path
         file = filedialog.askopenfilename(title='Open HOR H2 file', initialdir=path, filetypes=[('Textfile', '*.txt')])
         if file.strip():
@@ -2248,7 +2248,7 @@ if __name__ == '__main__':
             RefEntry.insert(0, Ref)
 
 
-    ct.CTkButton(master=input_frame, text='Ref', command=Ref, font=("Calibri", -16), width=40, height=20).grid(row=7,
+    ct.CTkButton(master=input_frame, text='Ref', command=Reference, font=("Calibri", -16), width=40, height=20).grid(row=7,
                                                                                                                column=3,
                                                                                                                sticky=tk.W,
                                                                                                                padx=5)
@@ -2548,7 +2548,7 @@ if __name__ == '__main__':
     def find_measurement_files(folder_path):
         # Define patterns for each measurement type
         patterns = {
-            "Ar_cv_slow": os.path.join(folder_path, "*CV-*0,01mVs-0rpm*cycles.txt"),
+            "Ar_cv_slow": os.path.join(folder_path, "*CV-*0,01Vs-0rpm*cycles.txt"),
             "CO_strip": os.path.join(folder_path, "*-CO-Strip-*.txt"),
             "O2_measurement": os.path.join(folder_path, "*-O2-CV-*1600*.txt"),
             "H2_measurement": os.path.join(folder_path, "*-H2-CV-*1600*.txt"),
@@ -2582,6 +2582,13 @@ if __name__ == '__main__':
             # Find and print the latest files based on the criteria
             latest_files = find_measurement_files(folder_path)
 
+            HUPDEntry.delete(0, 'end')
+            COStripEntry.delete(0, 'end')
+            ORREntry.delete(0, 'end')
+            ORRArEntry.delete(0, 'end')
+            HOREntry.delete(0, 'end')
+            RefEntry.delete(0, 'end')
+            REntry.delete(0, 'end')
 
             if latest_files.get('Ar_cv_slow'):
                 HUPDEntry.delete(0, 'end')
