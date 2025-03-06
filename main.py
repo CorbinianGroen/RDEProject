@@ -1549,6 +1549,37 @@ def HOR_plot(df1, df2):
     df1_red = df1.iloc[0:max_lim_1].reset_index()
     df2_red = df2.iloc[0:max_lim].reset_index()
 
+    df2_filtered_HOR = df2_red[(df2_red['E-iR/V'] >= 0)]
+    df2_filtered_HER = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0)]
+
+    df2_filtered_HOR = df2_filtered_HOR.copy()
+    df2_filtered_HER = df2_filtered_HER.copy()
+
+    df2_filtered_HOR.loc[:, 'E-iR-eta/V'] = df2_filtered_HOR['E-iR/V'] + (((8.31446 * Temp) / (2 * 96485)) * (np.log(1 - (df2_filtered_HOR['Current/A'] / i_limiting_h))))
+    df2_filtered_HER.loc[:, 'E-iR-eta/V'] = df2_filtered_HER['E-iR/V']
+
+    df2_filtered_HER = df2_filtered_HER.copy()
+
+    df2_filtered_HER.loc[:, 'Current_kin/A'] = df2_filtered_HER['Current/A']
+
+    df2_filtered_HOR_iR = df2_filtered_HOR[(df2_filtered_HOR['E-iR/V'] <= 0.01)]
+    df2_filtered_HOR_eta = df2_filtered_HOR[(df2_filtered_HOR['E-iR-eta/V'] <= 0.01)]
+
+    df2_filtered_HOR_iR = df2_filtered_HOR_iR.copy()
+    df2_filtered_HOR_eta = df2_filtered_HOR_eta.copy()
+
+    df2_filtered_HOR_iR.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_iR['Current/A']) / (i_limiting_h - df2_filtered_HOR_iR['Current/A'])
+    df2_filtered_HOR_eta.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_eta['Current/A']) / (i_limiting_h - df2_filtered_HOR_eta['Current/A'])
+
+
+    df2_filtered = pd.concat([df2_filtered_HER, df2_filtered_HOR_iR], ignore_index=True)
+    df2_filtered_eta = pd.concat([df2_filtered_HER, df2_filtered_HOR_eta], ignore_index=True)
+
+    df2_filtered = df2_filtered.drop(columns=['level_0', 'index'])
+    df2_filtered_eta = df2_filtered_eta.drop(columns=['level_0', 'index'])
+
+
+
     df1_red['E-iR-eta/V'] = df1_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df1_red['Current/A'] / i_limiting_h)))
 
     df2_red['E-iR-eta/V'] = df2_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (
@@ -1560,15 +1591,20 @@ def HOR_plot(df1, df2):
     linear_df1 = np.polyfit(df1_filtered['E-iR/V'], df1_filtered['Current/A'], 1)
     linear_df1_eta = np.polyfit(df1_filtered_eta['E-iR-eta/V'], df1_filtered_eta['Current/A'], 1)
 
-    df2_filtered = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0.01)]
-    df2_filtered_eta = df2_red[(df2_red['E-iR-eta/V'] >= -0.01) & (df2_red['E-iR-eta/V'] <= 0.01)]
+    #df2_filtered = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0.01)]
+    #df2_filtered_eta = df2_red[(df2_red['E-iR-eta/V'] >= -0.01) & (df2_red['E-iR-eta/V'] <= 0.01)]
 
-    #df2_filtered_eta.plot(x='E-iR-eta/V', y='Current/A', kind='line', marker='o')
+    #df2_filtered_eta.plot(x='E-iR-eta/V', y='Current_kin/A', kind='line', marker='o')
 
 
-    linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current/A'], 1)
-    linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current/A'], 1)
+    linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current_kin/A'], 1)
+    linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current_kin/A'], 1)
 
+    #df2_filtered_eta['Current_kin_linear/A'] = linear_df2_eta[0] * df2_filtered_eta['E-iR-eta/V'] + linear_df2_eta[1]
+
+    #df2_filtered_eta.plot(x='E-iR-eta/V', y='Current_kin_linear/A', kind='line', marker='o')
+
+    #plt.show()
 
     global df2_f
     global df2_f_eta
@@ -1669,6 +1705,38 @@ def HOR_plot(df1, df2):
         df1_red = df1.iloc[0:max_lim_1].reset_index()
         df2_red = df2.iloc[0:max_lim].reset_index()
 
+        df2_filtered_HOR = df2_red[(df2_red['E-iR/V'] >= 0)]
+        df2_filtered_HER = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0)]
+
+        df2_filtered_HOR = df2_filtered_HOR.copy()
+        df2_filtered_HER = df2_filtered_HER.copy()
+
+        df2_filtered_HOR.loc[:, 'E-iR-eta/V'] = df2_filtered_HOR['E-iR/V'] + (
+                    ((8.31446 * Temp) / (2 * 96485)) * (np.log(1 - (df2_filtered_HOR['Current/A'] / i_limiting_h))))
+        df2_filtered_HER.loc[:, 'E-iR-eta/V'] = df2_filtered_HER['E-iR/V']
+
+        df2_filtered_HER = df2_filtered_HER.copy()
+
+        df2_filtered_HER.loc[:, 'Current_kin/A'] = df2_filtered_HER['Current/A']
+
+        df2_filtered_HOR_iR = df2_filtered_HOR[(df2_filtered_HOR['E-iR/V'] <= 0.01)]
+        df2_filtered_HOR_eta = df2_filtered_HOR[(df2_filtered_HOR['E-iR-eta/V'] <= 0.01)]
+
+        df2_filtered_HOR_iR = df2_filtered_HOR_iR.copy()
+        df2_filtered_HOR_eta = df2_filtered_HOR_eta.copy()
+
+        df2_filtered_HOR_iR.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_iR['Current/A']) / (
+                    i_limiting_h - df2_filtered_HOR_iR['Current/A'])
+        df2_filtered_HOR_eta.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_eta['Current/A']) / (
+                    i_limiting_h - df2_filtered_HOR_eta['Current/A'])
+
+        df2_filtered = pd.concat([df2_filtered_HER, df2_filtered_HOR_iR], ignore_index=True)
+        df2_filtered_eta = pd.concat([df2_filtered_HER, df2_filtered_HOR_eta], ignore_index=True)
+
+        df2_filtered = df2_filtered.drop(columns=['level_0', 'index'])
+        df2_filtered_eta = df2_filtered_eta.drop(columns=['level_0', 'index'])
+
+
         df1_red['E-iR-eta/V'] = df1_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (
             np.log(1 - (df1_red['Current/A'] / i_limiting_h_1)))
 
@@ -1682,11 +1750,11 @@ def HOR_plot(df1, df2):
 
         linear_df1_eta = np.polyfit(df1_filtered_eta['E-iR-eta/V'], df1_filtered_eta['Current/A'], 1)
 
-        df2_filtered = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0.01)]
-        df2_filtered_eta = df2_red[(df2_red['E-iR-eta/V'] >= -0.01) & (df2_red['E-iR-eta/V'] <= 0.01)]
+        #df2_filtered = df2_red[(df2_red['E-iR/V'] >= -0.01) & (df2_red['E-iR/V'] <= 0.01)]
+        #df2_filtered_eta = df2_red[(df2_red['E-iR-eta/V'] >= -0.01) & (df2_red['E-iR-eta/V'] <= 0.01)]
 
-        linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current/A'], 1)
-        linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current/A'], 1)
+        linear_df2 = np.polyfit(df2_filtered['E-iR/V'], df2_filtered['Current_kin/A'], 1)
+        linear_df2_eta = np.polyfit(df2_filtered_eta['E-iR-eta/V'], df2_filtered_eta['Current_kin/A'], 1)
 
         global df2_f
         global df2_f_eta
@@ -1978,21 +2046,23 @@ def HOR_plot(df1, df2):
         df2.drop('index', axis=1, inplace=True)
 
         df2_f.drop('E-iR-eta/V', axis=1, inplace=True)
-        df2_f.drop('level_0', axis=1, inplace=True)
-        df2_f.drop('index', axis=1, inplace=True)
+        #df2_f.drop('level_0', axis=1, inplace=True)
+        #df2_f.drop('index', axis=1, inplace=True)
         df2_f['Current_linear/A_' + str(z)] = linear_df2[0] * df2_f['E-iR/V'] + linear_df2[1]
         df2_f.rename(columns={'E-iR/V': 'E-iR(lim)_ca/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)}, inplace=True)
         df2_f.rename(columns={'Current/A': 'Current_cathodic(lim)/A_' + str(z)}, inplace=True)
+        df2_f.rename(columns={'Current_kin/A': 'Current_cathodic_kin(lim)/A_' + str(z)}, inplace=True)
 
         df2_f_eta['Current_linear_eta/A_' + str(z)] = linear_df2_eta[0] * df2_f_eta['E-iR-eta/V'] + linear_df2_eta[1]
         df2_f_eta.drop('E-iR/V', axis=1, inplace=True)
-        df2_f_eta.drop('level_0', axis=1, inplace=True)
-        df2_f_eta.drop('index', axis=1, inplace=True)
+        #df2_f_eta.drop('level_0', axis=1, inplace=True)
+        #df2_f_eta.drop('index', axis=1, inplace=True)
         df_pop = df2_f_eta.pop('E-iR-eta/V')
         df2_f_eta.insert(0, 'E-iR-eta/V', df_pop)
         df2_f_eta.rename(columns={'E-iR-eta/V': 'E-iR-eta(lim)/V_' + 'HOR_' + NameEntry.get() + '_' + str(z)},
                          inplace=True)
         df2_f_eta.rename(columns={'Current/A': 'Current_cathodic(lim)_eta/A_' + str(z)}, inplace=True)
+        df2_f_eta.rename(columns={'Current_kin/A': 'Current_cathodic_kin(lim)_eta/A_' + str(z)}, inplace=True)
 
         global savefile
         savefile = pd.concat([savefile, df1], axis=1)

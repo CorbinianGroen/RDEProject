@@ -1,2 +1,2 @@
 PathFile
-//10.162.95.2/data/RRDE/RRDE_Data/07_CO Tolerance Troubleshooting/02_TKK_30wt_PtC/acidic/GC-16893/catalyst/
+//10.162.95.2/data/RRDE/RRDE_Data/03_LTCG/LTCG_5/LTCG_5_PtRuTiOxC_400C_1h/alkaline
