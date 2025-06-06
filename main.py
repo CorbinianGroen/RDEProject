@@ -26,12 +26,7 @@ Temp = 273 + 20
 # R = 32.7
 global Ref
 Ref = 0
-Ar = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-Ar-0.02mVs-CV-0.05-0.925mV-2.txt'
-O2 = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-O2-1(1).txt'
-Ar_orr = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3-1600rpm-0.02mVs-1-0.05mV-ORR-an-19936-CN-S31-Ar-1(1).txt'
-CO_Strip = 'C:/CloudStation/Master/Forschungspraktikum Paulette/Data/RDE/20210414-RRDE3/20210414-RRDE3_20210414-RRDE3_COstrip-0.05V_1Vs-1_0.01rpm_Ar_0_GC-19936-afterORRC_all cylcles.txt'
-Kr_test = 'C:/CloudStation/Master/Forschungspraktikum Krischer/Data/nSi-Pt_20220225/5_ar_cv_-0pt67_-0pt3_20mvs_200rpm_3cyc - Kopie.txt'
-Kr_test_2 = "C:/CloudStation/Master/Forschungspraktikum Krischer/Data/nSi-Pt_20220225/3_ar_cv_-0pt67_0pt46_20mvs_200rpm_3cyc.txt"
+
 
 # radius = 0.2
 
@@ -166,7 +161,7 @@ def CO_plot(df1, df2):
 
     higher0 = df[df['Diff'] >= 0]
     higher0 = higher0[higher0['Potential/V'] >= 0.2]
-    integration = np.trapz(x=higher0['Potential/V'], y=higher0['Diff'])
+    integration = np.trapezoid(x=higher0['Potential/V'], y=higher0['Diff'])
     global co_area
     co_area = ((integration / 0.01) / 420e-6)
 
@@ -497,9 +492,9 @@ def Ar_Plot(anodic, cathodic):
     shade_c = ax.fill_between(cathodic['Potential/V'].loc[index_high_c:index_low_c],
                               cathodic['Current/A'].loc[index_high_c:index_low_c], init_cathodic_A, color=color)
 
-    area_a = np.trapz(x=anodic['Potential/V'].loc[index_low:index_high],
+    area_a = np.trapezoid(x=anodic['Potential/V'].loc[index_low:index_high],
                       y=anodic['Current/A'].loc[index_low:index_high] - init_anodic_A)
-    area_c = np.trapz(x=cathodic['Potential/V'].loc[index_high_c:index_low_c],
+    area_c = np.trapezoid(x=cathodic['Potential/V'].loc[index_high_c:index_low_c],
                       y=cathodic['Current/A'].loc[index_high_c:index_low_c] - init_cathodic_A)
     global area
     area = (abs(area_a) + abs(area_c)) / 2
@@ -534,9 +529,9 @@ def Ar_Plot(anodic, cathodic):
         shade_c = ax.fill_between(cathodic['Potential/V'].loc[index_high_c:index_low_c],
                                   cathodic['Current/A'].loc[index_high_c:index_low_c], cathodic_dl, color=color)
 
-        area_a = np.trapz(x=anodic['Potential/V'].loc[index_low:index_high],
+        area_a = np.trapezoid(x=anodic['Potential/V'].loc[index_low:index_high],
                           y=anodic['Current/A'].loc[index_low:index_high] - anodic_dl)
-        area_c = np.trapz(x=cathodic['Potential/V'].loc[index_high_c:index_low_c],
+        area_c = np.trapezoid(x=cathodic['Potential/V'].loc[index_high_c:index_low_c],
                           y=cathodic['Current/A'].loc[index_high_c:index_low_c] - cathodic_dl)
 
         global area

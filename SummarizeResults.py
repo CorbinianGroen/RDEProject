@@ -173,6 +173,6 @@ file_path = filedialog.askdirectory(title='Open HOR Ar file', initialdir=path)
 if file_path is not None:
 
     folder_path = file_path
-    output_csv = file_path + '/Pt_PVP_F1.csv'
+    output_csv = file_path + '/LTCG_alkaline_new.csv'
 
     process_files(folder_path, output_csv)
