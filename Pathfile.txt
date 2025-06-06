@@ -1,2 +1,2 @@
 PathFile
-//10.162.95.2/data/RRDE/RRDE_Data/03_LTCG/LTCG_5/LTCG_5_PtRuTiOxC_400C_1h/alkaline
+/
