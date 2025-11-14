@@ -21,7 +21,7 @@ from importfilter import importwindow
 import scanimport as scan
 
 # testing values
-loading = 3.847E-6
+#loading = 3.847E-6
 Temp = 273 + 20
 # R = 32.7
 global Ref
@@ -1352,7 +1352,15 @@ def O2_plot(O2, Ar):
 
         dflim['ik/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)]
         dflim['im/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / (float(LoadingEntry.get())*(np.pi * (float(RadiusEntry.get()) ** 2))*(10**(-6)))
-        dflim['is/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / area * 1000 * 1000
+
+
+        if 'co_area' in globals():
+            dflim['is/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / co_area * 1000 * 1000
+
+
+        elif 'co_area' not in globals() and 'area' in globals():
+            dflim['is/A_tafel_' + 'ORR_' + str(z)] = tafel['ik/A_' + 'ORR_' + str(z)] / area * 1000 * 1000
+
         dflim['E-iR/V_tafel_' + 'ORR_' + str(z)] = coefficents[0] * np.log10(tafel['ik/A_' + 'ORR_' + str(z)]) + \
                                                    coefficents[1]
         dflim['E-iR-etadiff/V_tafel_' + 'ORR_' + str(z)] = coefficents1[0] * np.log10(
