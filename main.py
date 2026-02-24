@@ -2107,7 +2107,8 @@ def HOR_plot(df1, df2):
                                'HOR_cathodic_slope_' + str(z): [slope_cat],
                                'HOR_cathodic_slope_eta_' + str(z): [slope_cat_eta],
                                'HOR_cathodic_y_inter_' + str(z): [y_inter],
-                               'HOR_cathodic_y_inter_eta_' + str(z): [y_inter_eta]})
+                               'HOR_cathodic_y_inter_eta_' + str(z): [y_inter_eta],
+                               'HOR_cathodic_limiting_current_' + str(z): [i_limiting_h]})
         global results
         results = pd.concat([results, result], axis=1)
 
@@ -2541,30 +2542,32 @@ if __name__ == '__main__':
 
             ORR_sep_dic = {';': ';', 'spaces': r'\s+', 'tabs': '\t'}
 
-            ORR_dic = {'LSV': scan.lsvscan(ORR, sepvalue=ORR_sep_dic[ORR_config[3]], headervalue=ORR_header,
+
+            ORR_dic = {'LSV': lambda: scan.lsvscan(ORR, sepvalue=ORR_sep_dic[ORR_config[3]], headervalue=ORR_header,
                                            decimalvalue=ORR_config[5], skip=int(ORR_config[6]), pot=int(ORR_config[7]),
                                            cur=int(ORR_config[8])),
-                       'Single': scan.singlescan(ORR, sepvalue=ORR_sep_dic[ORR_config[3]], headervalue=ORR_header,
+                       'Single': lambda: scan.singlescan(ORR, sepvalue=ORR_sep_dic[ORR_config[3]], headervalue=ORR_header,
                                                  decimalvalue=ORR_config[5], skip=int(ORR_config[6]),
                                                  pot=int(ORR_config[7]), cur=int(ORR_config[8])),
-                       'Multiple': scan.multiplescan(ORR, int(ORR_config[2]), sepvalue=ORR_sep_dic[ORR_config[3]],
+                       'Multiple': lambda: scan.multiplescan(ORR, int(ORR_config[2]), sepvalue=ORR_sep_dic[ORR_config[3]],
                                                      headervalue=ORR_header, decimalvalue=ORR_config[5],
                                                      skip=int(ORR_config[6]), pot=int(ORR_config[7]),
                                                      cur=int(ORR_config[8]))}
 
-            ORRa_dic = {'LSV': scan.lsvscan(Ar_orr, sepvalue=ORR_sep_dic[ORRa_config[3]], headervalue=ORRa_header,
+            ORRa_dic = {'LSV': lambda: scan.lsvscan(Ar_orr, sepvalue=ORR_sep_dic[ORRa_config[3]], headervalue=ORRa_header,
                                             decimalvalue=ORRa_config[5], skip=int(ORRa_config[6]),
                                             pot=int(ORRa_config[7]), cur=int(ORRa_config[8])),
-                        'Single': scan.singlescan(Ar_orr, sepvalue=ORR_sep_dic[ORRa_config[3]], headervalue=ORRa_header,
+                        'Single': lambda: scan.singlescan(Ar_orr, sepvalue=ORR_sep_dic[ORRa_config[3]], headervalue=ORRa_header,
                                                   decimalvalue=ORRa_config[5], skip=int(ORRa_config[6]),
                                                   pot=int(ORRa_config[7]), cur=int(ORRa_config[8])),
-                        'Multiple': scan.multiplescan(Ar_orr, int(ORRa_config[2]), sepvalue=ORR_sep_dic[ORRa_config[3]],
+                        'Multiple': lambda: scan.multiplescan(Ar_orr, int(ORRa_config[2]), sepvalue=ORR_sep_dic[ORRa_config[3]],
                                                       headervalue=ORRa_header, decimalvalue=ORRa_config[5],
                                                       skip=int(ORRa_config[6]), pot=int(ORRa_config[7]),
                                                       cur=int(ORRa_config[8]))}
 
-            ORR_cathodic, ORR_anodic = ORR_dic[ORR_config[0]]
-            ORRa_cathodic, ORRa_anodic = ORRa_dic[ORRa_config[0]]
+
+            ORR_cathodic, ORR_anodic = ORR_dic[ORR_config[0]]()
+            ORRa_cathodic, ORRa_anodic = ORRa_dic[ORRa_config[0]]()
 
             O2_plot(ORR_anodic, ORRa_anodic)
 
