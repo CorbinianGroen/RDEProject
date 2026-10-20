@@ -851,8 +851,13 @@ def O2_plot(O2, Ar):
     index_low = df.iloc[(df['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
     index_high = df.iloc[(df['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
 
+    if ORRLimitEntry.get() == "":
+        i_limiting_check = df['Diff/A'].loc[index_low:index_high].mean()
+    else:
+        i_limiting_check = float(ORRLimitEntry.get())
+
     global i_limiting
-    i_limiting = df['Diff/A'].loc[index_low:index_high].mean()
+    i_limiting = i_limiting_check
 
     global dflim
     dflim = df[(df['Diff/A'] >= (i_limiting * 0.5)) & (df['Diff/A'] <= (i_limiting * 0.01))].reset_index()
@@ -1530,11 +1535,19 @@ def HOR_plot(df1, df2):
     index_low_1 = df1.iloc[(df1['E-iR/V'] - 0.3).abs().argsort()[:1]].index[0]
     index_high_1 = df1.iloc[(df1['E-iR/V'] - 0.5).abs().argsort()[:1]].index[0]
 
+    if HORLimitEntry.get() == "":
+        i_limiting_h_check = df2['Current/A'].loc[index_low:index_high].mean()
+        i_limiting_h_1_check = df1['Current/A'].loc[index_low_1:index_high_1].mean()
+    else:
+        i_limiting_h_check = float(HORLimitEntry.get())
+        i_limiting_h_1_check = float(HORLimitEntry.get())
+
+
     global i_limiting_h
-    i_limiting_h = df2['Current/A'].loc[index_low:index_high].mean()
+    i_limiting_h = i_limiting_h_check
 
     global i_limiting_h_1
-    i_limiting_h_1 = df1['Current/A'].loc[index_low_1:index_high_1].mean()
+    i_limiting_h_1 = i_limiting_h_1_check
 
     min_lim = df2[df2['Current/A'] > 0].iloc[0].name
 
@@ -1571,8 +1584,11 @@ def HOR_plot(df1, df2):
     df2_filtered_HOR_iR = df2_filtered_HOR_iR.copy()
     df2_filtered_HOR_eta = df2_filtered_HOR_eta.copy()
 
-    df2_filtered_HOR_iR.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_iR['Current/A']) / (i_limiting_h - df2_filtered_HOR_iR['Current/A'])
-    df2_filtered_HOR_eta.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_eta['Current/A']) / (i_limiting_h - df2_filtered_HOR_eta['Current/A'])
+    #df2_filtered_HOR_iR.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_iR['Current/A']) / (i_limiting_h - df2_filtered_HOR_iR['Current/A'])
+    df2_filtered_HOR_iR.loc[:, 'Current_kin/A'] = df2_filtered_HOR_iR['Current/A'] / ( (1 - (df2_filtered_HOR_iR['Current/A'] / i_limiting_h)) ** 0.5)
+
+    #df2_filtered_HOR_eta.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_eta['Current/A']) / (i_limiting_h - df2_filtered_HOR_eta['Current/A'])
+    df2_filtered_HOR_eta.loc[:, 'Current_kin/A'] = df2_filtered_HOR_eta['Current/A'] / ( (1 - (df2_filtered_HOR_eta['Current/A'] / i_limiting_h)) ** 0.5)
 
 
     df2_filtered = pd.concat([df2_filtered_HER, df2_filtered_HOR_iR], ignore_index=True)
@@ -1728,10 +1744,11 @@ def HOR_plot(df1, df2):
         df2_filtered_HOR_iR = df2_filtered_HOR_iR.copy()
         df2_filtered_HOR_eta = df2_filtered_HOR_eta.copy()
 
-        df2_filtered_HOR_iR.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_iR['Current/A']) / (
-                    i_limiting_h - df2_filtered_HOR_iR['Current/A'])
-        df2_filtered_HOR_eta.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_eta['Current/A']) / (
-                    i_limiting_h - df2_filtered_HOR_eta['Current/A'])
+        #df2_filtered_HOR_iR.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_iR['Current/A']) / (i_limiting_h - df2_filtered_HOR_iR['Current/A'])
+        df2_filtered_HOR_iR.loc[:, 'Current_kin/A'] = df2_filtered_HOR_iR['Current/A'] / ( ( 1 - (df2_filtered_HOR_iR['Current/A'] / i_limiting_h) )**0.5 )
+
+        #df2_filtered_HOR_eta.loc[:, 'Current_kin/A'] = (i_limiting_h * df2_filtered_HOR_eta['Current/A']) / (i_limiting_h - df2_filtered_HOR_eta['Current/A'])
+        df2_filtered_HOR_eta.loc[:, 'Current_kin/A'] = df2_filtered_HOR_eta['Current/A'] / ( ( 1 - (df2_filtered_HOR_eta['Current/A'] / i_limiting_h) )**0.5 )
 
         df2_filtered = pd.concat([df2_filtered_HER, df2_filtered_HOR_iR], ignore_index=True)
         df2_filtered_eta = pd.concat([df2_filtered_HER, df2_filtered_HOR_eta], ignore_index=True)
@@ -1740,11 +1757,9 @@ def HOR_plot(df1, df2):
         df2_filtered_eta = df2_filtered_eta.drop(columns=['level_0', 'index'])
 
 
-        df1_red['E-iR-eta/V'] = df1_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (
-            np.log(1 - (df1_red['Current/A'] / i_limiting_h_1)))
+        df1_red['E-iR-eta/V'] = df1_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df1_red['Current/A'] / i_limiting_h_1)))
 
-        df2_red['E-iR-eta/V'] = df2_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (
-            np.log(1 - (df2_red['Current/A'] / i_limiting_h)))
+        df2_red['E-iR-eta/V'] = df2_red['E-iR/V'] - ((-8.314 * Temp) / (2 * 96485)) * (np.log(1 - (df2_red['Current/A'] / i_limiting_h)))
 
         df1_filtered = df1_red[(df1_red['E-iR/V'] >= -0.01) & (df1_red['E-iR/V'] <= 0.01)]
         df1_filtered_eta = df1_red[(df1_red['E-iR-eta/V'] >= -0.01) & (df1_red['E-iR-eta/V'] <= 0.01)]
@@ -2453,6 +2468,11 @@ if __name__ == '__main__':
     ORREntry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     ORREntry.grid(row=5, column=5, sticky=tk.W)
 
+    ORRLimit = ct.CTkLabel(master=input_frame, text='Use fixed i_lim:', font=("Calibri", -18))
+    ORRLimit.grid(row=5, column=8, sticky=tk.W, padx=20, rowspan=3)
+    ORRLimitEntry = ct.CTkEntry(master=input_frame, width=100, font=("Calibri", -14))
+    ORRLimitEntry.grid(row=5, column=9, sticky=tk.W, rowspan=3)
+
 
     def ORR():
         global path
@@ -2580,6 +2600,11 @@ if __name__ == '__main__':
     HORLabel.grid(row=9, column=4, sticky=tk.W)
     HOREntry = ct.CTkEntry(master=input_frame, width=400, font=("Calibri", -14))
     HOREntry.grid(row=9, column=5, sticky=tk.W)
+
+    HORLimit = ct.CTkLabel(master=input_frame, text='Use fixed i_lim:', font=("Calibri", -18))
+    HORLimit.grid(row=9, column=8, sticky=tk.W, padx=20)
+    HORLimitEntry = ct.CTkEntry(master=input_frame, width=100, font=("Calibri", -14))
+    HORLimitEntry.grid(row=9, column=9, sticky=tk.W)
 
 
     def HOR():

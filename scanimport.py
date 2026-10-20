@@ -178,7 +178,13 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
             else:
                 beginning = CVs.loc[min[scan - 2]:max[scan - 1], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
 
-            end = CVs.loc[min[scan - 1]:max[scan], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+            # Last scan?
+            if scan == len(max):
+                end = CVs.loc[min[scan - 1]:, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+            else:
+                end = CVs.loc[min[scan - 1]:max[scan], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+
+            #end = CVs.loc[min[scan - 1]:max[scan], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
 
             endofscan = abs(end['WE(1).Potential (V)'] - first_value).idxmin()
             beginningofscan = abs(beginning['WE(1).Potential (V)'] - first_value).idxmin()
@@ -189,7 +195,13 @@ def multiplescan(filename, scan, sepvalue=';', headervalue=0, decimalvalue='.', 
                 beginning = CVs.loc[0:min[scan - 1], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
             else:
                 beginning = CVs.loc[max[scan - 2]:min[scan - 1], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
-            end = CVs.loc[max[scan - 1]:min[scan], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+            #end = CVs.loc[max[scan - 1]:min[scan], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+            if scan == len(min):
+                end = CVs.loc[max[scan - 1]:, ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+            else:
+                end = CVs.loc[max[scan - 1]:min[scan], ['WE(1).Potential (V)', 'WE(1).Current (A)']]
+
+
             endofscan = abs(end['WE(1).Potential (V)'] - first_value).idxmin()
             beginningofscan = abs(beginning['WE(1).Potential (V)'] - first_value).idxmin()
 
